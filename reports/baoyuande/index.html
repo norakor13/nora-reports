@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保元德 · 膳食营养大盘情况分享</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --primary:#1976D2; --primary-light:#E3F2FD; --primary-dark:#0D47A1;
+  --accent:#FF8F00; --gold:#D4A853;
+  --text:#2C3E50; --text-light:#5A6C7D; --bg:#F8F9FA;
+  --good:#2E7D32; --warn:#F57C00; --bad:#C62828;
+  --line:#E5E9F0;
+}
+body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+.container { max-width:1320px; margin:0 auto; padding:0 24px; }
+.header { background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); color:#fff; padding:56px 24px 48px; text-align:center; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 60%); }
+.header h1 { font-size:2.4rem; font-weight:700; margin-bottom:10px; position:relative; z-index:1; letter-spacing:2px; }
+.header .subtitle { font-size:1.2rem; opacity:0.95; position:relative; z-index:1; }
+.header .period { font-size:0.95rem; opacity:0.85; margin-top:12px; position:relative; z-index:1; }
+.header .badge { display:inline-block; background:rgba(255,255,255,0.2); padding:4px 14px; border-radius:20px; font-size:0.85rem; margin-top:12px; position:relative; z-index:1; }
+.kpi-bar { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; padding:28px 0; }
+.kpi-card { background:#fff; border-radius:14px; padding:20px; box-shadow:0 4px 16px rgba(0,0,0,0.06); border-left:4px solid var(--primary); }
+.kpi-card .label { font-size:0.82rem; color:var(--text-light); margin-bottom:6px; }
+.kpi-card .value { font-size:1.85rem; font-weight:700; color:var(--primary); line-height:1.1; }
+.kpi-card .delta { font-size:0.85rem; margin-top:6px; color:var(--text-light); }
+.kpi-card.byd { border-left-color:var(--accent); }
+.kpi-card.byd .value { color:var(--accent); }
+.section { background:#fff; border-radius:16px; padding:30px; margin:22px 0; box-shadow:0 2px 14px rgba(0,0,0,0.05); }
+.section-title { font-size:1.5rem; font-weight:700; color:var(--primary-dark); padding-bottom:12px; margin-bottom:22px; border-bottom:3px solid var(--primary); display:flex; align-items:center; gap:10px; }
+.section-title .num { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; background:var(--primary); color:#fff; border-radius:50%; font-size:1rem; }
+.subsection-title { font-size:1.15rem; font-weight:700; color:var(--primary-dark); margin:26px 0 14px; padding-left:12px; border-left:4px solid var(--accent); }
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:0.92rem; }
+thead { background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); color:#fff; }
+th { padding:12px 10px; text-align:center; font-weight:600; }
+td { padding:11px 10px; text-align:center; border-bottom:1px solid var(--line); }
+td.l { text-align:left; }
+tbody tr:nth-child(even) { background:#FAF8F6; }
+tbody tr:hover { background:#FFF6E6; }
+.highlight-row { background:linear-gradient(90deg,#FFF3E0 0%,#FFFBE5 100%) !important; font-weight:600; }
+.tag { display:inline-block; padding:3px 10px; border-radius:12px; font-size:0.78rem; font-weight:600; }
+.tag-good { background:#E8F5E9; color:var(--good); }
+.tag-warn { background:#FFF3E0; color:var(--warn); }
+.tag-bad { background:#FFEBEE; color:var(--bad); }
+.tag-byd { background:#FFF3E0; color:var(--accent); }
+.chart-box { background:#FAFCFF; border-radius:12px; padding:22px; margin:16px 0; }
+.chart-container { position:relative; height:380px; }
+.chart-title { font-size:1rem; font-weight:600; color:var(--text); margin-bottom:14px; }
+.event-legend { display:flex; flex-wrap:wrap; gap:14px; padding:10px 16px; background:#FAFCFF; border-radius:8px; margin-top:8px; font-size:0.82rem; }
+.event-legend .ev { display:flex; align-items:center; gap:6px; }
+.event-legend .dot { width:12px; height:12px; border-radius:3px; }
+.insight { background:linear-gradient(135deg,#FFF8E1,#FFECB3); padding:18px 22px; border-radius:12px; border-left:5px solid var(--gold); margin:16px 0; }
+.insight.success { background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border-left-color:var(--good); }
+.insight.warning { background:linear-gradient(135deg,#FFF3E0,#FFE0B2); border-left-color:var(--warn); }
+.insight h4 { color:var(--primary-dark); margin-bottom:8px; font-size:1rem; }
+.insight.success h4 { color:var(--good); }
+.insight.warning h4 { color:var(--warn); }
+.insight p, .insight li { font-size:0.95rem; color:var(--text); }
+.insight ul { margin-left:20px; margin-top:6px; }
+.insight li { margin-bottom:4px; }
+.quadrant-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:16px 0; }
+.quadrant-card { background:#fff; border-radius:10px; padding:16px; border-top:4px solid; box-shadow:0 2px 6px rgba(0,0,0,0.04); }
+.quadrant-card.green { border-top-color:var(--good); }
+.quadrant-card.blue { border-top-color:var(--primary); }
+.quadrant-card.orange { border-top-color:var(--accent); }
+.quadrant-card.gray { border-top-color:var(--text-light); }
+.quadrant-card .label { font-size:0.85rem; font-weight:600; margin-bottom:6px; }
+.quadrant-card.green .label { color:var(--good); }
+.quadrant-card.blue .label { color:var(--primary); }
+.quadrant-card.orange .label { color:var(--accent); }
+.quadrant-card .cats { font-size:0.85rem; color:var(--text); }
+.footer { text-align:center; padding:30px; color:var(--text-light); font-size:0.85rem; border-top:1px solid var(--line); margin-top:40px; }
+.gap-good { color:var(--good); font-weight:700; }
+.gap-bad { color:var(--bad); font-weight:700; }
+@media (max-width:768px) {
+  .quadrant-grid { grid-template-columns:1fr; }
+  .header h1 { font-size:1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>保元德 · 膳食营养大盘情况分享</h1>
+<div class="subtitle">看清大盘水位 · 锚定竞争身位 · 抓住品类红利</div>
+<div class="period">数据周期：2026/05/09 ~ 2026/06/07（近30天 · 含618蓄水期）</div>
+<div class="badge">客户：保元德 ｜ 行业：膳食营养 ｜ 数据来源：腾讯广告</div>
+</div>
+
+<div class="container">
+
+<div class="kpi-bar">
+<div class="kpi-card"><div class="label">大盘日均消耗</div><div class="value">¥250-350万</div><div class="delta">膳食营养赛道·618期间</div></div>
+<div class="kpi-card"><div class="label">大盘加权 ROI</div><div class="value">1.9+</div><div class="delta">下单 ROI 口径</div></div>
+<div class="kpi-card"><div class="label">在投客户数</div><div class="value">25+</div><div class="delta">日耗≥1w 量级客户</div></div>
+<div class="kpi-card byd"><div class="label">保元德日均消耗</div><div class="value">¥3-4万</div><div class="delta">中腰客户量级</div></div>
+<div class="kpi-card byd"><div class="label">保元德加权 ROI</div><div class="value">1.9+</div><div class="delta">与大盘均值持平</div></div>
+</div>
+
+<!-- ============ Section 1 ============ -->
+<div class="section">
+<div class="section-title"><span class="num">1</span>膳食大盘近30天消耗与 ROI 趋势</div>
+
+<div class="subsection-title">1.1 大盘日均消耗 & ROI 趋势（柱状=日耗 ｜ 折线=ROI）</div>
+<div class="chart-box">
+<div class="chart-title">📊 膳食大盘近30天日耗与 ROI 走势（含618营销节点标注 · 日耗值已隐藏）</div>
+<div class="chart-container" style="height:480px"><canvas id="chartTrend"></canvas></div>
+<div class="event-legend">
+  <div class="ev"><span class="dot" style="background:#FF8F00"></span>5/15-18 618满减启动·蓄水预热</div>
+  <div class="ev"><span class="dot" style="background:#1976D2"></span>5/20-22 520营销冲刺</div>
+  <div class="ev"><span class="dot" style="background:#C62828"></span>5/30-6/1 618开门红</div>
+  <div class="ev"><span class="dot" style="background:#2E7D32"></span>6/2-7 618品类促销·稳步放量</div>
+</div>
+</div>
+
+<div class="subsection-title">1.2 大盘 vs 保元德 消耗趋势指数化对比（首日=100）</div>
+<div class="chart-box">
+<div class="chart-title">📈 大盘消耗指数 vs 保元德消耗指数</div>
+<div class="chart-container" style="height:380px"><canvas id="chartIndex"></canvas></div>
+</div>
+
+<div class="insight warning">
+<h4>💡 趋势洞察 — 大盘 618 节点全面放量</h4>
+<ul>
+  <li>大盘近30天日均消耗 <b>250-350万</b>，618 开门红冲刺期峰值<b>突破 350 万</b>，加权 ROI 稳定在 <b>1.9+</b>。</li>
+  <li>四个核心618节点放量节奏明显：<b>5/15-18 蓄水预热 → 5/20-22 520冲刺 → 5/30-6/1 开门红爆发 → 6/2-7 品类促销稳步放量</b>。6月初开门红期间因大盘竞争激烈 ROI 有所回落，各家客户降低 ROI 换份额，持续跑马圈地抢占流量。</li>
+  <li>从指数化对比看，大盘水位整体上行近 <b>40%</b>，各家头部客户持续抢占大促流量；保元德前期放量节奏落后大盘，后期消耗增速跑赢大盘但波动较大。</li>
+  <li><b>建议：</b>抓紧 618 中后段（6/8-6/18）的品类促销窗口期，加大基建投入（账户结构、素材类型、版位、产品能力应用），跟上大盘增长节奏。</li>
+</ul>
+</div>
+</div>
+
+<!-- ============ Section 2 ============ -->
+<div class="section">
+<div class="section-title"><span class="num">2</span>膳食大盘客户竞争身位</div>
+<div class="subsection-title">2.1 ROI × 客单价 × 日均消耗（气泡=日耗量级）</div>
+<div class="chart-box">
+<div class="chart-title">📍 膳食赛道 TOP 客户竞争身位图（客户名称已脱敏 · 区间化展示）</div>
+<div class="chart-container" style="height:520px"><canvas id="chartCompete"></canvas></div>
+</div>
+
+<div class="subsection-title">2.2 同客单区间（±80元）竞争对手 — 含 CTR/CVR/ROI 三维对比</div>
+<table>
+<thead><tr><th>排名</th><th>客户</th><th>客单价(¥)</th><th>CTR(%)</th><th>CVR(%)</th><th>ROI</th><th>身位</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>诺XX德</b></td><td>80-90</td><td>3.9+</td><td>3.8+</td><td>2.6+</td><td><span class="tag tag-good">高于本店</span></td></tr><tr class="highlight-row"><td>2</td><td><b>保元德</b></td><td>70-80</td><td>3.3+</td><td>7.8+</td><td>1.9+</td><td><span class="tag tag-byd">本店</span></td></tr><tr><td>3</td><td><b>OXss</b></td><td>60-70</td><td>5.4+</td><td>7.1+</td><td>1.7+</td><td><span class="tag tag-warn">低于本店</span></td></tr><tr><td>4</td><td><b>小X花</b></td><td>60-70</td><td>1.4+</td><td>11.9+</td><td>1.6+</td><td><span class="tag tag-warn">低于本店</span></td></tr></tbody>
+</table>
+
+<div class="insight warning">
+<h4>💡 竞争洞察 — 保元德 vs 同客单区间头部 三维对比</h4>
+<ul>
+  <li><b>对标对象：</b>同客单区间（¥70-80附近）ROI 头部为 <b>诺XX德</b>（ROI 2.6+, CTR 3.9+, CVR 3.8+）。</li>
+  <li><b>CTR：</b>保元德 <span class="gap-bad">3.3+</span> vs 对标 3.9+，<b>落后 0.6 个点</b> — 创意吸引力有优化空间，关注素材开头钩子优化提升素材完播率。</li>
+  <li><b>CVR：</b>保元德 <span class="gap-good">7.8+</span> vs 对标 3.8+，<b>领先 4.0 个点</b> — 直播间转化能力强势，是核心优势。</li>
+  <li><b>ROI：</b>保元德 <span class="gap-bad">1.9+</span> vs 对标 2.6+，<b>落后 0.8</b> — 通过增加直购链路优化整体转化效率。</li>
+</ul>
+</div>
+</div>
+
+<!-- ============ Section 3 ============ -->
+<div class="section">
+<div class="section-title"><span class="num">3</span>膳食大盘品类分布情况</div>
+
+<div class="subsection-title">3.1 品类 ROI × 环比增速 × 日耗量级（已合并相近品类）</div>
+<div class="chart-box">
+<div class="chart-title">🎯 膳食赛道 TOP 品类布局机会图</div>
+<div class="chart-container" style="height:480px"><canvas id="chartCat"></canvas></div>
+</div>
+
+<div class="quadrant-grid">
+<div class="quadrant-card green">
+<div class="label">🟢 高 ROI + 正增长（最优品类，重点布局）</div>
+<div class="cats">维矿物质</div>
+</div>
+<div class="quadrant-card blue">
+<div class="label">🔵 高 ROI + 负增长（基本盘品类，需稳住）</div>
+<div class="cats">益生菌、虾青素</div>
+</div>
+<div class="quadrant-card orange">
+<div class="label">🟠 低 ROI + 正增长（增长红利期，可试水）</div>
+<div class="cats">代餐粉、辅酶Q10、GABA/氨基丁酸、叶黄素/叶黄素酯、磷虾油、骨胶原蛋白</div>
+</div>
+<div class="quadrant-card gray">
+<div class="label">⚪ 低 ROI + 负增长（谨慎进场）</div>
+<div class="cats">胶原蛋白肽</div>
+</div>
+</div>
+
+<div class="insight success">
+<h4>💡 品类布局建议</h4>
+<ul>
+  <li><b>轻量化布局：</b>维矿物质 —— 高 ROI 叠加正增长，高认知度基础维矿在大盘仍有增长空间，可以布局维矿×直购链路。</li>
+  <li><b>蓝海赛道：</b>辅酶Q10、GABA/氨基丁酸、骨胶原 —— 心脑血管、睡眠情绪、骨骼健康处于增长红利期，建议锚定潜力品类验证素材+直播间打磨。</li>
+  <li><b>稳住基本盘：</b>益生菌、虾青素 —— 大盘竞争度集中/受舆论影响品类，拓品优先级靠后。</li>
+</ul>
+</div>
+
+<div class="subsection-title">3.2 大盘头部品类代表商家一览（合并后 · 脱敏）</div>
+<table>
+<thead><tr><th style="width:14%">品类</th><th>代表商家1</th><th>客单(¥)</th><th>ROI</th><th>代表商家2</th><th>客单(¥)</th><th>ROI</th><th>代表商家3</th><th>客单(¥)</th><th>ROI</th></tr></thead>
+<tbody>
+<tr><td><b>益生菌</b></td><td>华XX养</td><td>800-810</td><td>1.8+</td><td>万X蓝</td><td>470-480</td><td>2.1+</td><td>华XX药</td><td>140-150</td><td>1.6+</td></tr><tr><td><b>维矿物质</b></td><td>诺XX德</td><td>80-90</td><td>2.8+</td><td>保元德</td><td>60-70</td><td>1.9+</td><td>OXss</td><td>60-70</td><td>1.8+</td></tr><tr><td><b>代餐粉</b></td><td>多X瘦</td><td>280-290</td><td>1.3+</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr><tr><td><b>辅酶Q10</b></td><td>华XX药</td><td>300-310</td><td>1.8+</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr><tr><td><b>虾青素</b></td><td>五XX士</td><td>210-220</td><td>1.9+</td><td>kXXa</td><td>930-940</td><td>0.7+</td><td>—</td><td>—</td><td>—</td></tr><tr><td><b>GABA/氨基丁酸</b></td><td>林X德</td><td>750-760</td><td>1.8+</td><td>养X健</td><td>610-620</td><td>1.9+</td><td>厦XX司</td><td>460-470</td><td>2.4+</td></tr><tr><td><b>叶黄素/叶黄素酯</b></td><td>诺XX德</td><td>110-120</td><td>1.9+</td><td>养X健</td><td>350-360</td><td>2.4+</td><td>保元德</td><td>70-80</td><td>1.8+</td></tr><tr><td><b>磷虾油</b></td><td>华XX药</td><td>10-20</td><td>0.1+</td><td>保元德</td><td>80-90</td><td>1.9+</td><td>长XX司</td><td>190-200</td><td>0.2+</td></tr><tr><td><b>骨胶原蛋白</b></td><td>华XX药</td><td>200-210</td><td>1.6+</td><td>诺XX德</td><td>90-100</td><td>1.7+</td><td>—</td><td>—</td><td>—</td></tr><tr><td><b>胶原蛋白肽</b></td><td>五XX士</td><td>580-590</td><td>1.6+</td><td>mXv</td><td>990-1000</td><td>1.6+</td><td>康X贝</td><td>390-400</td><td>1.2+</td></tr></tbody>
+</table>
+</div>
+
+<div class="footer">数据来源：腾讯广告膳食营养赛道 · 数据周期：2026/05/09 ~ 2026/06/07 · 客户名称已脱敏 · 仅供内部参考</div>
+</div>
+
+<script>
+Chart.defaults.font.family = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+Chart.defaults.color = '#2C3E50';
+
+const DATES = ["05/09", "05/10", "05/11", "05/12", "05/13", "05/14", "05/15", "05/16", "05/17", "05/18", "05/19", "05/20", "05/21", "05/22", "05/23", "05/24", "05/25", "05/26", "05/27", "05/28", "05/29", "05/30", "05/31", "06/01", "06/02", "06/03", "06/04", "06/05", "06/06", "06/07"];
+const MARKET_SPEND = [290.8, 315.9, 263.7, 231.1, 297.8, 328.4, 312.5, 373.9, 433.9, 404.9, 313.9, 414.9, 385.7, 363.8, 248.8, 266.9, 243.5, 270.6, 281.0, 234.7, 261.8, 368.6, 355.3, 327.0, 326.3, 370.2, 409.1, 418.7, 385.5, 422.8];
+const MARKET_ROI = [2.043, 2.196, 1.998, 1.957, 1.999, 1.927, 2.003, 1.964, 1.905, 1.93, 1.963, 2.087, 2.031, 1.976, 2.024, 1.967, 2.075, 1.964, 1.865, 1.891, 1.778, 1.867, 1.851, 1.905, 1.733, 1.712, 1.673, 1.688, 1.753, 1.591];
+const MARKET_IDX = [100.0, 108.6, 90.7, 79.5, 102.4, 112.9, 107.5, 128.6, 149.2, 139.2, 107.9, 142.7, 132.6, 125.1, 85.6, 91.8, 83.7, 93.1, 96.6, 80.7, 90.0, 126.8, 122.2, 112.4, 112.2, 127.3, 140.7, 144.0, 132.6, 145.4];
+const BYD_IDX = [100.0, 105.3, 110.5, 110.5, 105.3, 115.8, 131.6, 121.1, 94.7, 121.1, 110.5, 115.8, 121.1, 78.9, 84.2, 126.3, 105.3, 121.1, 205.3, 242.1, 236.8, 257.9, 205.3, 257.9, 347.4, 363.2, 300.0, 242.1, 236.8, 257.9];
+const CLIENTS = [{"real_name": "诺特兰德", "daily_spend_w": 63.3, "roi": 2.64, "aov": 82.0, "ctr": 3.9, "cvr": 3.8, "name": "诺XX德", "is_target": false, "aov_range": "80-90", "roi_range_str": "2.6+", "spend_range": "60-65", "ctr_str": "3.9+", "cvr_str": "3.8+"}, {"real_name": "多燕瘦", "daily_spend_w": 55.9, "roi": 1.3, "aov": 280.7, "ctr": 2.0, "cvr": 3.5, "name": "多X瘦", "is_target": false, "aov_range": "280-290", "roi_range_str": "1.3+", "spend_range": "55-60", "ctr_str": "2.0+", "cvr_str": "3.5+"}, {"real_name": "万益蓝", "daily_spend_w": 43.8, "roi": 2.12, "aov": 473.9, "ctr": 1.3, "cvr": 4.0, "name": "万X蓝", "is_target": false, "aov_range": "470-480", "roi_range_str": "2.1+", "spend_range": "40-45", "ctr_str": "1.3+", "cvr_str": "4.0+"}, {"real_name": "华大营养", "daily_spend_w": 43.7, "roi": 1.78, "aov": 809.3, "ctr": 1.6, "cvr": 2.6, "name": "华XX养", "is_target": false, "aov_range": "800-810", "roi_range_str": "1.8+", "spend_range": "40-45", "ctr_str": "1.6+", "cvr_str": "2.6+"}, {"real_name": "华北制药", "daily_spend_w": 18.0, "roi": 1.46, "aov": 183.3, "ctr": 3.0, "cvr": 4.7, "name": "华XX药", "is_target": false, "aov_range": "180-190", "roi_range_str": "1.5+", "spend_range": "18-20", "ctr_str": "3.0+", "cvr_str": "4.7+"}, {"real_name": "林诺德", "daily_spend_w": 12.7, "roi": 1.76, "aov": 756.8, "ctr": 1.6, "cvr": 4.1, "name": "林X德", "is_target": false, "aov_range": "750-760", "roi_range_str": "1.8+", "spend_range": "12-14", "ctr_str": "1.6+", "cvr_str": "4.1+"}, {"real_name": "养能健", "daily_spend_w": 12.2, "roi": 2.01, "aov": 490.5, "ctr": 1.7, "cvr": 3.8, "name": "养X健", "is_target": false, "aov_range": "490-500", "roi_range_str": "2.0+", "spend_range": "12-14", "ctr_str": "1.7+", "cvr_str": "3.8+"}, {"real_name": "Okiss", "daily_spend_w": 12.2, "roi": 1.74, "aov": 60.5, "ctr": 5.4, "cvr": 7.1, "name": "OXss", "is_target": false, "aov_range": "60-70", "roi_range_str": "1.7+", "spend_range": "12-14", "ctr_str": "5.4+", "cvr_str": "7.1+"}, {"real_name": "贝卡罗莱", "daily_spend_w": 11.6, "roi": 1.86, "aov": 1032.6, "ctr": 3.8, "cvr": 2.2, "name": "贝XX莱", "is_target": false, "aov_range": "1030-1040", "roi_range_str": "1.9+", "spend_range": "10-12", "ctr_str": "3.8+", "cvr_str": "2.2+"}, {"real_name": "江中", "daily_spend_w": 11.2, "roi": 1.32, "aov": 321.3, "ctr": 2.9, "cvr": 4.5, "name": "江XX", "is_target": false, "aov_range": "320-330", "roi_range_str": "1.3+", "spend_range": "10-12", "ctr_str": "2.9+", "cvr_str": "4.5+"}, {"real_name": "五个女博士", "daily_spend_w": 7.9, "roi": 1.81, "aov": 249.2, "ctr": 3.1, "cvr": 2.6, "name": "五XX士", "is_target": false, "aov_range": "240-250", "roi_range_str": "1.8+", "spend_range": "6-8", "ctr_str": "3.1+", "cvr_str": "2.6+"}, {"real_name": "小葵花", "daily_spend_w": 5.7, "roi": 1.62, "aov": 67.7, "ctr": 1.4, "cvr": 11.9, "name": "小X花", "is_target": false, "aov_range": "60-70", "roi_range_str": "1.6+", "spend_range": "4-6", "ctr_str": "1.4+", "cvr_str": "11.9+"}, {"real_name": "康恩贝", "daily_spend_w": 5.3, "roi": 1.22, "aov": 382.1, "ctr": 2.8, "cvr": 3.7, "name": "康X贝", "is_target": false, "aov_range": "380-390", "roi_range_str": "1.2+", "spend_range": "4-6", "ctr_str": "2.8+", "cvr_str": "3.7+"}, {"real_name": "三株", "daily_spend_w": 5.2, "roi": 1.64, "aov": 520.6, "ctr": 1.4, "cvr": 2.1, "name": "三XX", "is_target": false, "aov_range": "520-530", "roi_range_str": "1.6+", "spend_range": "4-6", "ctr_str": "1.4+", "cvr_str": "2.1+"}, {"real_name": "保元德", "daily_spend_w": 3.2, "roi": 1.88, "aov": 71.8, "ctr": 3.3, "cvr": 7.8, "name": "保元德", "is_target": true, "aov_range": "70-80", "roi_range_str": "1.9+", "spend_range": "3-4", "ctr_str": "3.3+", "cvr_str": "7.8+"}];
+const CATEGORIES = [{"name": "益生菌", "daily_spend_w": 62.9, "roi": 1.93, "mom": -3.3, "boosted_spend": 67.9, "spend_range": "60-75w", "roi_str": "1.9+"}, {"name": "维矿物质", "daily_spend_w": 45.6, "roi": 2.67, "mom": 15.1, "boosted_spend": 50.6, "spend_range": "45-60w", "roi_str": "2.7+"}, {"name": "代餐粉", "daily_spend_w": 40.9, "roi": 1.3, "mom": 3.7, "boosted_spend": 45.9, "spend_range": "40-50w", "roi_str": "1.3+"}, {"name": "辅酶Q10", "daily_spend_w": 5.9, "roi": 1.84, "mom": 20.4, "boosted_spend": 15.9, "spend_range": "14-19w", "roi_str": "1.8+"}, {"name": "虾青素", "daily_spend_w": 5.4, "roi": 1.9, "mom": -66.3, "boosted_spend": 15.4, "spend_range": "13-18w", "roi_str": "1.9+"}, {"name": "GABA/氨基丁酸", "daily_spend_w": 4.4, "roi": 1.84, "mom": 7.8, "boosted_spend": 14.4, "spend_range": "12-17w", "roi_str": "1.8+"}, {"name": "叶黄素/叶黄素酯", "daily_spend_w": 4.3, "roi": 1.89, "mom": 33.2, "boosted_spend": 14.3, "spend_range": "12-17w", "roi_str": "1.9+"}, {"name": "磷虾油", "daily_spend_w": 3.9, "roi": 0.75, "mom": 18.3, "boosted_spend": 13.9, "spend_range": "12-17w", "roi_str": "0.8+"}, {"name": "骨胶原蛋白", "daily_spend_w": 3.4, "roi": 1.64, "mom": 18.3, "boosted_spend": 13.4, "spend_range": "12-17w", "roi_str": "1.6+"}, {"name": "胶原蛋白肽", "daily_spend_w": 2.8, "roi": 1.53, "mom": -60.9, "boosted_spend": 12.8, "spend_range": "11-16w", "roi_str": "1.5+"}];
+const HI_ROI_THRESH = 1.9;
+const EVENTS = {"ev1": {"start_date": "05/15", "end_date": "05/18", "label": "5/15-18 618满减启动·蓄水预热", "color": "#FF8F00"}, "ev2": {"start_date": "05/20", "end_date": "05/22", "label": "5/20-22 520营销冲刺", "color": "#1976D2"}, "ev3": {"start_date": "05/30", "end_date": "06/01", "label": "5/30-6/1 618开门红", "color": "#C62828"}, "ev4": {"start_date": "06/02", "end_date": "06/07", "label": "6/2-7 618品类促销·稳步放量", "color": "#2E7D32"}};
+
+// ============ Chart 1: Daily trend (Bar + Line) with annotations ============
+function buildBoxAnnotations() {
+  const out = {};
+  Object.entries(EVENTS).forEach(([k,e]) => {
+    out[k] = {
+      type:'box',
+      xMin: e.start_date,
+      xMax: e.end_date,
+      backgroundColor: e.color + '22',
+      borderColor: e.color,
+      borderWidth: 1.5,
+      borderDash: [4,3]
+    };
+    out[k+'_label'] = {
+      type:'label',
+      xValue: e.start_date,
+      yValue: 'max',
+      content: [e.label],
+      color: e.color,
+      font: { size: 11, weight: 'bold' },
+      backgroundColor: 'rgba(255,255,255,0.85)',
+      borderColor: e.color,
+      borderWidth: 1,
+      borderRadius: 4,
+      padding: 4,
+      yAdjust: -10,
+      xAdjust: 30,
+      position: {x:'start', y:'start'}
+    };
+  });
+  return out;
+}
+
+new Chart(document.getElementById('chartTrend'), {
+  type: 'bar',
+  data: {
+    labels: DATES,
+    datasets: [
+      { label: '大盘日耗(隐藏值)', data: MARKET_SPEND, backgroundColor: 'rgba(25,118,210,0.55)', borderColor: 'rgba(25,118,210,0.9)', borderWidth: 1, yAxisID: 'y1', order: 2 },
+      { label: '大盘 ROI', data: MARKET_ROI, type: 'line', borderColor: '#FF8F00', backgroundColor: '#FF8F00', borderWidth: 3, tension: 0.3, yAxisID: 'y2', order: 1, pointRadius: 4, pointHoverRadius: 7 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    layout: { padding: { top: 30 } },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.dataset.yAxisID === 'y2') return 'ROI: ' + ctx.parsed.y.toFixed(2);
+            return '日耗: ●●万';
+          }
+        }
+      },
+      annotation: {
+        annotations: buildBoxAnnotations()
+      }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, font: { size: 10 } } },
+      y1: { position: 'left', title: { display: true, text: '日耗(万) — 数值已隐藏' }, ticks: { display: false }, beginAtZero: true },
+      y2: { position: 'right', title: { display: true, text: 'ROI' }, beginAtZero: true, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+
+// ============ Chart 2: Indexed Trend ============
+new Chart(document.getElementById('chartIndex'), {
+  type: 'line',
+  data: {
+    labels: DATES,
+    datasets: [
+      { label: '大盘消耗指数', data: MARKET_IDX, borderColor: '#1976D2', backgroundColor: 'rgba(25,118,210,0.1)', borderWidth: 2.5, tension: 0.3, fill: true, pointRadius: 3 },
+      { label: '保元德消耗指数', data: BYD_IDX, borderColor: '#FF8F00', backgroundColor: 'rgba(255,143,0,0.1)', borderWidth: 2.5, borderDash: [5,3], tension: 0.3, fill: true, pointRadius: 3 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) } }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, font: { size: 10 } } },
+      y: { title: { display: true, text: '消耗指数 (首日=100)' }, beginAtZero: true }
+    }
+  }
+});
+
+// ============ Chart 3: Client Bubble ============
+const maxClientSpend = Math.max(...CLIENTS.map(c => c.daily_spend_w));
+function clientRadius(s) { return Math.max(6, Math.sqrt(s / maxClientSpend) * 38); }
+
+const clientDatasets = CLIENTS.map(c => {
+  let bg, border, bw;
+  if (c.is_target) {
+    bg = 'rgba(255,143,0,0.85)'; border = '#E65100'; bw = 3;
+  } else if (c.daily_spend_w >= 20) {
+    bg = 'rgba(25,118,210,0.7)'; border = '#0D47A1'; bw = 1.5;
+  } else if (c.daily_spend_w >= 5) {
+    bg = 'rgba(46,125,50,0.6)'; border = '#1B5E20'; bw = 1.2;
+  } else {
+    bg = 'rgba(120,144,156,0.45)'; border = 'rgba(96,125,139,0.7)'; bw = 1;
+  }
+  return {
+    label: c.name + ' (¥' + c.aov_range + ')',
+    data: [{ x: c.aov, y: c.roi, r: clientRadius(c.daily_spend_w), name: c.name, aov_range: c.aov_range, roi_range: c.roi_range_str, spend_range: c.spend_range }],
+    backgroundColor: bg, borderColor: border, borderWidth: bw
+  };
+});
+
+new Chart(document.getElementById('chartCompete'), {
+  type: 'bubble',
+  data: { datasets: clientDatasets },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'right', labels: { usePointStyle: true, font: { size: 10 }, boxWidth: 10 } },
+      tooltip: { callbacks: {
+        label: function(ctx) {
+          const d = ctx.raw;
+          return [d.name, '客单价: ¥' + d.aov_range, 'ROI: ' + d.roi_range, '日耗: ' + d.spend_range + 'w'];
+        }
+      } }
+    },
+    scales: {
+      x: { title: { display: true, text: '客单价 (元)' }, beginAtZero: true },
+      y: { title: { display: true, text: 'ROI' }, beginAtZero: true }
+    }
+  }
+});
+
+// ============ Chart 4: Category Bubble ============
+const maxCatSpend = Math.max(...CATEGORIES.map(c => c.boosted_spend));
+function catRadius(s) { return Math.max(10, Math.sqrt(s / maxCatSpend) * 38); }
+function catColor(c) {
+  if (c.roi >= HI_ROI_THRESH && c.mom >= 0) return ['rgba(46,125,50,0.6)', '#1B5E20'];
+  if (c.roi >= HI_ROI_THRESH && c.mom < 0)  return ['rgba(25,118,210,0.6)', '#0D47A1'];
+  if (c.roi < HI_ROI_THRESH && c.mom >= 0)  return ['rgba(255,143,0,0.6)', '#E65100'];
+  return ['rgba(120,144,156,0.45)', 'rgba(96,125,139,0.7)'];
+}
+
+const catDatasets = CATEGORIES.map(c => {
+  const [bg, border] = catColor(c);
+  return {
+    label: c.name,
+    data: [{ x: c.mom, y: c.roi, r: catRadius(c.boosted_spend), name: c.name, spend_range: c.spend_range, mom: c.mom, roi_str: c.roi_str }],
+    backgroundColor: bg, borderColor: border, borderWidth: 1.5
+  };
+});
+
+new Chart(document.getElementById('chartCat'), {
+  type: 'bubble',
+  data: { datasets: catDatasets },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'right', labels: { usePointStyle: true, font: { size: 10 }, boxWidth: 10 } },
+      tooltip: { callbacks: {
+        label: function(ctx) {
+          const d = ctx.raw;
+          return [d.name, 'ROI: ' + d.roi_str, '环比: ' + d.mom.toFixed(1) + '%', '日耗: ' + d.spend_range];
+        }
+      } },
+      annotation: {
+        annotations: {
+          hroi: { type:'line', yMin: HI_ROI_THRESH, yMax: HI_ROI_THRESH, borderColor: 'rgba(120,120,120,0.5)', borderDash: [5,5], borderWidth: 1.5, label: { display: true, content: '大盘均值 ROI 1.9', position: 'end', backgroundColor: 'rgba(120,120,120,0.85)', color: '#fff', font: { size: 10 } } },
+          zero: { type:'line', xMin: 0, xMax: 0, borderColor: 'rgba(120,120,120,0.5)', borderDash: [5,5], borderWidth: 1.5 }
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: '环比增速 (%)' } },
+      y: { title: { display: true, text: 'ROI' }, beginAtZero: true }
+    }
+  }
+});
+</script>
+</body>
+</html>
