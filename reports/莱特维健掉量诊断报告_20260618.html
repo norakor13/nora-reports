@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>莱特维健掉量诊断报告</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #F0F4FF; color: #1a1a2e; font-size: 14px; }
+  
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a237e 0%, #296BEF 100%); color: white; padding: 28px 32px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; opacity: 0.9; margin-top: 10px; }
+  .header .meta span { display: flex; align-items: center; gap: 6px; }
+  .tag { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 3px 10px; font-size: 12px; }
+  
+  /* Container */
+  .container { max-width: 960px; margin: 0 auto; padding: 20px 16px; }
+  
+  /* Summary Card */
+  .summary-card { background: white; border-radius: 12px; border-left: 5px solid #FF6D5E; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .summary-card h2 { font-size: 16px; color: #FF6D5E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .summary-card p { line-height: 1.8; color: #333; font-size: 14px; }
+  
+  /* KPI Row */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
+  .kpi-card .label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .kpi-card .value { font-size: 22px; font-weight: 700; color: #1a237e; }
+  .kpi-card .change { font-size: 12px; margin-top: 4px; }
+  .red { color: #FF6D5E; }
+  .green { color: #76C84D; }
+  .orange { color: #FFAE19; }
+  
+  /* Module Card */
+  .module { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .module-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0F4FF; }
+  .module-header h3 { font-size: 16px; font-weight: 600; color: #1a237e; }
+  .badge { border-radius: 12px; padding: 3px 10px; font-size: 12px; font-weight: 600; }
+  .badge-red { background: #FFF5F5; color: #FF6D5E; }
+  .badge-green { background: #F0FFF4; color: #76C84D; }
+  .badge-orange { background: #FFF8E6; color: #FFAE19; }
+  
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #296BEF; color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  th.num, td.num { text-align: right; }
+  td { padding: 9px 12px; border-bottom: 1px solid #F5F7FF; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F8FAFF; }
+  .row-red td { background: #FFF5F5; }
+  .row-orange td { background: #FFF8E6; }
+  .row-highlight td { background: #EEF4FF; }
+  
+  /* Analysis Block */
+  .analysis { background: #F8FAFF; border-radius: 8px; padding: 14px 16px; margin-top: 14px; font-size: 13px; line-height: 1.8; }
+  .analysis strong { color: #296BEF; }
+  
+  /* Suggestion Block */
+  .suggestion { background: #FFF8E6; border-left: 3px solid #FFAE19; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-top: 14px; }
+  .suggestion h4 { color: #FFAE19; font-size: 14px; margin-bottom: 10px; }
+  .suggestion ol { padding-left: 18px; }
+  .suggestion li { margin-bottom: 8px; line-height: 1.7; font-size: 13px; }
+  
+  /* Root Cause */
+  .root-cause { background: #FFF5F5; border-radius: 8px; padding: 14px 16px; margin-top: 14px; }
+  .root-cause h4 { color: #FF6D5E; font-size: 14px; margin-bottom: 10px; }
+  .root-cause ul { padding-left: 18px; }
+  .root-cause li { margin-bottom: 6px; line-height: 1.7; font-size: 13px; }
+  
+  /* Footer */
+  .footer { text-align: center; color: #aaa; font-size: 12px; padding: 20px; }
+  
+  .divider { height: 1px; background: #F0F4FF; margin: 12px 0; }
+  
+  .status-icon { font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 莱特维健(珠海)保健食品有限公司 · 掉量诊断报告</h1>
+  <div class="meta">
+    <span>🏢 账户ID：82589358</span>
+    <span>🕐 数据周期：2026-06-18 00:00 ~ 14:36（对比昨日同时段）</span>
+    <span class="tag">保健食品</span>
+    <span class="tag">食品饮料一中心</span>
+    <span class="tag">异动诊断</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 总结卡片 -->
+  <div class="summary-card">
+    <h2>🔴 根因摘要</h2>
+    <p>
+      今日截至14:36消耗 <strong>1,463元</strong>，较昨日同时段 <strong>1,913元</strong> 下跌 <strong class="red">-23.5%</strong>，而保健食品行业大盘同期上涨 +3.8%，客户明显跑输大盘。
+      <br><br>
+      根因定位于<strong>投放效果恶化</strong>：<strong>3条头部广告（108122115833、106827120967、104426700981）CVR大幅下滑</strong>，合计贡献掉量约 <strong>610元（占总掉量135%）</strong>，被另一条广告（108224795287）的增量部分抵消。
+      其中广告 <strong>106827120967</strong> 今日CVR骤降至0%（昨日8.11%），几乎完全失去转化能力，消耗下跌82.4%；广告 <strong>108122115833</strong> CVR从8.11%降至6.52%（-19.6%），消耗腰斩-50.8%。
+      <br><br>
+      余额（约2.1万元）和预算均健康，不是掉量原因。
+    </p>
+  </div>
+
+  <!-- KPI 核心指标 -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="label">今日消耗（截至14:36）</div>
+      <div class="value">1,463元</div>
+      <div class="change red">▼ -23.5% vs 昨日同时段</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">昨日同时段消耗</div>
+      <div class="value">1,913元</div>
+      <div class="change" style="color:#888;">基准值</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">近7日日均全天消耗</div>
+      <div class="value">2,578元</div>
+      <div class="change" style="color:#888;">参考基线</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">行业大盘同期变化</div>
+      <div class="value green">+3.8%</div>
+      <div class="change red">客户跑输大盘27.3pct</div>
+    </div>
+  </div>
+
+  <!-- 模块1：余额预算 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="status-icon">💰</span>
+      <h3>优先级1：余额预算诊断</h3>
+      <span class="badge badge-green">✅ 健康，非掉量原因</span>
+    </div>
+    <table>
+      <tr>
+        <th>账户ID</th>
+        <th>是否共享钱包</th>
+        <th class="num">昨日余额（元）</th>
+        <th class="num">昨日消耗（元）</th>
+        <th class="num">可支撑天数</th>
+        <th>余额状态</th>
+        <th>预算状态</th>
+      </tr>
+      <tr class="row-highlight">
+        <td>82589358</td>
+        <td>否</td>
+        <td class="num">21,096</td>
+        <td class="num">4,303</td>
+        <td class="num">4.9天</td>
+        <td><span style="color:#76C84D;">✅ 正常</span></td>
+        <td><span style="color:#76C84D;">✅ 未撞线（进度0%）</span></td>
+      </tr>
+    </table>
+    <div class="analysis">
+      账户余额约2.1万元，按近期日均消耗约2,578元/天计算，可支撑约 <strong>8天</strong>，余额充足。预算消耗进度为0%，无撞线风险。<strong>余额预算不是本次掉量原因。</strong>
+    </div>
+  </div>
+
+  <!-- 模块2：基建诊断 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="status-icon">🏗️</span>
+      <h3>优先级2：基建诊断</h3>
+      <span class="badge badge-orange">🟡 轻微风险，非主因</span>
+    </div>
+    <table>
+      <tr>
+        <th>日期</th>
+        <th class="num">消耗（元）</th>
+        <th class="num">在线广告数</th>
+        <th class="num">有消耗广告数</th>
+        <th class="num">CTR(%)</th>
+        <th class="num">CVR(%)</th>
+      </tr>
+      <tr><td>2026/06/11</td><td class="num">1,517.94</td><td class="num">4</td><td class="num">4</td><td class="num">3.98</td><td class="num">4.42</td></tr>
+      <tr><td>2026/06/12</td><td class="num">1,985.17</td><td class="num">5</td><td class="num">5</td><td class="num">4.54</td><td class="num">5.74</td></tr>
+      <tr><td>2026/06/13</td><td class="num">1,383.41</td><td class="num">6</td><td class="num">6</td><td class="num">3.34</td><td class="num">4.55</td></tr>
+      <tr><td>2026/06/14</td><td class="num">1,175.96</td><td class="num">5</td><td class="num">5</td><td class="num">4.45</td><td class="num">5.56</td></tr>
+      <tr><td>2026/06/15</td><td class="num">3,910.78</td><td class="num">5</td><td class="num">5</td><td class="num">3.50</td><td class="num">4.95</td></tr>
+      <tr><td>2026/06/16</td><td class="num">3,771.50</td><td class="num">5</td><td class="num">5</td><td class="num">2.92</td><td class="num">6.13</td></tr>
+      <tr class="row-highlight"><td>2026/06/17</td><td class="num">4,302.50</td><td class="num">5</td><td class="num">5</td><td class="num">4.38</td><td class="num">5.85</td></tr>
+      <tr class="row-orange"><td>今日(截至14:36)</td><td class="num">1,463.26</td><td class="num">—</td><td class="num">5</td><td class="num">4.63</td><td class="num">5.73</td></tr>
+    </table>
+    <div class="analysis">
+      今日有消耗广告数维持在 <strong>5条</strong>，与近7日持平，广告数量未发生变化。在线广告数稳定，无广告大规模下线情况。<strong>基建规模不是本次掉量主因</strong>，但广告数量较少（仅5条），整体基建盘子偏薄，抗风险能力弱。
+    </div>
+  </div>
+
+  <!-- 模块3：投放效果（根因）-->
+  <div class="module">
+    <div class="module-header">
+      <span class="status-icon">📉</span>
+      <h3>优先级3：投放效果诊断</h3>
+      <span class="badge badge-red">🔴 根因 — CVR下滑导致系统压量</span>
+    </div>
+    
+    <table>
+      <tr>
+        <th>广告ID</th>
+        <th class="num">今日消耗</th>
+        <th class="num">昨日消耗</th>
+        <th class="num">消耗变化</th>
+        <th class="num">今日CTR</th>
+        <th class="num">昨日CTR</th>
+        <th class="num">今日CVR</th>
+        <th class="num">昨日CVR</th>
+        <th>状态</th>
+      </tr>
+      <tr class="row-highlight">
+        <td>108224795287</td>
+        <td class="num">563.63</td>
+        <td class="num">391.65</td>
+        <td class="num green">+43.9%</td>
+        <td class="num">4.35%</td>
+        <td class="num">5.10%</td>
+        <td class="num green">5.94%</td>
+        <td class="num">2.53%</td>
+        <td>🟢 增量</td>
+      </tr>
+      <tr>
+        <td>106847176474</td>
+        <td class="num">551.81</td>
+        <td class="num">563.58</td>
+        <td class="num" style="color:#888;">-2.1%</td>
+        <td class="num">6.83%</td>
+        <td class="num">4.20%</td>
+        <td class="num red">4.04%</td>
+        <td class="num">8.75%</td>
+        <td>🟡 CVR下滑</td>
+      </tr>
+      <tr class="row-red">
+        <td><strong>108122115833</strong></td>
+        <td class="num red">238.74</td>
+        <td class="num">485.45</td>
+        <td class="num red">-50.8%</td>
+        <td class="num red">2.92%</td>
+        <td class="num">4.46%</td>
+        <td class="num red">6.52%</td>
+        <td class="num">8.11%</td>
+        <td>🔴 CTR+CVR双降</td>
+      </tr>
+      <tr class="row-red">
+        <td><strong>106827120967</strong></td>
+        <td class="num red">53.08</td>
+        <td class="num">300.88</td>
+        <td class="num red">-82.4%</td>
+        <td class="num red">2.67%</td>
+        <td class="num">4.43%</td>
+        <td class="num red">0.00%</td>
+        <td class="num">8.11%</td>
+        <td>🔴 CVR归零</td>
+      </tr>
+      <tr class="row-orange">
+        <td>104426700981</td>
+        <td class="num">56.00</td>
+        <td class="num">171.53</td>
+        <td class="num red">-67.4%</td>
+        <td class="num green">9.32%</td>
+        <td class="num">4.72%</td>
+        <td class="num green">16.67%</td>
+        <td class="num">4.55%</td>
+        <td>🟡 消耗受限</td>
+      </tr>
+    </table>
+
+    <div class="root-cause">
+      <h4>🔴 根因分析</h4>
+      <ul>
+        <li><strong>广告 106827120967（贡献掉量55.1%）</strong>：CVR从8.11%骤降至0%，完全失去转化能力，消耗下跌82.4%（-247.8元）。CTR也从4.43%降至2.67%，广告素材或落地页可能出现问题，系统判断效果差后大幅压量。</li>
+        <li><strong>广告 108122115833（贡献掉量54.8%）</strong>：CTR从4.46%降至2.92%（-34.5%），CVR从8.11%降至6.52%（-19.6%），效果双降，消耗腰斩-50.8%（-246.7元）。</li>
+        <li><strong>广告 104426700981（贡献掉量25.7%）</strong>：CTR大幅提升至9.32%，CVR也升至16.67%，效果实际较好，但消耗仍下跌67.4%，可能受预算或出价限制，未能充分跑量。</li>
+        <li><strong>广告 108224795287（增量对冲）</strong>：CVR从2.53%升至5.94%，效果改善，消耗+43.9%，部分抵消了掉量。</li>
+      </ul>
+    </div>
+
+    <div class="analysis">
+      整体CTR今日 <strong>4.63%</strong> vs 昨日 <strong>4.57%</strong>（+1.3%，基本持平），整体CVR今日 <strong>5.73%</strong> vs 昨日 <strong>6.51%</strong>（<strong class="red">-12.0%</strong>）。CVR整体下滑是核心信号，说明流量质量或落地页转化出现问题，系统自动压缩了低效广告的出量。
+      <br><br>
+      预估偏差方面，pcvr bias为 <strong>+3.65%</strong>（轻微正偏），系统略微高估转化率，影响较小，不是主因。
+    </div>
+  </div>
+
+  <!-- 竞争环境 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="status-icon">🏆</span>
+      <h3>竞争环境</h3>
+      <span class="badge badge-orange">🟡 行业大盘上涨，客户跑输</span>
+    </div>
+    <table>
+      <tr>
+        <th>维度</th>
+        <th class="num">今日消耗（截至14:36）</th>
+        <th class="num">昨日同时段消耗</th>
+        <th class="num">变化</th>
+      </tr>
+      <tr>
+        <td>保健食品行业大盘</td>
+        <td class="num">219.7万元</td>
+        <td class="num">211.6万元</td>
+        <td class="num green">+3.8%</td>
+      </tr>
+      <tr class="row-red">
+        <td>莱特维健（本客户）</td>
+        <td class="num">1,463元</td>
+        <td class="num">1,913元</td>
+        <td class="num red">-23.5%</td>
+      </tr>
+    </table>
+    <div class="analysis">
+      行业大盘今日上涨 <strong>+3.8%</strong>，说明整体流量环境良好，竞争并未全面加剧。客户消耗下跌 <strong>-23.5%</strong>，跑输大盘约 <strong>27.3个百分点</strong>，进一步印证掉量是客户自身广告效果问题，而非外部竞争环境导致。
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="status-icon">💡</span>
+      <h3>行动建议</h3>
+      <span class="badge" style="background:#EEF4FF;color:#296BEF;">优先级排序</span>
+    </div>
+    <div class="suggestion">
+      <h4>🚨 立即处理（今日）</h4>
+      <ol>
+        <li>
+          <strong>排查广告 106827120967（CVR归零，最高优先级）</strong>：今日CVR从8.11%骤降至0%，立即检查该广告的落地页是否正常加载、链接是否失效、转化追踪代码是否异常。若落地页无问题，检查素材是否被系统判定低质。建议暂停该广告，避免继续浪费预算。
+        </li>
+        <li>
+          <strong>排查广告 108122115833（CTR+CVR双降）</strong>：CTR下降34.5%，CVR下降19.6%，广告整体吸引力和转化能力均下滑。检查素材是否进入衰退期，建议替换新素材或调整创意方向，同时检查落地页转化路径是否顺畅。
+        </li>
+        <li>
+          <strong>放量广告 104426700981（效果好但消耗受限）</strong>：该广告今日CTR高达9.32%、CVR 16.67%，效果优秀，但消耗仅56元，大幅低于昨日171元。建议检查该广告的出价和预算设置，适当上调出价或放开预算限制，让这条高效广告充分跑量，弥补其他广告的掉量缺口。
+        </li>
+      </ol>
+    </div>
+    <div class="suggestion" style="margin-top:12px;">
+      <h4>📋 短期优化（1-3天）</h4>
+      <ol>
+        <li>
+          <strong>补充新素材，扩充基建</strong>：当前仅5条有消耗广告，基建盘子偏薄，单条广告效果波动对整体消耗影响极大。建议新建3-5条广告，搭配不同素材方向（参考广告108224795287的成功素材类型），增强抗风险能力。
+        </li>
+        <li>
+          <strong>复盘广告 108224795287 的增量原因</strong>：该广告今日CVR从2.53%升至5.94%，消耗+43.9%，找出其素材/出价/定向的成功要素，在其他广告中复用。
+        </li>
+        <li>
+          <strong>关注广告 106847176474 的CVR趋势</strong>：该广告CVR从8.75%降至4.04%（-53.8%），虽然消耗基本持平，但效果恶化信号需警惕，若明日继续下滑则需及时干预。
+        </li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  数据来源：腾讯广告数仓 · 生成时间：2026-06-18 14:38 · 小A助手
+</div>
+
+<script>(function(){var _h=0,_t;function m(){var b=document.body;if(!b)return 0;return Math.max(b.scrollHeight,b.offsetHeight,Math.ceil(b.getBoundingClientRect().height))}function s(){var h=m();if(h>0&&h!==_h){_h=h;window.parent.postMessage({type:"iframe-resize",height:h},"*")}}function d(){clearTimeout(_t);_t=setTimeout(s,150)}if(document.readyState==="complete")s();else window.addEventListener("load",s);window.addEventListener("resize",d);if(typeof ResizeObserver!=="undefined"){var ro=new ResizeObserver(d);ro.observe(document.documentElement);if(document.body)ro.observe(document.body)}})();</script><style id="__adata_wm_style__">.__adata_wm__{position:fixed;inset:0;pointer-events:none;z-index:2147483647;background-repeat:repeat;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160'><text x='50%' y='50%' fill='rgba(0,0,0,0.08)' font-size='14' font-family='-apple-system,Segoe UI,sans-serif' text-anchor='middle' transform='rotate(-25 120 80)'>norake</text></svg>")}</style><div class="__adata_wm__" aria-hidden="true"></div></body>
+</html>
