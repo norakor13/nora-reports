@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>近双周不起量诊断 | 广州谷町科技</title>
+<script src="https://unpkg.com/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#F0F4FA;color:#1a1a2e;font-size:14px}
+.header{background:linear-gradient(135deg,#1a237e 0%,#296BEF 100%);color:white;padding:28px 36px}
+.header h1{font-size:22px;font-weight:700;margin-bottom:8px}
+.header .meta{font-size:13px;opacity:.85;display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.header .meta span{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+.container{max-width:1120px;margin:0 auto;padding:24px 20px}
+
+/* 总结卡 */
+.summary{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:5px solid #FF6D5E;padding:20px 24px;margin-bottom:20px}
+.summary h2{font-size:16px;color:#FF6D5E;margin-bottom:12px}
+.summary p{line-height:1.8;color:#333;margin-bottom:8px}
+.rc-list{background:#FFF5F5;border-radius:8px;padding:14px 18px;margin-top:10px}
+.rc-list li{margin:7px 0;line-height:1.7;font-size:13px}
+
+/* 模块卡 */
+.card{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:20px 24px;margin-bottom:20px}
+.card h2{font-size:15px;font-weight:700;color:#296BEF;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #EEF4FF;display:flex;align-items:center;gap:8px}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th{background:#296BEF;color:white;padding:9px 12px;text-align:left;font-weight:600;white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:8px 12px;border-bottom:1px solid #F0F4FA;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr.rh{background:#FFF5F5}
+tr.rm{background:#FFF8E6}
+tr.rg{background:#F0FFF0}
+tr:hover{background:#F8FAFF}
+
+/* 标签 */
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;margin-left:6px}
+.t-red{background:#FFF5F5;color:#FF6D5E;border:1px solid #FF6D5E}
+.t-yellow{background:#FFF8E6;color:#FFAE19;border:1px solid #FFAE19}
+.t-green{background:#F0FFF0;color:#76C84D;border:1px solid #76C84D}
+.t-blue{background:#EEF4FF;color:#296BEF;border:1px solid #296BEF}
+
+.up{color:#76C84D;font-weight:600}
+.dn{color:#FF6D5E;font-weight:600}
+.na{color:#aaa}
+
+/* 分析/建议块 */
+.ab{background:#F8FAFF;border-radius:8px;padding:14px 16px;margin-top:14px}
+.ab h4{font-size:13px;color:#296BEF;margin-bottom:8px;font-weight:700}
+.ab li,.ab p{line-height:1.8;color:#444;font-size:13px}
+.ab ul{padding-left:18px}
+.sb{background:#FFF8E6;border-left:3px solid #FFAE19;border-radius:8px;padding:14px 16px;margin-top:14px}
+.sb h4{font-size:13px;color:#FFAE19;margin-bottom:8px;font-weight:700}
+.sb li{line-height:1.8;color:#555;font-size:13px}
+.sb ul{padding-left:18px}
+
+/* 图表 */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.chart-box{background:#F8FAFF;border-radius:8px;padding:10px}
+.chart-full{background:#F8FAFF;border-radius:8px;padding:10px;margin-top:16px}
+
+/* 概览格 */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.kpi-box{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:16px 18px}
+.kpi-box .cid{font-size:12px;color:#888;margin-bottom:3px}
+.kpi-box .cname{font-size:13px;font-weight:700;color:#1a237e;margin-bottom:10px}
+.kpi-box .kv{display:flex;justify-content:space-between;margin:5px 0;font-size:13px}
+.kpi-box .k{color:#666}
+.kpi-box .v{font-weight:600}
+
+/* 时间轴 */
+.timeline{margin-top:14px;padding:0 4px}
+.tl-item{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.tl-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.tl-dot.red{background:#FF6D5E}
+.tl-dot.yellow{background:#FFAE19}
+.tl-dot.green{background:#76C84D}
+.tl-dot.blue{background:#296BEF}
+.tl-content{flex:1}
+.tl-date{font-size:12px;color:#888;margin-bottom:2px}
+.tl-text{font-size:13px;line-height:1.7;color:#333}
+
+@media(max-width:700px){.kpi-grid,.chart-row{grid-template-columns:1fr}.header{padding:18px 16px}.container{padding:14px 10px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔍 近双周不起量诊断报告 — 广州谷町科技有限公司</h1>
+  <div class="meta">
+    <span>📅 数据周期：2026-06-11 00:00 ~ 2026-06-24 23:59</span>
+    <span>🏭 传统滋补 | 视频号直播链路</span>
+    <span>🎯 异动诊断</span>
+    <span>🆔 84498660 / 84498640 / 84400218</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 总结 -->
+<div class="summary">
+  <h2>🔴 核心结论：直播间转化能力极不稳定，CVR/下单归零是反复不起量的根因</h2>
+  <p>近双周三账户合计消耗 <strong>22,010元</strong>，呈现出典型的"脉冲式"特征——消耗在少数几天集中爆发（6/16、6/18、6/19峰值超3,000~4,000元），其余大多数天消耗极低甚至为零。<strong>不是基建问题（在线广告数全程稳定123条），也不是余额/预算问题，根因是直播间下单转化极不稳定</strong>：有直播的日子能跑量，没有转化的日子系统立即压量。</p>
+  <div class="rc-list">
+    <strong>🔴 根因清单：</strong>
+    <ul>
+      <li>🔴 <strong>CVR/下单转化严重不稳定</strong>：双周内仅8天有下单记录（共54单/27,407元），其余6天下单为0，CVR=0的日子系统判断广告无法达成目标，自动限速至几乎停投</li>
+      <li>🔴 <strong>6/20~6/21 完全断崖</strong>：两天合计消耗仅2.08元，有消耗广告数从99条骤降至1条→0条，是最严重的停投节点，推测直播间停播或出现严重故障</li>
+      <li>🔴 <strong>84400218 转化能力最弱</strong>：双周仅2单/859元，下单ROI仅0.38，远低于另外两账户（1.29~1.36），该账户长期处于"有消耗无转化"状态</li>
+      <li>🟡 <strong>pCTR模型持续负偏差</strong>：84400218偏差均值 -18.8%，84498660 -8.2%，系统低估点击率，出价偏保守，竞价能力受损</li>
+      <li>🟡 <strong>出价6/18起上调至256元（+7%）</strong>，但未能解决转化问题，消耗在6/19后仍快速萎缩</li>
+      <li>🟡 <strong>双周零新建广告</strong>（6/11批量新建123条后再无补充），素材无迭代，系统探索空间收窄</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 客户概览 -->
+<div class="kpi-grid">
+  <div class="kpi-box">
+    <div class="cid">84498640（主力账户）</div>
+    <div class="cname">广州谷町科技有限公司</div>
+    <div class="kv"><span class="k">双周消耗</span><span class="v">14,955元</span></div>
+    <div class="kv"><span class="k">双周下单</span><span class="v">41单 / 20,388元</span></div>
+    <div class="kv"><span class="k">下单ROI</span><span class="v up">1.36</span></div>
+    <div class="kv"><span class="k">CTR均值</span><span class="v">2.14%</span></div>
+    <div class="kv"><span class="k">pCTR Bias均值</span><span class="v dn">-2.6%</span></div>
+    <div class="kv"><span class="k">在线广告数</span><span class="v">41条（全程稳定）</span></div>
+  </div>
+  <div class="kpi-box">
+    <div class="cid">84498660</div>
+    <div class="cname">广州谷町科技有限公司</div>
+    <div class="kv"><span class="k">双周消耗</span><span class="v">4,783元</span></div>
+    <div class="kv"><span class="k">双周下单</span><span class="v">11单 / 6,160元</span></div>
+    <div class="kv"><span class="k">下单ROI</span><span class="v up">1.29</span></div>
+    <div class="kv"><span class="k">CTR均值</span><span class="v">2.68%</span></div>
+    <div class="kv"><span class="k">pCTR Bias均值</span><span class="v dn">-8.2%</span></div>
+    <div class="kv"><span class="k">在线广告数</span><span class="v">41条（全程稳定）</span></div>
+  </div>
+  <div class="kpi-box">
+    <div class="cid">84400218（转化最弱）</div>
+    <div class="cname">广州谷町科技有限公司</div>
+    <div class="kv"><span class="k">双周消耗</span><span class="v">2,272元</span></div>
+    <div class="kv"><span class="k">双周下单</span><span class="v dn">2单 / 859元</span></div>
+    <div class="kv"><span class="k">下单ROI</span><span class="v dn">0.38（严重亏损）</span></div>
+    <div class="kv"><span class="k">CTR均值</span><span class="v">2.61%</span></div>
+    <div class="kv"><span class="k">pCTR Bias均值</span><span class="v dn">-18.8%</span></div>
+    <div class="kv"><span class="k">在线广告数</span><span class="v">41条（全程稳定）</span></div>
+  </div>
+</div>
+
+<!-- 消耗趋势图 -->
+<div class="card">
+  <h2>📈 近双周消耗趋势</h2>
+  <div class="chart-full">
+    <div id="chart_trend" style="height:280px"></div>
+  </div>
+  <div class="ab">
+    <h4>📊 趋势特征</h4>
+    <ul>
+      <li>消耗呈<strong>脉冲式</strong>：6/16（3,380元）、6/18（4,034元）、6/19（3,646元）为三个峰值，其余天大多低于500元</li>
+      <li><strong>6/20~6/21 完全断崖</strong>：两天合计仅2.08元，有消耗广告数从99条骤降至1条→0条</li>
+      <li>6/22起小幅恢复，但6/23再次跌至334元，6/24回升至1,224元，整体仍不稳定</li>
+      <li>84498640 是消耗主力（占双周68%），其消耗波动决定整体走势</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 优先级1：余额预算 -->
+<div class="card">
+  <h2>✅ 优先级1：余额预算 <span class="tag t-green">健康，排除</span></h2>
+  <div class="ab">
+    <h4>📊 结论</h4>
+    <p>三账户余额充裕（7.7~8.5万元），历史数据中余额不足占比、预算撞线占比均为0%，预算消耗进度始终未达撞线阈值。<strong>余额预算不是不起量的原因。</strong></p>
+  </div>
+</div>
+
+<!-- 优先级2：基建 -->
+<div class="card">
+  <h2>🟡 优先级2：基建诊断 <span class="tag t-yellow">结构单薄，非主因但存在隐患</span></h2>
+  <div class="chart-row">
+    <div class="chart-box"><div id="chart_infra" style="height:220px"></div></div>
+    <div class="chart-box"><div id="chart_costadnum" style="height:220px"></div></div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th class="r">合计消耗(元)</th>
+        <th class="r">在线广告数</th>
+        <th class="r">有消耗广告数</th>
+        <th class="r">新建广告数</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>06/11</td><td class="r">3.55</td><td class="r">122</td><td class="r">14</td><td class="r up">123</td><td>批量新建广告日</td></tr>
+      <tr><td>06/12</td><td class="r">1,918.87</td><td class="r">123</td><td class="r">65</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/13</td><td class="r">2,702.59</td><td class="r">123</td><td class="r">62</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/14</td><td class="r">2,171.84</td><td class="r">123</td><td class="r">62</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/15</td><td class="r">1,129.38</td><td class="r">123</td><td class="r">65</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/16</td><td class="r">3,379.63</td><td class="r">123</td><td class="r">60</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/17</td><td class="r">496.16</td><td class="r">123</td><td class="r">78</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/18</td><td class="r">4,033.95</td><td class="r">123</td><td class="r">91</td><td class="r na">0</td><td>消耗峰值</td></tr>
+      <tr><td>06/19</td><td class="r">3,646.33</td><td class="r">123</td><td class="r">99</td><td class="r na">0</td><td></td></tr>
+      <tr class="rh"><td>06/20</td><td class="r dn">2.08</td><td class="r">123</td><td class="r dn">1</td><td class="r na">0</td><td>⚠️ 断崖，有消耗广告数骤降</td></tr>
+      <tr class="rh"><td>06/21</td><td class="r dn">0.00</td><td class="r">123</td><td class="r dn">0</td><td class="r na">0</td><td>⚠️ 完全停投</td></tr>
+      <tr><td>06/22</td><td class="r">968.20</td><td class="r">123</td><td class="r">86</td><td class="r na">0</td><td>小幅恢复</td></tr>
+      <tr><td>06/23</td><td class="r">333.91</td><td class="r">123</td><td class="r">104</td><td class="r na">0</td><td></td></tr>
+      <tr><td>06/24</td><td class="r">1,223.77</td><td class="r">123</td><td class="r">116</td><td class="r na">0</td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="ab">
+    <h4>📊 关键发现</h4>
+    <ul>
+      <li>在线广告数全程稳定（123条），<strong>广告数量不是问题</strong></li>
+      <li>6/11批量新建123条广告后，<strong>双周内零新建</strong>，无任何素材迭代补充</li>
+      <li>6/20~6/21 有消耗广告数从99条骤降至1条→0条，但在线广告数仍为123条，说明<strong>广告在线但无法获得消耗</strong>，是效果端问题导致系统不给量，而非广告被下线</li>
+      <li>无智投项目，全部为非智投广告，缺乏自动化投放能力</li>
+    </ul>
+  </div>
+  <div class="sb">
+    <h4>💡 建议</h4>
+    <ul>
+      <li>基建不是主因，但双周零新建是隐患，建议持续补充新素材/新广告，避免存量广告集体衰退</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 优先级3：投放策略 -->
+<div class="card">
+  <h2>🟡 优先级3：投放策略 <span class="tag t-yellow">出价上调但未解决问题</span></h2>
+  <table>
+    <thead>
+      <tr>
+        <th>账户</th>
+        <th>优化目标</th>
+        <th>智投类型</th>
+        <th class="r">目标出价均值(元)</th>
+        <th class="r">CTR均值(%)</th>
+        <th class="r">pCTR Bias均值(%)</th>
+        <th class="r">精排通过率均值(%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>84498640</td><td>下单(204)</td><td>非智投</td>
+        <td class="r">245.4</td><td class="r">2.14%</td>
+        <td class="r dn">-2.6%</td><td class="r">0.37%</td>
+      </tr>
+      <tr class="rm">
+        <td>84498660</td><td>下单(204)</td><td>非智投</td>
+        <td class="r">247.4</td><td class="r">2.68%</td>
+        <td class="r dn">-8.2%</td><td class="r">0.44%</td>
+      </tr>
+      <tr class="rh">
+        <td>84400218</td><td>下单(204)</td><td>非智投</td>
+        <td class="r">246.6</td><td class="r">2.61%</td>
+        <td class="r dn">-18.8%</td><td class="r">0.16%</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="ab">
+    <h4>📊 关键发现</h4>
+    <ul>
+      <li>三账户均为<strong>非ROI广告，优化目标=下单(204)</strong>，目标出价在6/18前约236~239元，6/18起上调至255~256元（+7%），6/24进一步上调至277~285元</li>
+      <li>出价上调后消耗并未持续改善，说明<strong>出价不是核心瓶颈，转化能力才是</strong></li>
+      <li>84400218 pCTR Bias均值 <strong>-18.8%</strong>，系统严重低估点击率，精排通过率仅0.16%（另两账户0.37%~0.44%），竞价能力最弱</li>
+      <li>版位高度集中于<strong>微信视频号</strong>（占消耗87%），其余版位（公众号、搜一搜）虽CTR更高但下单转化极少</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 优先级4：投放效果（根因） -->
+<div class="card">
+  <h2>🔴 优先级4：投放效果 <span class="tag t-red">根因 — 转化极不稳定，直播间依赖性强</span></h2>
+  <div class="chart-row">
+    <div class="chart-box"><div id="chart_order" style="height:220px"></div></div>
+    <div class="chart-box"><div id="chart_roi" style="height:220px"></div></div>
+  </div>
+  <table style="margin-top:14px">
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th class="r">合计消耗(元)</th>
+        <th class="r">下单次数</th>
+        <th class="r">下单金额(元)</th>
+        <th class="r">下单ROI</th>
+        <th class="r">达成率(%)</th>
+        <th class="r">超收占比(%)</th>
+        <th class="r">CTR(%)</th>
+        <th class="r">pCTR Bias(%)</th>
+        <th>状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>06/11</td><td class="r">3.55</td><td class="r dn">0</td><td class="r">0</td><td class="r na">—</td><td class="r dn">0%</td><td class="r">0%</td><td class="r">4.38%</td><td class="r dn">-59.4%</td><td>无转化</td></tr>
+      <tr class="rm"><td>06/12</td><td class="r">1,918.87</td><td class="r">3</td><td class="r">1,158</td><td class="r dn">0.60</td><td class="r dn">4.8%</td><td class="r dn">16.5%</td><td class="r">2.45%</td><td class="r dn">-16.1%</td><td>转化弱，超收</td></tr>
+      <tr class="rm"><td>06/13</td><td class="r">2,702.59</td><td class="r">5</td><td class="r">2,539</td><td class="r dn">0.94</td><td class="r dn">0%</td><td class="r dn">44.9%</td><td class="r">2.38%</td><td class="r">-0.5%</td><td>超收严重</td></tr>
+      <tr class="rm"><td>06/14</td><td class="r">2,171.84</td><td class="r">5</td><td class="r">2,017</td><td class="r dn">0.93</td><td class="r dn">0%</td><td class="r dn">44.0%</td><td class="r">1.47%</td><td class="r">3.4%</td><td>超收严重</td></tr>
+      <tr class="rm"><td>06/15</td><td class="r">1,129.38</td><td class="r">2</td><td class="r">598</td><td class="r dn">0.53</td><td class="r dn">0%</td><td class="r dn">52.1%</td><td class="r">2.95%</td><td class="r">1.1%</td><td>超收严重</td></tr>
+      <tr class="rg"><td>06/16</td><td class="r">3,379.63</td><td class="r up">13</td><td class="r up">6,796</td><td class="r up">2.01</td><td class="r up">32.5%</td><td class="r up">0%</td><td class="r">3.35%</td><td class="r dn">-23.9%</td><td>✅ 最佳日</td></tr>
+      <tr><td>06/17</td><td class="r">496.16</td><td class="r">2</td><td class="r">1,120</td><td class="r up">2.26</td><td class="r dn">0%</td><td class="r">0%</td><td class="r">5.43%</td><td class="r dn">-26.7%</td><td>消耗低但ROI好</td></tr>
+      <tr class="rg"><td>06/18</td><td class="r">4,033.95</td><td class="r up">14</td><td class="r up">7,579</td><td class="r up">1.88</td><td class="r up">29.7%</td><td class="r dn">30.1%</td><td class="r">1.67%</td><td class="r">3.3%</td><td>✅ 消耗峰值</td></tr>
+      <tr class="rm"><td>06/19</td><td class="r">3,646.33</td><td class="r">5</td><td class="r">2,800</td><td class="r dn">0.77</td><td class="r dn">0%</td><td class="r">0%</td><td class="r">1.18%</td><td class="r">-1.7%</td><td>转化骤降</td></tr>
+      <tr class="rh"><td>06/20</td><td class="r dn">2.08</td><td class="r dn">0</td><td class="r">0</td><td class="r na">—</td><td class="r na">—</td><td class="r na">—</td><td class="r dn">0%</td><td class="r na">—</td><td>⚠️ 断崖</td></tr>
+      <tr class="rh"><td>06/21</td><td class="r dn">0.00</td><td class="r dn">0</td><td class="r">0</td><td class="r na">—</td><td class="r na">—</td><td class="r na">—</td><td class="r na">—</td><td class="r na">—</td><td>⚠️ 完全停投</td></tr>
+      <tr class="rm"><td>06/22</td><td class="r">968.20</td><td class="r">3</td><td class="r">1,680</td><td class="r up">1.74</td><td class="r dn">0%</td><td class="r dn">33.0%</td><td class="r">1.56%</td><td class="r dn">-7.9%</td><td>恢复但超收</td></tr>
+      <tr class="rh"><td>06/23</td><td class="r dn">333.91</td><td class="r dn">0</td><td class="r">0</td><td class="r na">—</td><td class="r dn">0%</td><td class="r">0%</td><td class="r">2.12%</td><td class="r dn">-16.5%</td><td>无转化</td></tr>
+      <tr><td>06/24</td><td class="r">1,223.77</td><td class="r">2</td><td class="r">1,120</td><td class="r dn">0.92</td><td class="r dn">0%</td><td class="r">0%</td><td class="r">1.67%</td><td class="r">7.6%</td><td>转化弱</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ab" style="margin-top:16px">
+    <h4>📊 深度分析：消耗与转化的强相关性</h4>
+    <ul>
+      <li>🔴 <strong>转化决定消耗</strong>：有下单的日子（6/16、6/18）消耗高达3,000~4,000元；下单为0的日子（6/20、6/21、6/23）消耗几乎为零。这是视频号直播链路的典型特征——系统根据实时转化反馈动态调整出量</li>
+      <li>🔴 <strong>超收问题严重</strong>：6/12~6/15、6/22 超收消耗占比高达16%~52%，说明这些天广告花了钱但转化不达标，系统随后触发限速，导致次日消耗骤降</li>
+      <li>🔴 <strong>6/19是关键转折点</strong>：当天消耗3,646元但仅5单（ROI=0.77，严重超成本），系统判断广告超成本，6/20立即触发断崖式限速</li>
+      <li>🟡 <strong>84400218 全程无效</strong>：双周仅2单，下单ROI=0.38，该账户长期处于"烧钱无转化"状态，建议暂停排查</li>
+      <li>🟡 <strong>CTR在6/19后持续低迷</strong>（1.2%~2.1%），素材吸引力下降，进一步压缩了系统给量意愿</li>
+    </ul>
+  </div>
+
+  <!-- 事件时间轴 -->
+  <div class="ab" style="margin-top:14px">
+    <h4>🕐 关键事件时间轴</h4>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot blue"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/11</div>
+          <div class="tl-text">批量新建123条广告，当日消耗仅3.55元（广告刚上线，系统学习期）</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/12 ~ 06/15</div>
+          <div class="tl-text">消耗逐步爬升（1,000~2,700元/天），但超收占比高（16%~52%），转化不稳定，ROI低于1.0</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/16 ~ 06/18</div>
+          <div class="tl-text">🌟 最佳阶段：6/16消耗3,380元/13单/ROI=2.01，6/18消耗4,034元/14单/ROI=1.88，直播间转化表现优秀</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/19</div>
+          <div class="tl-text">消耗3,646元但仅5单，ROI=0.77（严重超成本），系统开始压量</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/20 ~ 06/21</div>
+          <div class="tl-text">🔴 完全断崖：合计消耗2.08元，有消耗广告数1→0，推测直播间停播或严重异常</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot yellow"></div>
+        <div class="tl-content">
+          <div class="tl-date">06/22 ~ 06/24</div>
+          <div class="tl-text">小幅恢复但不稳定：6/22有3单（968元），6/23再次归零（334元），6/24小幅回升（1,224元/2单），整体仍处于低位</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sb">
+    <h4>💡 行动建议（按优先级）</h4>
+    <ul>
+      <li>🔴 <strong>【紧急】排查直播间6/19~6/21异常</strong>：6/19转化骤降（5单vs前两天14单），6/20~6/21完全停播，需确认直播间是否被限流/封禁、商品是否下架、主播是否停播</li>
+      <li>🔴 <strong>【紧急】暂停或重建84400218</strong>：双周仅2单/ROI=0.38，长期超成本，建议暂停该账户，将预算集中到84498640</li>
+      <li>🔴 <strong>【重要】稳定直播间开播节奏</strong>：消耗与直播间转化强相关，需保证每天稳定开播，避免断播导致系统重新进入学习期</li>
+      <li>🟡 <strong>【重要】提报pCTR偏差校准</strong>：84400218偏差-18.8%，联系产研排查，偏差过大导致出价偏保守</li>
+      <li>🟡 <strong>【建议】补充新素材/广告</strong>：6/11后零新建，CTR持续下滑，需迭代新素材提升广告吸引力</li>
+      <li>🟡 <strong>【建议】控制超收风险</strong>：6/12~6/15、6/22超收占比高，可适当下调目标出价（当前256~285元）或优化直播间承接能力，减少超成本触发限速</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ── 消耗趋势图 ──────────────────────────────────────────
+const dates = ['06/11','06/12','06/13','06/14','06/15','06/16','06/17','06/18','06/19','06/20','06/21','06/22','06/23','06/24'];
+const d640  = [0.02,1458.66,1725,1445.33,565.2,3300.59,408.3,3113.27,2058.77,0,0,154.63,164.46,560.92];
+const d660  = [2.59,384.71,365.31,581.48,49.97,24.18,52.63,803.47,1246.24,2.08,0,782.38,102.1,386.34];
+const d218  = [0.94,75.5,612.28,145.03,514.21,54.86,35.23,117.21,341.32,0,0,31.19,67.35,276.51];
+
+const trend = echarts.init(document.getElementById('chart_trend'));
+trend.setOption({
+  tooltip:{trigger:'axis'},
+  legend:{data:['84498640','84498660','84400218'],top:0},
+  grid:{left:60,right:20,top:36,bottom:30},
+  xAxis:{type:'category',data:dates,axisLabel:{fontSize:11}},
+  yAxis:{type:'value',name:'消耗(元)',nameTextStyle:{fontSize:11}},
+  series:[
+    {name:'84498640',type:'bar',stack:'total',data:d640,itemStyle:{color:'#296BEF'},barMaxWidth:28},
+    {name:'84498660',type:'bar',stack:'total',data:d660,itemStyle:{color:'#FF6D5E'},barMaxWidth:28},
+    {name:'84400218',type:'bar',stack:'total',data:d218,itemStyle:{color:'#FFAE19'},barMaxWidth:28}
+  ]
+});
+
+// ── 基建：在线 vs 有消耗广告数 ──────────────────────────
+const infra = echarts.init(document.getElementById('chart_infra'));
+const hasCost = [14,65,62,62,65,60,78,91,99,1,0,86,104,116];
+infra.setOption({
+  tooltip:{trigger:'axis'},
+  legend:{data:['在线广告数','有消耗广告数'],top:0},
+  grid:{left:50,right:10,top:36,bottom:30},
+  xAxis:{type:'category',data:dates,axisLabel:{fontSize:10}},
+  yAxis:{type:'value',name:'条数'},
+  series:[
+    {name:'在线广告数',type:'line',data:[122,123,123,123,123,123,123,123,123,123,123,123,123,123],lineStyle:{color:'#296BEF'},symbol:'none'},
+    {name:'有消耗广告数',type:'bar',data:hasCost,itemStyle:{color:'rgba(255,109,94,0.7)'},barMaxWidth:20}
+  ]
+});
+
+// ── 消耗 vs 有消耗广告数 ──────────────────────────────
+const costAdnum = echarts.init(document.getElementById('chart_costadnum'));
+const totalCost = [3.55,1918.87,2702.59,2171.84,1129.38,3379.63,496.16,4033.95,3646.33,2.08,0,968.2,333.91,1223.77];
+costAdnum.setOption({
+  tooltip:{trigger:'axis'},
+  legend:{data:['合计消耗(元)','有消耗广告数'],top:0},
+  grid:{left:60,right:60,top:36,bottom:30},
+  xAxis:{type:'category',data:dates,axisLabel:{fontSize:10}},
+  yAxis:[
+    {type:'value',name:'消耗(元)',nameTextStyle:{fontSize:10}},
+    {type:'value',name:'广告数',nameTextStyle:{fontSize:10}}
+  ],
+  series:[
+    {name:'合计消耗(元)',type:'bar',data:totalCost,itemStyle:{color:'rgba(41,107,239,0.7)'},barMaxWidth:20},
+    {name:'有消耗广告数',type:'line',yAxisIndex:1,data:hasCost,lineStyle:{color:'#FF6D5E'},symbol:'circle',symbolSize:5,itemStyle:{color:'#FF6D5E'}}
+  ]
+});
+
+// ── 下单次数趋势 ──────────────────────────────────────
+const orderChart = echarts.init(document.getElementById('chart_order'));
+const orders = [0,3,5,5,2,13,2,14,5,0,0,3,0,2];
+orderChart.setOption({
+  tooltip:{trigger:'axis'},
+  legend:{data:['合计消耗(元)','下单次数'],top:0},
+  grid:{left:60,right:60,top:36,bottom:30},
+  xAxis:{type:'category',data:dates,axisLabel:{fontSize:10}},
+  yAxis:[
+    {type:'value',name:'消耗(元)',nameTextStyle:{fontSize:10}},
+    {type:'value',name:'下单次数',nameTextStyle:{fontSize:10}}
+  ],
+  series:[
+    {name:'合计消耗(元)',type:'bar',data:totalCost,itemStyle:{color:'rgba(41,107,239,0.6)'},barMaxWidth:20},
+    {name:'下单次数',type:'line',yAxisIndex:1,data:orders,lineStyle:{color:'#76C84D',width:2},symbol:'circle',symbolSize:6,itemStyle:{color:'#76C84D'}}
+  ]
+});
+
+// ── 下单ROI趋势 ──────────────────────────────────────
+const roiChart = echarts.init(document.getElementById('chart_roi'));
+const rois = [null,0.60,0.94,0.93,0.53,2.01,2.26,1.88,0.77,null,null,1.74,null,0.92];
+roiChart.setOption({
+  tooltip:{trigger:'axis',formatter:p=>{
+    let s=p[0].axisValue+'<br/>';
+    p.forEach(i=>{s+=i.marker+i.seriesName+': '+(i.value==null?'无转化':i.value.toFixed(2))+'<br/>'});
+    return s;
+  }},
+  legend:{data:['下单ROI'],top:0},
+  grid:{left:50,right:20,top:36,bottom:30},
+  xAxis:{type:'category',data:dates,axisLabel:{fontSize:10}},
+  yAxis:{type:'value',name:'下单ROI',min:0,max:3},
+  markLine:{},
+  series:[
+    {name:'下单ROI',type:'line',data:rois,connectNulls:false,lineStyle:{color:'#296BEF',width:2},symbol:'circle',symbolSize:6,itemStyle:{color:'#296BEF'},
+     markLine:{data:[{yAxis:1,lineStyle:{color:'#FF6D5E',type:'dashed'},label:{formatter:'ROI=1.0'}}]}}
+  ]
+});
+</script>
+<script>(function(){var _h=0,_t;function m(){var b=document.body;if(!b)return 0;return Math.max(b.scrollHeight,b.offsetHeight,Math.ceil(b.getBoundingClientRect().height))}function s(){var h=m();if(h>0&&h!==_h){_h=h;window.parent.postMessage({type:"iframe-resize",height:h},"*")}}function d(){clearTimeout(_t);_t=setTimeout(s,150)}if(document.readyState==="complete")s();else window.addEventListener("load",s);window.addEventListener("resize",d);if(typeof ResizeObserver!=="undefined"){var ro=new ResizeObserver(d);ro.observe(document.documentElement);if(document.body)ro.observe(document.body)}})();</script><style id="__adata_wm_style__">.__adata_wm__{position:fixed;inset:0;pointer-events:none;z-index:2147483647;background-repeat:repeat;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160'><text x='50%' y='50%' fill='rgba(0,0,0,0.08)' font-size='14' font-family='-apple-system,Segoe UI,sans-serif' text-anchor='middle' transform='rotate(-25 120 80)'>norake</text></svg>")}</style><div class="__adata_wm__" aria-hidden="true"></div></body>
+</html>
