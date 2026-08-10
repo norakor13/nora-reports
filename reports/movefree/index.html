@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保健食品行业投放指引与案例 — MoveFree 专场 Workshop</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  /* ====== DESIGN SYSTEM ====== */
+  :root {
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+    --primary-light: #EFF6FF;
+    --primary-soft: #DBEAFE;
+    --accent: #0D9488;
+    --accent-light: #F0FDFA;
+    --accent-soft: #CCFBF1;
+    --bg: #F0F2F5;
+    --card: #FFFFFF;
+    --text: #0F172A;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --border-light: #F1F5F9;
+    --success: #10B981;
+    --success-light: #ECFDF5;
+    --warning: #F59E0B;
+    --warning-light: #FFFBEB;
+    --danger: #EF4444;
+    --danger-light: #FEF2F2;
+    --purple: #7C3AED;
+    --purple-light: #F5F3FF;
+    --slate-50: #F8FAFC;
+    --slate-100: #F1F5F9;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ====== NAVIGATION ====== */
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; gap: 0; justify-content: center;
+    overflow-x: auto;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .top-nav a {
+    display: inline-flex; align-items: center; padding: 15px 20px;
+    text-decoration: none; color: var(--text-secondary);
+    font-size: 13.5px; font-weight: 500; letter-spacing: 0.3px;
+    white-space: nowrap; position: relative;
+    transition: color 0.25s;
+  }
+  .top-nav a::after {
+    content: ''; position: absolute; bottom: 0; left: 12px; right: 12px;
+    height: 2.5px; border-radius: 2px 2px 0 0;
+    background: var(--primary);
+    transform: scaleX(0); transition: transform 0.25s;
+  }
+  .top-nav a:hover { color: var(--primary); }
+  .top-nav a.active { color: var(--primary); font-weight: 600; }
+  .top-nav a.active::after { transform: scaleX(1); }
+
+  /* ====== HERO ====== */
+  .hero {
+    background: linear-gradient(150deg, #1E3A5F 0%, #1E40AF 30%, #2563EB 55%, #0D9488 100%);
+    color: white;
+    padding: 72px 32px 56px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 85%, rgba(255,255,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 15%, rgba(255,255,255,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  }
+  .hero h1 {
+    font-size: 38px; font-weight: 800; margin-bottom: 10px;
+    position: relative; letter-spacing: -0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .hero .subtitle {
+    font-size: 18px; opacity: 0.9; margin-bottom: 28px;
+    position: relative; font-weight: 400; letter-spacing: 0.5px;
+  }
+  .hero .meta {
+    display: flex; justify-content: center; gap: 36px;
+    font-size: 13px; opacity: 0.72; position: relative;
+    flex-wrap: wrap;
+  }
+  .hero .meta span {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 14px; border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* ====== CONTAINER ====== */
+  .container { max-width: 1120px; margin: 0 auto; padding: 40px 28px 32px; }
+
+  /* ====== SECTION ====== */
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 25px; font-weight: 750; color: var(--text);
+    padding-bottom: 14px; margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 2px solid var(--border-light);
+    position: relative;
+  }
+  .section-title::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 60px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: white; font-size: 17px; font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+  }
+
+  /* ====== CARDS ====== */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg); padding: 28px 30px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 22px;
+    transition: box-shadow 0.25s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); }
+  .card h3 {
+    font-size: 17px; font-weight: 650; margin-bottom: 14px; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h4 {
+    font-size: 15px; font-weight: 600; margin-bottom: 10px;
+    color: var(--primary); letter-spacing: 0.2px;
+  }
+
+  /* ====== STATS GRID ====== */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--card); border-radius: var(--radius-lg);
+    padding: 22px 18px 18px; text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-card .value {
+    font-size: 30px; font-weight: 750; color: var(--primary);
+    letter-spacing: -0.5px; line-height: 1.2;
+  }
+  .stat-card .label {
+    font-size: 13px; color: var(--text-secondary); margin-top: 6px;
+    line-height: 1.4;
+  }
+  .stat-card .trend { font-size: 12px; margin-top: 8px; font-weight: 500; }
+  .stat-card .trend.up { color: var(--success); }
+  .stat-card .trend.flat { color: var(--warning); }
+
+  /* ====== HIGHLIGHT BOXES ====== */
+  .highlight {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 18px 22px; border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 18px 0; font-size: 14px; line-height: 1.7;
+  }
+  .highlight.accent { background: var(--accent-light); border-left-color: var(--accent); }
+  .highlight.warning { background: var(--warning-light); border-left-color: var(--warning); }
+  .highlight.danger  { background: var(--danger-light); border-left-color: var(--danger); }
+
+  /* ====== TABLES ====== */
+  .table-wrap { overflow-x: auto; margin: 18px 0; }
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13.5px;
+    background: var(--card); border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+  thead { background: linear-gradient(180deg, var(--slate-50), var(--slate-100)); }
+  th {
+    padding: 13px 16px; text-align: left; font-weight: 650;
+    font-size: 12px; color: var(--text-secondary);
+    letter-spacing: 0.4px; border-bottom: 2px solid var(--border);
+    text-transform: none;
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover { background: var(--slate-50); }
+  tbody tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
+  }
+  .tag-high  { background: var(--danger-light); color: var(--danger); }
+  .tag-mid   { background: var(--warning-light); color: #D97706; }
+  .tag-low   { background: var(--success-light); color: #059669; }
+  .tag-blue  { background: var(--primary-light); color: var(--primary); }
+
+  /* ====== TWO COLUMN ====== */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ====== FLOW STEPS ====== */
+  .flow-steps {
+    display: flex; gap: 14px; margin: 24px 0;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .flow-step {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 18px 22px;
+    text-align: center; flex: 1; min-width: 140px; max-width: 200px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .flow-step:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .flow-step .step-num {
+    display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: white; font-size: 14px; font-weight: 700;
+    align-items: center; justify-content: center; margin-bottom: 10px;
+  }
+  .flow-step .step-title { font-weight: 650; font-size: 14.5px; margin-bottom: 5px; }
+  .flow-step .step-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ====== CHART CONTAINER ====== */
+  .chart-box { position: relative; margin: 22px 0; height: 320px; }
+  .chart-box.tall { height: 400px; }
+
+  /* ====== TABS ====== */
+  .tabs {
+    display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+    padding: 5px; background: var(--slate-100); border-radius: var(--radius);
+  }
+  .tab-btn {
+    padding: 10px 20px; border: none; border-radius: var(--radius-sm);
+    background: transparent; font-size: 13.5px; cursor: pointer;
+    font-weight: 500; transition: all 0.25s; color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.6); }
+  .tab-btn.active {
+    background: var(--card); color: var(--primary); font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ====== MOVEFREE CALLOUT ====== */
+  .mf-callout {
+    background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(13,148,136,0.03));
+    border: 1.5px solid var(--primary-soft);
+    border-radius: var(--radius-lg); padding: 26px 28px; margin: 24px 0;
+    position: relative;
+  }
+  .mf-callout::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+  .mf-callout h4 { color: var(--primary); margin-bottom: 12px; font-size: 16px; font-weight: 650; }
+
+  /* ====== CASE CARDS / GRID ====== */
+  .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; margin: 18px 0; }
+  .case-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 22px;
+    transition: box-shadow 0.25s;
+    box-shadow: var(--shadow-sm);
+  }
+  .case-card:hover { box-shadow: var(--shadow-lg); }
+  .case-card .case-header { font-weight: 700; font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .case-card .case-metrics { display: flex; gap: 18px; margin: 12px 0; flex-wrap: wrap; }
+  .case-card .case-metric { text-align: center; }
+  .case-card .case-metric .val { font-size: 22px; font-weight: 750; color: var(--primary); }
+  .case-card .case-metric .lbl { font-size: 11.5px; color: var(--text-secondary); }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    text-align: center; padding: 44px 24px 36px;
+    color: var(--text-muted); font-size: 12.5px;
+    border-top: 1px solid var(--border); margin-top: 56px;
+    background: var(--card);
+  }
+  .footer p + p { margin-top: 6px; }
+
+  /* ====== PRINT ====== */
+  @media print {
+    .top-nav { display: none; }
+    body { font-size: 12px; background: white; }
+    .hero { padding: 36px; background: #1E40AF !important; -webkit-print-color-adjust: exact; }
+    .container { max-width: 100%; padding: 24px; }
+    .card, .stat-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .flow-step, .case-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="top-nav" id="topNav">
+  <a href="#overview" class="active">大盘概览</a>
+  <a href="#links">链路解析</a>
+  <a href="#fourforces">四力模型</a>
+  <a href="#movefree">MoveFree 起盘建议</a>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <h1>保健食品行业投放指引与案例</h1>
+  <p class="subtitle">MoveFree 品牌种草 · 效果投放双轨 Workshop</p>
+  <div class="meta">
+    <span>📅 2026年8月</span>
+    <span>📊 数据周期：2026年H1 + 6月最新</span>
+    <span>🏷️ 腾讯广告 · 保健食品行业</span>
+    <span>📋 基于《腾讯广告26年保健食品投放指南》+ 投放百宝箱</span>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ====== SECTION 1: 大盘概览 ====== -->
+<section id="overview" class="section">
+  <h2 class="section-title"><span class="num">1</span>保健食品整体大盘概览</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="value">440w+</div>
+      <div class="label">大盘日耗 / 日</div>
+      <div class="trend up">↑ 环比 +15%</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">100w+</div>
+      <div class="label">闭环日耗 / 日</div>
+      <div class="trend up">↑ 年初定准至今持续增长</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">250w+</div>
+      <div class="label">非闭环直购 / 日</div>
+      <div class="trend up">↑ 环比 +10%</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">15w+</div>
+      <div class="label">头部客户日均消耗</div>
+      <div class="trend flat">葵花、汤臣倍健、健尔马等</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>📊 保健食品日耗结构（按链路）</h3>
+      <div class="chart-box"><canvas id="chartLinkDist"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>🔥 核心品类日耗、客单与 ROI</h3>
+      <div class="chart-box" style="height:220px;margin-bottom:12px;"><canvas id="chartCategorySpend"></canvas></div>
+      <div class="chart-box" style="height:380px;"><canvas id="chartCategoryBar"></canvas></div>
+      <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;text-align:center;">上：日耗及占比 → 调节三高+减肥占大盘 70% &nbsp;|&nbsp; 下：气泡大小 = 日耗；左上 = 高客单×高ROI</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>💡 关键判断</strong>
+    <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px 24px;">
+
+      <div style="border-left:3px solid var(--primary); padding-left:10px;">
+        <strong style="color:var(--primary);">总量持续扩张</strong>
+        <p style="margin:4px 0 0;font-size:13px;">大盘日耗突破 440w+/日（环比 +15%），闭环日耗 100w+ 年初定准至今持续增长，非闭环直购仍稳占主力（250w+）</p>
+      </div>
+
+      <div style="border-left:3px solid var(--accent); padding-left:10px;">
+        <strong style="color:var(--accent);">链路结构分化</strong>
+        <p style="margin:4px 0 0;font-size:13px;">SaaS 直购为核心承载（46%），加粉链路高客单复购稳定（17%），CID 外链→闭环迁移趋势明确（12%）</p>
+      </div>
+
+      <div style="border-left:3px solid #10b981; padding-left:10px;">
+        <strong style="color:#10b981;">直播是增量引擎</strong>
+        <p style="margin:4px 0 0;font-size:13px;">直播占比 21% 且效率持续提升，多品类直播 ROI 显著高于直购，是当前微信电商增长最快的链路</p>
+      </div>
+
+      <div style="border-left:3px solid #6366f1; padding-left:10px;">
+        <strong style="color:#6366f1;">品类两极分化</strong>
+        <p style="margin:4px 0 0;font-size:13px;">调节三高+减肥占大盘 70%（低客单走量）；增强免疫+骨骼健康属高客单×高ROI品质品类，MoveFree 处蓝海窗口</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 2: 链路解析 ====== -->
+<section id="links" class="section">
+  <h2 class="section-title"><span class="num">2</span>直购链路投放指引与参考案例</h2>
+
+  <!-- 链路选择 Tabs -->
+  <div class="tabs" id="linkTabs">
+    <button class="tab-btn active" onclick="switchTab('link-compare',this)">📋 链路对比总览</button>
+    <button class="tab-btn" onclick="switchTab('link-cid',this)">🔗 CID 链路（京东/天猫/PDD）</button>
+    <button class="tab-btn" onclick="switchTab('link-live',this)">📺 直播链路</button>
+    <button class="tab-btn" onclick="switchTab('link-shop',this)">🛒 小店直购链路</button>
+  </div>
+
+  <!-- 链路对比总览 -->
+  <div id="link-compare" class="tab-content active">
+    <div class="card">
+      <h3>📋 链路对比总览</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">💡 商家如何选择合适的交易链路？按自身商品做定位</p>
+
+      <div style="display:grid; grid-template-columns: 70px repeat(3, 1fr); gap:12px; margin-top:16px;">
+
+        <!-- 左侧标签：高客单 / 低客单 -->
+        <div style="grid-row: span 6; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:8px 0;">
+          <div style="background:#fee2e2; color:#dc2626; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; line-height:1.3;">高客单<br>&gt;300r+</div>
+          <div style="display:flex; align-items:center; justify-content:center; flex:1; padding:4px 0;">
+            <svg width="16" height="80" viewBox="0 0 16 80" xmlns="http://www.w3.org/2000/svg">
+              <line x1="8" y1="72" x2="8" y2="12" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+              <polyline points="2,20 8,8 14,20" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div style="background:#dcfce7; color:#16a34a; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:bold; text-align:center; line-height:1.3;">低客单<br>&lt;100r+</div>
+        </div>
+
+        <!-- 表头 -->
+        <div style="background:var(--primary-light); padding:10px; border-radius:6px; text-align:center; font-weight:bold; font-size:13px;">原小程序直购商家<br><span style="font-size:11px; color:var(--text-secondary); font-weight:normal;">(白牌贸易商)</span></div>
+        <div style="background:var(--primary-light); padding:10px; border-radius:6px; text-align:center; font-weight:bold; font-size:13px;">现直播商家<br><span style="font-size:11px; color:var(--text-secondary); font-weight:normal;">(新锐/经销商/达人)</span></div>
+        <div style="background:var(--primary-light); padding:10px; border-radius:6px; text-align:center; font-weight:bold; font-size:13px;">头部品牌商家</div>
+
+        <!-- 高客单内容区 -->
+        <!-- Column 1: 原小程序直购商家 - 高客单 -->
+        <div style="padding:10px; border:1px dashed #e2e8f0; border-radius:6px; font-size:12px; line-height:1.6; display:flex; flex-direction:column; gap:8px;">
+          <div><strong style="color:var(--primary);">①直播（代运营）</strong><br>适合有直播团队商家，直播客单价最高，且高价ROI表现最好。</div>
+          <div><strong style="color:var(--primary);">②小店直购</strong><br>对商品质量有一定要求，品退率不能超过0.5%。</div>
+          <div><strong style="color:var(--primary);">③CID-PDD链路</strong><br>PDD对加粉严控，适合即建即盈利/无需后续加粉的中低客单商家。</div>
+        </div>
+
+        <!-- Column 2: 现直播商家 - 高客单 -->
+        <div style="padding:10px; border:1px dashed #e2e8f0; border-radius:6px; font-size:12px; line-height:1.6; display:flex; flex-direction:column; gap:8px;">
+          <div><strong style="color:var(--primary);">①直播</strong><br>适合短视频/直播运营能力强（尤其同时有私域后端/IP授权）商家，最大化发挥直播高转化优势。</div>
+          <div><strong style="color:var(--primary);">②直播+小店双开</strong><br>经测试，双开能提升整体转化率
+            <div style="margin-top:4px; padding-left:8px; border-left:2px solid var(--primary); color:var(--text-secondary); font-size:11px;">
+              <strong style="color:var(--primary);">【老客多的直播间】</strong>两者下单人群重合率非常低，双开即能拦截直播常客，也能转化只看短视频的用户，提升整体转化率，有效拉新。<br>
+              <strong style="color:var(--primary);">【非日播商家】</strong>直播时长短的商家，小店直购链路可以补充日常曝光。<br>
+              <strong style="color:var(--primary);">【直播间易违规商家】</strong>尤其功效品-经常直播内容违规限流，小店直购不受影响，且属于广告类审核，可分散风险。
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: 头部品牌商家 - 高客单（所有链路放在同一单元格）-->
+        <div style="padding:10px; border:1px dashed #e2e8f0; border-radius:6px; font-size:12px; line-height:1.6; display:flex; flex-direction:column; gap:8px; grid-row: span 2;">
+          <div><strong style="color:var(--accent);">①直播/小店（拉新）</strong><br>发挥ADQ全域流量优势，为原生自然流玩家弥补新客缺口，突破视频号流量池，拓展更多流量场景拉新。</div>
+          <div><strong style="color:var(--primary);">②CID-淘天/京东</strong><br>知名品牌CID转化更高，适合品牌方在节点电商导流、拉新客使用。</div>
+          <div><strong style="color:var(--primary);">③融合方案/小程序直购</strong><br>品牌小程序虽可继续交易，但基于未来趋势，<span style="color:var(--danger);">建议走融合方案</span>，即保留自有数据，承接竞价&合约，也能享受小店的送礼、会员互通。</div>
+        </div>
+
+      </div>
+
+      <div class="highlight" style="margin-top:16px;">
+        <strong>💡 链路选择核心逻辑：</strong>交易链路选择不取决于客户当下的能力，而取决于商品本身的<strong>客单价</strong>和<strong>商家属性</strong>。MoveFree 作为头部品牌 + 高客单的代表，建议以 <strong>CID-淘天/京东 + 小店闭环链路（享受品牌倾斜政策）</strong> 双链路并行，对标头部品牌商家的标准模型。
+      </div>
+    </div>
+  </div>
+
+  <!-- 直播链路 -->
+  <div id="link-live" class="tab-content">
+    <div class="card">
+      <h3>📺 直播链路 — 保健食品增长最快的引擎</h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px;">直播是当前保健食品增长确定性最高的链路。闭环直播效率持续优化，多个品类已跑通，链路ROI 持续爬升。</p>
+
+      <h4>直播分品类大盘数据</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>功效品类</th><th>占比</th><th>平均客单</th><th>下单ROI</th><th>代表客户</th></tr></thead>
+          <tbody>
+            <tr><td>调节三高</td><td>30%</td><td>65-75</td><td>1.0-1.2</td><td>健尔马</td></tr>
+            <tr><td>减肥瘦身</td><td>40%</td><td>65-75</td><td>1.2-1.3</td><td>葵花</td></tr>
+            <tr><td>增强免疫</td><td>15%</td><td>200-250</td><td>1.4-1.6</td><td>汤臣倍健</td></tr>
+            <tr><td>女性养颜</td><td>5%</td><td>100-120</td><td>1.3-1.5</td><td>康富来</td></tr>
+            <tr style="background:#f0f9ff;"><td>骨骼健康</td><td>5%</td><td>150-200</td><td>1.2-1.4</td><td>黄金搭档</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>📌 参考案例：品牌B — 降血脂直播案例</h4>
+      <p style="color:var(--text-secondary);margin-bottom:12px;font-size:14px;">直播链路降血脂品类跑通案例，展示从素材策略到ROI爬升的全链路打法。</p>
+      <iframe src="./case-品牌B-降血脂直播-2026-08-11.html" style="width:100%;height:1400px;border:1px solid var(--border);border-radius:8px;overflow-x:hidden;overflow-y:auto;max-width:100%;" title="品牌B降血脂直播案例"></iframe>
+    </div>
+  </div>
+  <div id="link-shop" class="tab-content">
+    <div class="card">
+      <h3>🛒 小店直购链路 — 平台主推的闭环阵地</h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px;">小店直购有两大通道：ADQ 智投直跳小店（推荐）、微信小店全域通 CPA 模式（无转化不扣费）。小店 CVR/ROI 优势明显，推荐增投。</p>
+
+      <div class="two-col">
+        <div>
+          <h4>ADQ 直跳小店</h4>
+          <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+            <li>✅ ADQ 智投高效创建广告</li>
+            <li>✅ 小店全域数据助攻提升拿量</li>
+            <li>✅ 送礼 + 自然流提升 ROI</li>
+            <li>✅ 先用后付提升 CVR</li>
+            <li>⚠️ 技术服务费 2-5%（不同类目）</li>
+          </ul>
+        </div>
+        <div>
+          <h4>全域通（CPA 模式）</h4>
+          <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+            <li>✅ 无转化不扣费，成本稳定</li>
+            <li>✅ 极简投放，最快两步创建</li>
+            <li>✅ 全域流量一键智投</li>
+            <li>✅ 支持无视频素材投放</li>
+            <li>⚠️ 创建直播广告需勾选「商品信息」否则走电商审核通道</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>📌 小店直购选品特征：</strong>小店直跳以"短平快决策"商品为主，得益于小店全店归因 & 先用后付功能，ROI 及 CVR 显著高于传统直购链路，但 ARPU 有所下降。适合 MoveFree 大贸品试水闭环。小店送礼广告是撬动 CTR/CVR 双提升的高效手段。
+      </div>
+    </div>
+  </div>
+
+  <!-- CID 链路 -->
+  <div id="link-cid" class="tab-content">
+    <div class="card">
+      <h3>🔗 CID 链路 — 保健品直购拓量重要阵地</h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px;">CID 链路双投渗透率 41%，保健食品行业 CID 链路支持京东/天猫/PDD 三平台。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>CID平台</th><th>适用客群</th><th>链路特点</th></tr></thead>
+          <tbody>
+            <tr style="background:#f0f9ff;">
+              <td><strong>京东 CID</strong></td><td>品牌客户</td>
+              <td>同时支持直跳京东小程序（链路最短效率更高）和二跳唤端（商详页表达尺度更广）</td>
+            </tr>
+            <tr>
+              <td><strong>天猫 CID</strong></td><td>品牌客户</td>
+              <td>微信内流量支持二跳唤端，非微信流量支持应用直达</td>
+            </tr>
+            <tr>
+              <td><strong>PDD CID (PA)</strong></td><td>白牌直购客户</td>
+              <td>腾讯PA自归因方案：归因准确率高，eCPM 竞争力提升 62.95%，消耗提升 30.15%（vs第三方归因）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 汤臣倍健京东CID案例 -->
+    <div class="card" style="margin-top:24px;">
+      <h3>📌 参考案例：汤臣倍健 × 京东CID — 头部保健品牌多品类矩阵增长标杆</h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px;font-size:14px;">覆盖增强免疫 / 心脑血管 / 骨骼健康三大品类，京东APP唤端 + 京东小程序双链路组合，CTR 0.5-1.5%+、CVR 2.4-4.0%+、ROI 1.3-1.6+</p>
+      <iframe src="./tangchen-beijian-jd-cid-case-2026-08-11.html" style="width:100%;height:1200px;border:1px solid var(--border);border-radius:8px;overflow-x:hidden;overflow-y:auto;max-width:100%;" title="汤臣倍健京东CID案例"></iframe>
+    </div>
+
+</section>
+
+<!-- ====== SECTION 3: 四力模型 ====== -->
+<section id="fourforces" class="section">
+  <h2 class="section-title"><span class="num">3</span>保健食品新客户起盘：四力模型</h2>
+  <p style="color:var(--text-secondary);margin-bottom:24px;">基于保健食品投放百宝箱四力升级模型，竞价广告 eCPM = BID × CTR × CVR × 1000，四力分别影响其中关键变量。</p>
+
+  <!-- 四力模型公式 -->
+  <div class="card" style="text-align:center;background:linear-gradient(135deg, #f8fafc, #e8f0fe);">
+    <h3>竞价广告核心公式 × 四力飞轮映射</h3>
+    <div style="font-size:20px;font-weight:700;color:var(--primary);margin:16px 0;font-family:monospace;">
+      eCPM = BID × CTR × CVR × 1000
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step" style="border-top:3px solid #10b981;">
+        <div class="step-title">🌿 商品力</div>
+        <div class="step-desc">影响 BID<br>高纯度货盘极致定位</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid #f59e0b;">
+        <div class="step-title">⚡ 内容力</div>
+        <div class="step-desc">影响 CTR<br>差异化素材对抗同质化</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid #8b5cf6;">
+        <div class="step-title">🏠 经营力</div>
+        <div class="step-desc">影响 CVR<br>高转化直播闭环</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid #3b82f6;">
+        <div class="step-title">🚀 投放力</div>
+        <div class="step-desc">表达层 主导eCPM<br>智投+多账户+多版位</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:12px;">前三力（商品力/内容力/经营力）为底层能力基石，「投放力」作为表达层（L2主战场）决定 eCPM 综合跑量表达。</p>
+  </div>
+
+  <!-- 四力详解 -->
+  <div class="two-col" style="margin-top:20px;">
+    <div class="card">
+      <h4>🌿 一、商品力（货）— 影响 BID 出价能力</h4>
+      <p style="font-size:13px;color:var(--text-secondary);">通过高纯度功能货盘、品牌力与精准人群定位，同步拉动 CTR/CVR 协同提升。</p>
+      <div class="highlight" style="font-size:13px;">
+        <strong>选品洞察：</strong>视频号全域选品趋势显示，<strong>中老年</strong>是热度最高的人群标签（1,452.2）、<strong>辅助降血脂</strong>是增速最快的功效词（↑586.55%）。骨骼健康品类选品热度 40.9，品牌竞争相对蓝海。<br><br>
+        <strong>商品力金句：</strong>选品洞察决定货盘天花板，标杆案例验证闭环确定性。
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);">
+        📎 参考文档：<a href="https://sumiyaliu.github.io/sumiya-public/%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E8%A1%8C%E4%B8%9A%E9%80%89%E5%93%81%E6%B4%9E%E5%AF%9F%E6%8A%A5%E5%91%8A_2026%E5%B9%B46%E6%9C%88.html" target="_blank">6月视频号全域选品洞察 ↗</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h4>⚡ 二、内容力（创意）— 影响 CTR 点击率</h4>
+      <p style="font-size:13px;color:var(--text-secondary);">品牌力背书、痛点金句与 AIGC 创意素材。素材差异化是攻克同质化唯一性过滤的命门。</p>
+      <div class="highlight accent" style="font-size:13px;">
+        <strong>标杆：品牌E 创意重复度仅 10%（全场最低）</strong>，素材生态最健康。商品点击率 48.2%。黄金前3秒痛点金句可一键复制。<br><br>
+        <strong>跑量素材三步走：</strong>①摸清拿量核心要素 → ②把握跑量素材结构 → ③抓住素材流量密码<br>
+        <strong>素材类型：</strong>病痛症状 / 症状口播 / 诊断画面 / 大字报 / 节目访谈专业人设
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);">
+        📎 CTR专项：<a href="https://doc.weixin.qq.com/doc/w3_ASgAZwZPAMACNVDepeVikSL0rltyI" target="_blank">大健康创意周报 CTR 专项 ↗</a><br>
+        📎 素材分析：<a href="https://sumiyaliu.github.io/sumiya-public/creative-biweekly-report.html" target="_blank">保健 & 滋补素材分析 ↗</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h4>🏠 三、经营力（转化）— 影响 CVR 转化率</h4>
+      <p style="font-size:13px;color:var(--text-secondary);">高转化率直播带货，直播闭环效率提升最大，直购近乎失效下的增量承接赛道。</p>
+      <div class="highlight accent" style="font-size:13px;">
+        <strong>标杆：品牌F 通便赛道 CVR 13-14% 全场最高，</strong>下单率 13.4%，客单价 ¥70-90。直播 vs 直购 ROI 差值 +0.90（全场最强）。<br><br>
+        <strong>关键策略：</strong><br>
+        • 直播强机会：双链路胜出率 100%<br>
+        • 增量承接：直购近乎失效时，直播闭环承接增量<br>
+        • 蓝帽背书：建立信任，拉升下单转化与复购黏性
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>🚀 四、投放力（流量）— 表达层 eCPM 综合跑量</h4>
+      <p style="font-size:13px;color:var(--text-secondary);">智投单链路 3002 + 多账户交叉 + 多版位拓展，让表达层 eCPM 足够稳，系统才敢持续放量。</p>
+      <div class="highlight" style="font-size:13px;">
+        <strong>标杆：品牌A 减肥规模化跑量：</strong>日耗 20-40w/d，CVR 8-9%，CTR 3-4%。<br><br>
+        <strong>核心策略：</strong><br>
+        • 智投单链路 3002：无人驾驶冷启拓流<br>
+        • 多账户交叉：摊薄单账户衰退，支撑稳定跑量<br>
+        • 多版位拓展：CTR 强吸引力 + 多版位快速起量
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);">
+        📎 非闭环基建：<a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E9%9D%9E%E9%97%AD%E7%8E%AF%E5%9F%BA%E5%BB%BA%E6%8F%90%E5%8D%87%E6%8C%87%E5%BC%95.html" target="_blank">小程序直购/CID基建提升指引 ↗</a><br>
+        📎 闭环基建：<a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/%E4%BC%A0%E7%BB%9F%E6%BB%8B%E8%A1%A5%E9%97%AD%E7%8E%AF%E5%9F%BA%E5%BB%BA%E6%8F%90%E5%8D%87%E6%8C%87%E5%BC%95.html" target="_blank">闭环直播小店基建提升指引 ↗</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SECTION 4: MoveFree 起盘建议 ====== -->
+<section id="movefree" class="section">
+  <h2 class="section-title"><span class="num">4</span>MoveFree 保健食品效果投放起盘建议</h2>
+
+  <div class="mf-callout">
+    <h4>🎯 MoveFree 当前投放画像</h4>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="value">35w</div>
+        <div class="label">日均消耗 / 元（直购CID）</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">1.1-1.3</div>
+        <div class="label">品类基准 ROI</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">1.0-1.4%</div>
+        <div class="label">CTR</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">1.3-1.5%</div>
+        <div class="label">CVR</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔷 阶段一：稳固基本盘 — CID 链路提效（当前→2周）</h3>
+    <div class="two-col">
+      <div>
+        <h4>核心动作</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>✅ <strong>素材 CTR 攻坚：</strong>创意差异化策略，互选达人素材二次推广帮助提升素材双率</li>
+          <li>✅ <strong>多账户矩阵：</strong>增加投放主体及账户，提升创意唯一性ID，摊薄单账户衰退风险</li>
+          <li>✅ <strong>智投启动：</strong>智投同步开启，提升拿量能力</li>
+        </ul>
+      </div>
+      <div>
+        <h4>预期收益</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>📈 CTR 从 1.0% → 1.5-2%</li>
+          <li>📈 日耗从 30-35w → 35-40w</li>
+          <li>📈 ROI 保持 1.3-1.5 区间</li>
+          <li>📈 跑量稳定性提升</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔷 阶段二：开辟第二增长曲线 — 小店闭环链路（2-6周）</h3>
+    <div class="two-col">
+      <div>
+        <h4>核心动作</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>✅ <strong>小店直购起盘：</strong>MoveFree大贸品优先走小店直购链路，利用微信小店送礼功能，撬动 CTR/CVR 双提升</li>
+          <li>✅ <strong>热招品牌申请：</strong>提升商品力和系统推荐权重</li>
+          <li>✅ <strong>全域通 CPA 模式：</strong>低成本测品测素材，无转化不扣费</li>
+        </ul>
+      </div>
+      <div>
+        <h4>预期收益</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>📈 小店链路日耗 3-5w 冷启动</li>
+          <li>📈 CVR 比 CID 提升 20-30%</li>
+          <li>📈 送礼场景拉新人群差异化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔷 阶段三：规模化增量 — 直播闭环链路（6-12周）</h3>
+    <div class="two-col">
+      <div>
+        <h4>核心动作</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>✅ <strong>品牌自播直播间搭建：</strong>参照同品类标杆直播间搭建，以品牌力驱动高转化</li>
+          <li>✅ <strong>素材差异化：</strong>将品牌种草内容复用至直播投流，降低创意重复度</li>
+          <li>✅ <strong>直播间基建：</strong>参照<a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/%E6%A1%88%E4%BE%8B7_%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E9%97%AD%E7%8E%AF%E5%9F%BA%E5%BB%BA%E6%8F%90%E5%8D%87%E6%8C%87%E5%BC%95.html" target="_blank">闭环直播间基建指引 ↗</a></li>
+          <li>✅ <strong>多优化目标并行：</strong>下单/下单-ROI/24h下单多OG投放</li>
+        </ul>
+      </div>
+      <div>
+        <h4>预期收益（对标品牌E）</h4>
+        <ul style="font-size:13px;color:var(--text-secondary);line-height:2;">
+          <li>📈 直播 ROI 比直购提升 +0.5 以上</li>
+          <li>📈 峰值 GMV 膨胀 2-3x</li>
+          <li>📈 CVR 从 2.3% → 5-8%</li>
+          <li>📈 新增直播日耗 3-10w</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 附录 ====== -->
+<section class="section">
+  <h2 class="section-title"><span class="num">📎</span>关键参考文档</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>文档名称</th><th>用途</th><th>链接</th></tr></thead>
+      <tbody>
+        <tr><td>保健食品赛道投前自查文档</td><td>入局前必读，对齐类目归属与合规边界</td><td><a href="https://doc.weixin.qq.com/doc/w3_AXsAzwa2AM0CNqDIexMhfSneKWcf5" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>投前功效自查 · 医典卡</td><td>核对功效声称边界，避开违规宣称</td><td><a href="https://doc.weixin.qq.com/sheet/e3_AW0ARAYrABACNT9W7QZ8LRq014mg1" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>大健康创意周报 CTR 专项</td><td>视频号爆量素材结构+风格参考</td><td><a href="https://doc.weixin.qq.com/doc/w3_ASgAZwZPAMACNVDepeVikSL0rltyI" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>保健&滋补素材分析报告</td><td>素材大片拆解，爆款创意规律</td><td><a href="https://sumiyaliu.github.io/sumiya-public/creative-biweekly-report.html" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>6月视频号全域选品洞察</td><td>选品趋势、功能赛道热度、货盘结构</td><td><a href="https://sumiyaliu.github.io/sumiya-public/%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E8%A1%8C%E4%B8%9A%E9%80%89%E5%93%81%E6%B4%9E%E5%AF%9F%E6%8A%A5%E5%91%8A_2026%E5%B9%B46%E6%9C%88.html" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>H1闭环核心品类与人群洞察</td><td>品类分布、三链路性别对比、年龄×性别分布</td><td><a href="https://sumiyaliu.github.io/sumiya-public/health-food-h1-analysis.html" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>保健食品闭环投放·完整方法论文档</td><td>四力升级模型、标杆案例、基建指引、创意素材</td><td><a href="https://doc.weixin.qq.com/doc/w3_AXsAzwa2AM0CNvZtAvihnSqCotamu" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>闭环直播间基建提升指引</td><td>从0到1搭建闭环直播间基建+7大案例对标</td><td><a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/%E6%A1%88%E4%BE%8B7_%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E9%97%AD%E7%8E%AF%E5%9F%BA%E5%BB%BA%E6%8F%90%E5%8D%87%E6%8C%87%E5%BC%95.html" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>非闭环（小程序直购/CID）基建提升指引</td><td>CID/小程序直购链路基建指引</td><td><a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/%E4%BF%9D%E5%81%A5%E9%A3%9F%E5%93%81%E9%9D%9E%E9%97%AD%E7%8E%AF%E5%9F%BA%E5%BB%BA%E6%8F%90%E5%8D%87%E6%8C%87%E5%BC%95.html" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>标杆案例全集</td><td>7品牌×6赛道 完整案例</td><td><a href="https://sumiyaliu.github.io/sumiya-public/health-food-cases/" target="_blank">打开 ↗</a></td></tr>
+        <tr><td>投放百宝箱总入口</td><td>保健食品投放实操手册全览</td><td><a href="https://sumiyaliu.github.io/sumiya-public/health-food-toolbox.html" target="_blank">打开 ↗</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>腾讯广告 · 保健食品行业团队 · 2026年8月</p>
+  <p style="margin-top:4px;">数据来源：《腾讯广告26年保健食品投放指南》+ 保健食品投放百宝箱 + 6月选品洞察报告</p>
+  <p style="margin-top:4px;">MoveFree 专场 Workshop · 本文件仅供内部培训参考使用</p>
+</footer>
+
+<script>
+// ===== NAV ACTIVE STATE =====
+const navLinks = document.querySelectorAll('.top-nav a');
+const sections = document.querySelectorAll('.section');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// ===== TAB SWITCH =====
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ===== CHARTS =====
+Chart.register(ChartDataLabels);
+const chartColors = {
+  blue: '#2563EB', teal: '#0D9488', green: '#10B981',
+  orange: '#F59E0B', red: '#EF4444', purple: '#7C3AED',
+  cyan: '#06B6D4', pink: '#EC4899', indigo: '#6366F1',
+  amber: '#F97316', lime: '#84CC16'
+};
+
+// Chart 1: 链路日耗分布
+new Chart(document.getElementById('chartLinkDist'), {
+  type: 'doughnut',
+  data: {
+    labels: ['SaaS直购', '直播', '加粉链路', 'CID链路', '小店直购'],
+    datasets: [{
+      data: [200, 90, 75, 50, 15],
+      backgroundColor: [chartColors.blue, chartColors.green, chartColors.purple, chartColors.teal, chartColors.orange],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '68%',
+    layout: { padding: { top: 20, bottom: 20, left: 60, right: 60 } },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + 'w+ / 日' } },
+      datalabels: {
+        color: '#333',
+        anchor: 'end',
+        align: 'end',
+        offset: 2,
+        clamp: true,
+        clip: false,
+        padding: { top: 1, bottom: 1, left: 4, right: 4 },
+        borderRadius: 3,
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        font: { size: 10, weight: 'bold' },
+        formatter: function(value, ctx) {
+          const labels = ['SaaS直购 200w+', '直播 90w+', '加粉 75w+', 'CID 50w+', '小店直购 15w+'];
+          const pcts = ['46%', '21%', '17%', '12%', '3%'];
+          return labels[ctx.dataIndex] + ' | ' + pcts[ctx.dataIndex];
+        }
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+// Chart 2a: 核心品类日耗占比（横向条形图）
+new Chart(document.getElementById('chartCategorySpend'), {
+  type: 'bar',
+  data: {
+    labels: ['调节三高', '减肥', '增强免疫', '补益安神', '肠胃养护', '骨骼健康', '补血祛斑'],
+    datasets: [{
+      label: '日耗 (万元)',
+      data: [150, 150, 40, 25, 20, 10, 10],
+      backgroundColor: [
+        '#ef4444', '#f97316', '#10b981', '#f59e0b', '#f59e0b',
+        '#6366f1', '#ef4444'
+      ],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            var pct = ['~35%', '~35%', '~10%', '~7%', '~5%', '~3%', '~3%'];
+            return ctx.raw + 'w / 日  占比 ' + pct[ctx.dataIndex];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        max: 200,
+        title: { display: true, text: '日均消耗（万元）' },
+        grid: { color: '#f1f5f9' },
+        ticks: { callback: function(v) { return v + 'w'; } }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { font: { size: 12 } }
+      }
+    }
+  }
+});
+
+// Chart 2b: 核心品类气泡图（X=客单, Y=ROI, 气泡大小=日耗）
+new Chart(document.getElementById('chartCategoryBar'), {
+  type: 'bubble',
+  data: {
+    datasets: [{
+      label: '调节三高',
+      data: [{ x: 72, y: 0.85, r: 35 }],
+      backgroundColor: 'rgba(239,68,68,0.65)', borderColor: '#ef4444', borderWidth: 2
+    }, {
+      label: '减肥',
+      data: [{ x: 65, y: 0.70, r: 35 }],
+      backgroundColor: 'rgba(249,115,22,0.65)', borderColor: '#f97316', borderWidth: 2
+    }, {
+      label: '增强免疫',
+      data: [{ x: 175, y: 1.25, r: 18 }],
+      backgroundColor: 'rgba(16,185,129,0.65)', borderColor: '#10b981', borderWidth: 2
+    }, {
+      label: '补益安神',
+      data: [{ x: 110, y: 0.70, r: 14 }],
+      backgroundColor: 'rgba(245,158,11,0.55)', borderColor: '#f59e0b', borderWidth: 2
+    }, {
+      label: '肠胃养护',
+      data: [{ x: 105, y: 0.85, r: 13 }],
+      backgroundColor: 'rgba(245,158,11,0.55)', borderColor: '#d97706', borderWidth: 2
+    }, {
+      label: '骨骼健康 🦴MoveFree',
+      data: [{ x: 175, y: 1.10, r: 9 }],
+      backgroundColor: 'rgba(99,102,241,0.75)', borderColor: '#6366f1', borderWidth: 3, borderDash: [6, 3]
+    }, {
+      label: '补血祛斑',
+      data: [{ x: 110, y: 0.70, r: 9 }],
+      backgroundColor: 'rgba(239,68,68,0.45)', borderColor: '#dc2626', borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { padding: 12, font: { size: 11 }, usePointStyle: true, pointStyleWidth: 10 }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const raw = ctx.raw;
+            const pctMap = { '调节三高': '35%', '减肥': '35%', '增强免疫': '10%', '补益安神': '7%', '肠胃养护': '5%', '骨骼健康 🦴MoveFree': '3%', '补血祛斑': '3%' };
+            const dsLabel = (ctx.dataset.label || '');
+            const pct = pctMap[dsLabel] || '';
+            const spend = Math.round(raw.r * raw.r / 35); // approximate spend from radius
+            return [dsLabel, '客单: ' + raw.x + '元  |  ROI: ' + raw.y + '  |  占比 ' + pct];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: '平均客单（元）' },
+        min: 30, max: 220,
+        grid: { color: '#f1f5f9' },
+        ticks: { callback: v => v + '元' }
+      },
+      y: {
+        title: { display: true, text: 'ROI' },
+        min: 0.4, max: 1.6,
+        grid: { color: '#f1f5f9' },
+        ticks: { stepSize: 0.2 }
+      }
+    }
+  }
+});
+
+// Chart 3: 核心品类 ROI 排名
+new Chart(document.getElementById('chartRoi'), {
+  type: 'bar',
+  data: {
+    labels: ['增强免疫', '骨骼健康\n🦴MoveFree', '调节三高', '肠胃养护', '减肥', '补益安神', '补血祛斑'],
+    datasets: [{
+      label: 'ROI',
+      data: [1.25, 1.1, 0.85, 0.85, 0.7, 0.7, 0.7],
+      backgroundColor: [
+        chartColors.green, chartColors.indigo,
+        chartColors.red, chartColors.orange,
+        chartColors.amber, chartColors.red, chartColors.red
+      ],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => 'ROI: ' + ctx.raw } }
+    },
+    scales: {
+      y: { title: { display: true, text: 'ROI' }, beginAtZero: true, max: 2, grid: { color: '#f1f5f9' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
