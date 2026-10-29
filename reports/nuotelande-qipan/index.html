@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诺特兰德 · 生意模式全景与起盘路径拆解</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#1a2233; --sub:#5b6472; --mute:#8b95a5; --line:#e6e9ef;
+    --brand:#2f6bff; --brand-d:#1d4ed8; --brand-soft:#eef3ff;
+    --amber:#d97706; --amber-soft:#fff6e8;
+    --green:#15803d; --green-soft:#e9f5ec;
+    --red:#c0392b; --red-soft:#fdecea;
+    --purple:#6d28d9; --purple-soft:#f3efff;
+    --teal:#0e8a8a; --teal-soft:#e7f6f6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.72;padding:34px 16px 60px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto}
+
+  /* ---------- hero ---------- */
+  .hero{background:linear-gradient(135deg,#16224a 0%,#24408f 55%,#2f6bff 100%);color:#fff;
+        border-radius:18px;padding:38px 40px 32px;box-shadow:0 12px 34px rgba(22,34,74,.24)}
+  .hero .tag{display:inline-block;font-size:12px;letter-spacing:1.6px;background:rgba(255,255,255,.18);
+             padding:5px 14px;border-radius:20px;margin-bottom:16px}
+  .hero h1{font-size:29px;font-weight:800;line-height:1.32;letter-spacing:.5px}
+  .hero .sub{font-size:14.5px;opacity:.93;margin-top:10px;max-width:760px}
+  .hero .concl{margin-top:20px;background:rgba(255,255,255,.13);border-left:4px solid #ffd43b;
+               border-radius:10px;padding:15px 18px;font-size:14.5px;line-height:1.78}
+  .hero .concl b{color:#ffd43b}
+  .hero .meta{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22);
+              font-size:12.5px;opacity:.86;display:flex;flex-wrap:wrap;gap:8px 26px}
+
+  /* ---------- kpi ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px}
+  .kpi .num{font-size:24px;font-weight:800;line-height:1.2;color:var(--brand-d)}
+  .kpi .lbl{font-size:12.5px;color:var(--sub);margin-top:6px;font-weight:600}
+  .kpi .note{font-size:11.5px;color:var(--mute);margin-top:3px}
+
+  /* ---------- section ---------- */
+  .sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-top:18px;
+       box-shadow:0 2px 10px rgba(20,30,50,.03)}
+  .sec > h2{font-size:19.5px;font-weight:800;display:flex;align-items:center;gap:11px;
+            padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .sec > h2 .n{display:inline-flex;width:29px;height:29px;background:var(--brand);color:#fff;border-radius:9px;
+               align-items:center;justify-content:center;font-size:14.5px;flex-shrink:0}
+  h3{font-size:15.5px;font-weight:700;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+  h3::before{content:"";width:4px;height:15px;background:var(--brand);border-radius:2px;display:inline-block}
+  h4{font-size:14px;font-weight:700;margin:18px 0 8px;color:#2c3550}
+  p{font-size:14px;color:#2f3a4f}
+  p + p{margin-top:8px}
+  ul{margin:8px 0 0 18px} li{font-size:14px;margin-bottom:5px;color:#2f3a4f}
+  .dim{color:var(--sub);font-size:13px}
+  b.hl{color:var(--brand-d)}
+  .en{font-size:11.5px;color:var(--mute);letter-spacing:.5px;font-weight:600}
+
+  /* ---------- table ---------- */
+  .tw{overflow-x:auto;margin:12px 0 4px;border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;min-width:520px}
+  th{background:#f1f3f8;text-align:left;padding:10px 13px;font-weight:700;color:#333c50;
+     border-bottom:2px solid var(--line);white-space:nowrap;font-size:12.8px}
+  td{padding:10px 13px;border-bottom:1px solid #eef0f5;vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:nth-child(even){background:#fafbfd}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* ---------- pills ---------- */
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11.8px;font-weight:700;white-space:nowrap}
+  .p-b{background:var(--brand-soft);color:var(--brand-d)}
+  .p-a{background:var(--amber-soft);color:var(--amber)}
+  .p-g{background:var(--green-soft);color:var(--green)}
+  .p-r{background:var(--red-soft);color:var(--red)}
+  .p-p{background:var(--purple-soft);color:var(--purple)}
+  .p-t{background:var(--teal-soft);color:var(--teal)}
+  .p-n{background:#eef0f4;color:#5b6472}
+
+  /* ---------- callout ---------- */
+  .call{padding:14px 18px;border-radius:10px;margin:14px 0;font-size:13.6px;line-height:1.78}
+  .call .t{font-weight:800;margin-bottom:5px;font-size:13.6px;display:block}
+  .c-b{background:var(--brand-soft);border-left:4px solid var(--brand)}
+  .c-a{background:var(--amber-soft);border-left:4px solid var(--amber)}
+  .c-r{background:var(--red-soft);border-left:4px solid var(--red)}
+  .c-g{background:var(--green-soft);border-left:4px solid var(--green)}
+  .c-p{background:var(--purple-soft);border-left:4px solid var(--purple)}
+
+  /* ---------- vs split ---------- */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .vsc{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:#fcfdff}
+  .vsc.b{border-top:3px solid var(--brand)}
+  .vsc.a{border-top:3px solid var(--amber)}
+  .vsc .h{font-size:15px;font-weight:800;margin-bottom:2px}
+  .vsc .pct{font-size:22px;font-weight:800;line-height:1.2}
+  .vsc.b .pct{color:var(--brand-d)} .vsc.a .pct{color:var(--amber)}
+  .vsc ul{margin-top:8px}
+
+  /* ---------- bar: stacked ---------- */
+  .sbar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:6px 0 4px;font-size:12.5px;font-weight:700;color:#fff}
+  .sbar div{display:flex;align-items:center;justify-content:center}
+  .seg-live{background:#f0a03c} .seg-dir{background:var(--brand)}
+  .barlab{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-top:2px}
+  .rowbar{display:grid;grid-template-columns:118px 1fr;align-items:center;gap:12px;margin:7px 0;font-size:12.8px}
+  .rb{display:flex;flex-direction:column;gap:3px}
+  .rb .bar{height:13px;border-radius:4px;display:flex;align-items:center;color:#fff;font-size:10.5px;
+           font-weight:700;padding-left:6px;min-width:34px}
+  .rb .bar.l{background:#f0a03c} .rb .bar.d{background:var(--brand)}
+
+  /* ---------- timeline ---------- */
+  .anchor{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 18px;font-size:12.8px}
+  .anchor span.n{background:#1a2233;color:#fff;border-radius:8px;padding:5px 12px;font-weight:700}
+  .anchor i{color:var(--mute);font-style:normal;font-size:16px}
+  .stage{border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;background:#fcfdff;position:relative}
+  .stage .top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .stage .sid{display:inline-flex;width:38px;height:38px;border-radius:10px;color:#fff;font-weight:800;
+              align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--brand)}
+  .stage.s2 .sid{background:var(--purple)} .stage.s3 .sid{background:var(--amber)} .stage.s4 .sid{background:var(--teal)}
+  .stage .nm{font-size:16px;font-weight:800}
+  .stage .win{font-size:12.5px;color:var(--mute);font-weight:600}
+  .stage .ms{font-size:13.5px;color:#2f3a4f;margin:6px 0 12px}
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .kv .i{background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+  .kv .k{font-size:11.5px;color:var(--mute);font-weight:700;letter-spacing:.3px}
+  .kv .v{font-size:13px;margin-top:3px;line-height:1.6}
+
+  /* ---------- factor cards ---------- */
+  .fx{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .fxc{border:1px solid var(--line);border-radius:11px;padding:15px 16px;background:#fcfdff}
+  .fxc .no{font-size:11.5px;font-weight:800;color:var(--brand-d);letter-spacing:1px}
+  .fxc .ti{font-size:14.2px;font-weight:800;margin:3px 0 6px}
+  .fxc .ds{font-size:12.8px;color:#3a4459;line-height:1.68}
+  .fxc .st{font-size:12px;margin-top:8px;color:var(--amber);letter-spacing:1px}
+  .fxc .cp{font-size:11.5px;color:var(--sub);margin-top:2px}
+
+  /* ---------- footer ---------- */
+  .foot{margin-top:20px;background:#fbfcfe;border:1px dashed #d7dce6;border-radius:12px;
+        padding:18px 24px;font-size:12.5px;color:var(--sub);line-height:1.85}
+  .foot b{color:#3a4459}
+  .disc{margin-top:14px;font-size:12px;color:var(--mute);text-align:center;line-height:1.8}
+
+  @media (max-width:860px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .vs{grid-template-columns:1fr}
+    .fx{grid-template-columns:1fr}
+    .hero{padding:28px 22px} .sec{padding:20px 18px}
+  }
+  @media print{
+    body{background:#fff;padding:0}
+    .sec{break-inside:avoid;box-shadow:none}
+    .hero{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= HERO ================= -->
+  <div class="hero">
+    <span class="tag">对标拆解 B1</span>
+    <h1>诺特兰德 · 生意模式全景与起盘路径拆解</h1>
+    <div class="sub">从 2025 Q4 单品破局，到 2026 Q4 全域经营 —— 四个阶段、两套引擎，以及汤臣倍健下一阶段的规划框架。    </div>
+    <div class="concl">
+      <b>一句话总览：</b>诺特兰德用半年多时间，在视频号把"抖音验证过的达人分销 + 自播矩阵"模型重做了一遍，并在 618 后完成引擎换挡 —— 从直播换到 ADQ 小店直购。规模已断层第一（2026 年 1-9 月 GMV 在 <b>10 亿量级</b>、占大盘 <b>约 4 成</b>、约为第 2 名 <b>5 倍以上</b>）。<br>
+      <span style="opacity:.85">第三方交叉验证（友望数据 · 视频号品牌全网口径）：1-9 月 GMV 接近 <b>10 亿量级</b>、日均 <b>300–400 万</b>，类目市占 <b>39.2% → 41.2%</b>；10 月 MTD 日均升至 <b>550–600 万</b>、市占 <b>46.9%</b>。两边份额一致，绝对值因分母定义不同。</span>
+    </div>
+  </div>
+
+  <!-- ================= KPI ================= -->
+  <div class="kpis">
+    <div class="kpi"><div class="num">10 亿量级</div><div class="lbl">1-9 月 GMV</div><div class="note">K800 大盘口径 · 同比 20 倍以上<br><span style="opacity:.7">友望品牌口径同量级</span></div></div>
+    <div class="kpi"><div class="num">39.4%</div><div class="lbl">占大盘份额</div><div class="note">K800 全看板 1 / 689<br><span style="opacity:.7">友望 39.2% → 41.2% → 46.9%</span></div></div>
+    <div class="kpi"><div class="num">5 倍以上</div><div class="lbl">≈ 第 2 名体量</div><div class="note">第 2 名为华大营养</div></div>
+    <div class="kpi"><div class="num">20.4%</div><div class="lbl">广告 GMV 占比</div><div class="note">五强最低，低广告依赖</div></div>
+    <div class="kpi"><div class="num">550–600 万</div><div class="lbl">10 月日均 GMV</div><div class="note">友望全网口径（1-9 月 300–400 万）<br><span style="opacity:.7">自营 16 店口径 150–200 万</span></div></div>
+  </div>
+
+  <!-- ================= 1 生意模式全景 ================= -->
+  <div class="sec">
+    <h2><span class="n">1</span>诺特兰德生意模式全景</h2>
+
+    <!-- 1.1 -->
+    <h3>1.1 生意来源：自营 vs 达人分销</h3>
+    <div class="vs">
+      <div class="vsc b">
+        <div class="h">自营</div><div class="pct">40% – 50%</div>
+        <div class="dim" style="font-weight:700;margin-top:2px">做深度：承接 + 复购 + 沉淀人群资产<br><span style="font-weight:400">全网成交口径</span></div>
+        <ul>
+          <li><b>16 家</b>自营小店（含直购店与直播店）</li>
+          <li>自营直播间 <b>160+ 个</b>，其中主力直播间 <b>15+ 个</b></li>
+          <li>承接达人种草溢出人群，成交沉淀进品牌 5R 资产</li>
+        </ul>
+      </div>
+      <div class="vsc a">
+        <div class="h">达人分销</div><div class="pct">50% – 60%</div>
+        <div class="dim" style="font-weight:700;margin-top:2px">做广度：拉新 + 声量 + 铺量渗透<br><span style="font-weight:400">全网成交口径</span></div>
+        <ul>
+          <li><span class="pill p-b">腾讯侧实测</span> 月<b>合作达人约 3,860 位</b></li>
+          <li><span class="pill p-b">腾讯侧实测</span> 月<b>达人产出带货短视频 4,100 – 4,900 条</b></li>
+          <li><span class="pill p-n">抖音侧</span> 月合作博主约 3,000 个 / 月产出带货视频 3,000–5,000 条<span style="font-weight:400">（仅背景参考）</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="call c-b">
+      <span class="t">达人分销与自营业务定位</span>
+      达人负责"<b class="hl">种的广度</b>" —— 腾讯侧实测：2026-09 <b>3,863 位合作达人产出 4,944 条带货短视频</b>；2026-10 MTD 同口径 <b>3,862 位 / 4,154 条</b>。本质是把"诺特兰德"变成目标人群刷视频时的熟面孔，同时制造可复用的素材资产；<br>
+      自营负责"<b class="hl">收的深度</b>" —— 自营店铺、直播间矩阵承接达人种草溢出的人群，成交沉淀进品牌 5R 人群资产。
+    </div>
+
+    <!-- 1.2 -->
+    <h3>1.2 自营链路拆解：直播 vs 直购（引擎已换挡）</h3>
+    <p><b>换挡发生在下半年，而且很陡。</b>直购（ADQ 小店直购）消耗占比 <b>7 月 38.7% → 10 月 67.4%</b>（<span class="pill p-b">+28.6pp</span>）；按推算 GMV 计 <b>52.2% → 73.0%</b>。全年加权下来，直购吃掉 <b>53.7% 的消耗、62.5% 的 GMV</b>。</p>
+
+    <h4>YTD 加权总览：结构与效率（全年 299 天）</h4>
+    <p class="dim">先把全年摊平看，再看月度走势。全年加权下：<b>直购用约 5 成消耗，做出约 6 成 GMV</b>；直播用约 5 成消耗，只换回约 4 成 GMV —— 投入相近，产出拉开 25pp。</p>
+
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:14px 0 2px">结构：投入占比 vs 产出占比</p>
+    <div class="rowbar">
+      <div style="font-size:12px;font-weight:700;color:var(--sub);text-align:right">投放消耗</div>
+      <div class="rb"><div class="sbar" style="margin:0"><div class="seg-dir" style="width:53.7%">直购 53.7%</div><div class="seg-live" style="width:46.3%">直播 46.3%</div></div></div>
+    </div>
+    <div class="rowbar">
+      <div style="font-size:12px;font-weight:700;color:var(--sub);text-align:right">产出 GMV</div>
+      <div class="rb"><div class="sbar" style="margin:0"><div class="seg-dir" style="width:62.5%">直购 62.5%</div><div class="seg-live" style="width:37.5%">直播 37.5%</div></div></div>
+    </div>
+    <div class="barlab"><span>■ 直购（ADQ 小店直购）</span><span>■ 直播链路</span></div>
+    <p class="dim" style="margin-top:4px">两端日均消耗都在 <b>20–30 万</b>量级、几乎持平；差距全部来自产出端 —— 直购日均 GMV <b>60–70 万</b>，直播 <b>40–50 万</b>。</p>
+
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:16px 0 2px">效率：直购 vs 直播（YTD 加权）</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:210px">指标</th><th class="num">直购（ADQ 小店直购）</th><th class="num">直播链路</th></tr></thead>
+      <tbody>
+        <tr><td>投放消耗占比</td><td class="num"><b>53.7%</b></td><td class="num">46.3%</td></tr>
+        <tr><td>产出 GMV 占比</td><td class="num"><b class="hl">62.5%</b></td><td class="num">37.5%</td></tr>
+        <tr><td><b>ROI 广告达成率</b></td><td class="num"><b class="hl">120%–130%</b></td><td class="num" style="color:#c0392b"><b>90%–95%</b></td></tr>
+        <tr><td>下单 ROI</td><td class="num">2.50–3.00</td><td class="num">1.50–2.00</td></tr>
+        <tr><td>CPA<span class="dim">（1 月 → 10 月）</span></td><td class="num">20–30 → 40–50 元</td><td class="num">60–70 → 80–90 元</td></tr>
+        <tr><td>下单单价<span class="dim">（1 月 → 10 月）</span></td><td class="num">40–50 → 90–100 元</td><td class="num">100–110 → 140–150 元</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>行业 TOP5 商家横向对比</h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:150px">指标</th><th class="num">诺特兰德</th><th class="num">华大营养</th><th class="num">万益蓝</th><th class="num">五个女博士</th><th class="num">华北制药</th></tr></thead>
+      <tbody>
+        <tr><td>店铺数</td><td class="num"><b>16 家</b></td><td class="num">4 家</td><td class="num">9 家</td><td class="num">7 家</td><td class="num">10 家</td></tr>
+        <tr><td>窗口内 GMV<span class="dim">（1–9 月）</span></td><td class="num"><b>10–15 亿</b></td><td class="num">2–5 亿</td><td class="num">1–2 亿</td><td class="num">1–2 亿</td><td class="num">5,000 万–1 亿</td></tr>
+        <tr><td>广告 GMV<span class="dim">（占比）</span></td><td class="num"><b>2–3 亿</b><span class="dim">（20.4%）</span></td><td class="num">1–2 亿<span class="dim">（76.3%）</span></td><td class="num">5,000 万–1 亿<span class="dim">（52.2%）</span></td><td class="num">3,000–5,000 万<span class="dim">（24.2%）</span></td><td class="num">3,000–5,000 万<span class="dim">（39.3%）</span></td></tr>
+        <tr><td>直播 / 短视频 / 其他</td><td class="num"><b>32% / 53% / 14%</b></td><td class="num">79% / 0% / 21%</td><td class="num">89% / 1% / 10%</td><td class="num">92% / 0% / 8%</td><td class="num">92% / 4% / 4%</td></tr>
+        <tr><td>全店订单</td><td class="num"><b>1,500 万–2,000 万单</b></td><td class="num">30–50 万单</td><td class="num">10–30 万单</td><td class="num">30–50 万单</td><td class="num">50–100 万单</td></tr>
+        <tr><td>客单价<span class="dim">（加权）</span></td><td class="num"><b>79 元/单</b></td><td class="num">737 元/单</td><td class="num">647 元/单</td><td class="num">308 元/单</td><td class="num">140 元/单</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">客单价 = 窗口 GMV 加权；金额类绝对值（GMV / 广告 GMV / 订单）已做区间模糊化处理，占比类指标保持原值。</p>
+
+    <div class="call c-b">
+      <span class="t">总览结论</span>
+      618 后直播退潮，诺特兰德生意增长引擎从直播链路逐步切换向<b class="hl">更低成本、灵活拿量的直购链路</b>。对比行业头部 TOP5 客户，诺特兰德<b class="hl">广告 GMV 占比 20.4%</b>（五强中最低）、<b class="hl">客单价 79 元</b>（五强中最低）、<b class="hl">订单 1,669 万单</b>（五强中最高）——典型的「<b>低客单、走量、低广告依赖</b>」模型；也是五强中<b>唯一以短视频为主（53% ＞ 直播 32%）</b>的品牌，短视频矩阵构成其规模壁垒。
+    </div>
+
+    <h4>① 月度结构：7 月是拐点 </h4>
+    <div style="margin:12px 0 14px">
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">01 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:57.1%">直购 57%</div><div class="seg-live" style="width:42.9%">43%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">02 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:39.4%">直购 39%</div><div class="seg-live" style="width:60.6%">61%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">03 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:59.0%">直购 59%</div><div class="seg-live" style="width:41.0%">41%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">04 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:68.6%">直购 69%</div><div class="seg-live" style="width:31.4%">31%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">05 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:50.7%">直购 51%</div><div class="seg-live" style="width:49.3%">49%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">06 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:30.8%">直购 31%</div><div class="seg-live" style="width:69.2%">69%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">07 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:38.7%">直购 39%</div><div class="seg-live" style="width:61.3%">61%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">08 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:57.4%">直购 57%</div><div class="seg-live" style="width:42.6%">43%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">09 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:64.0%">直购 64%</div><div class="seg-live" style="width:36.0%">36%</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0">
+          <div style="width:44px;font-size:12px;font-weight:700;color:var(--sub);text-align:right">10 月</div>
+          <div class="sbar" style="flex:1;margin:0"><div class="seg-dir" style="width:67.4%">直购 67%</div><div class="seg-live" style="width:32.6%">33%</div></div>
+        </div>
+      <div class="barlab"><span>■ 直购（ADQ 小店直购）</span><span>■ 直播链路</span></div>
+    </div>
+
+    <h4>② 分品线链路效率差</h4>
+    <div style="margin:10px 0 6px">
+      <div class="en">品线 ROI：直购 vs 直播（2026-10 切片）</div>
+      <div style="margin-top:10px">
+        <div class="rowbar"><div>骨胶原钙</div><div class="rb">
+          <div class="bar l" style="width:68%">直播 1.50–1.75</div><div class="bar d" style="width:76%">直购 1.75–2.00</div></div></div>
+        <div class="rowbar"><div>B 族</div><div class="rb">
+          <div class="bar l" style="width:72%">直播 1.75–2.00</div><div class="bar d" style="width:82%">直购 2.00–2.25</div></div></div>
+        <div class="rowbar"><div>益生菌</div><div class="rb">
+          <div class="bar l" style="width:82%">直播 2.00–2.25</div><div class="bar d" style="width:94%">直购 2.25–2.50</div></div></div>
+        <div class="rowbar"><div>VC+VE 烟酰胺</div><div class="rb">
+          <div class="bar l" style="width:76%">直播 1.75–2.00</div><div class="bar d" style="width:81%">直购 2.00–2.25</div></div></div>
+        <div class="rowbar"><div>液体钙 / 钙铁锌</div><div class="rb">
+          <div class="bar l" style="width:67%">直播 1.50–1.75</div><div class="bar d" style="width:80%">直购 2.00–2.25</div></div></div>
+      </div>
+      <div class="barlab"><span>■ 直播 ROI</span><span>■ 直购 ROI（各品线均高于直播）</span></div>
+      <p class="dim" style="margin-top:6px">这不是"直购更好"的泛泛结论，是<b>每一个品线都更好</b>。直播的问题是承接（同品线内效率差距主要来自 CVR 和客单价，不是引流点击）；<b>直购的问题则是规模上来后的边际递减</b> —— 达成率已从 5 月的 195%–200% 回落到 10 月的 105%–110%，再放量会逼近盈亏线，<b>放量节奏必须配货盘结构，不能只加预算。</b></p>
+    </div>
+
+    <h4>小结</h4>
+    <div class="call c-b">
+      <span class="t">自营增长路径：直播起盘 → 直购换挡</span>
+      <b>① 起盘靠直播。</b>诺特兰德自营以直播链路切入，靠持续培育爆款单品直播间、周期性打造直播大场，完成品类广告模型的培育与 GMV 水位跃迁 —— <b>直播是它起盘的引擎</b>。<br>
+      <b>② 7 月后换挡直购。</b>在直播时长见顶、直播边际 GMV 产出衰退的情况下，今年 7 月起逐步完成增长引擎切换：用<b>更低成本、更灵活拿量</b>的直购链路，继续把 GMV 规模往外拓。<br>
+      <b>③ 换挡能成立，靠三个前提缺一不可。</b>品类已具备成熟心智认知、客单区间适合快速决策、大量 KOC 短视频提供了充足的素材供给 —— 三者同时满足，才走出了一条<b>与行业其他头部品牌不一样的增长路径</b>。
+    </div>
+
+    <!-- 1.3 -->
+    <h3>1.3 达人侧：KOC 短挂 vs 达播带货</h3>
+    <p class="dim">先看达人分销这块 GMV 内部是怎么构成的 —— 短视频带货与达播带货各占多少，再分别下钻看是哪些达人在产出。</p>
+
+    <h4>达人分销 GMV 的结构：短视频 vs 达播</h4>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi"><div class="num">50%–60%</div><div class="lbl">达人分销占品牌全网成交</div><div class="note">全网成交口径，见 1.1</div></div>
+      <div class="kpi"><div class="num">84%–87%</div><div class="lbl">其中：短视频带货 GMV</div><div class="note">7,300–9,100 万（9 月）</div></div>
+      <div class="kpi"><div class="num">13%–16%</div><div class="lbl">其中：达播带货 GMV</div><div class="note">1,300–1,400 万（9 月，实测）</div></div>
+    </div>
+    <div style="margin:10px 0 6px">
+      <div class="sbar"><div class="seg-dir" style="width:85%">短视频带货 84%–87%</div><div class="seg-live" style="width:15%">达播 13%–16%</div></div>
+      <div class="barlab"><span>■ 短视频带货（挂车 / 商品卡 / 橱窗）</span><span>■ 达播带货（达人直播间）</span></div>
+    </div>
+    <div class="call c-b">
+      <span class="t">结构读数</span>
+      达人分销 GMV 里，<b class="hl">短视频带货约占八成半，达播只占一成半</b> —— 与 1.2 自营侧"7 月后换挡直购"是同一件事的两面：<b>诺特兰德在腾讯侧的规模不靠头部达播撑，靠的是大量达人持续挂车的内容供给。</b>达播的角色是内容场与大场脉冲，不是 GMV 主力。
+    </div>
+    <p class="dim">口径：达人分销 GMV 取 1.1 全网成交口径（占品牌全网成交 50%–60%）；达播带货 GMV 为友望直播成交口径的外部达人部分（<b>已剔除官方矩阵号</b>，9 月 306 位开播达人）。短视频部分为两者扣减推算，<b>用于看量级结构，不作为单独考核口径</b>。</p>
+
+        <h4>支撑这一规模，需要多大的达人盘子</h4>
+    <p class="dim">达人分销的两条线（短视频带货 / 达播带货）<b>所需的达人盘子完全不同</b>，下面分开看。覆盖品牌关联的全部达人账号（<b>不含官方矩阵号与授权分销号</b>），<b>不是头部切片</b>。</p>
+
+    <p style="margin:18px 0 8px;font-size:14px;font-weight:700"><span class="pill p-b">短视频带货</span> 撑起达人分销里 84%–87% 的 GMV</p>
+    <div class="kpis" style="grid-template-columns:repeat(2,1fr)">
+      <div class="kpi"><div class="num">3,863 位</div><div class="lbl">9 月合作达人（剔除官方号）</div><div class="note">10 月 MTD <b>3,862 位</b>，双期一致</div></div>
+      <div class="kpi"><div class="num">4,944 条</div><div class="lbl">9 月达人产出带货短视频</div><div class="note">10 月 MTD <b>4,154 条</b>（26 天）</div></div>
+    </div>
+    <div class="call c-b" style="margin-top:12px">
+      <span class="t">短视频侧的支撑量</span>
+      <b>· 短视频带货能做到这个量级，底色是约 3,800 位／月的合作达人盘子</b> —— 与抖音侧"月合作博主约 3,000 个"同一量级，可正面回应"腾讯侧铺不了达人"。<br>
+      <b>· 与之配套的是约 4,900 条／月的达人带货短视频供给</b> —— 这八成半的达人分销 GMV，就是由这几千位达人、每月数千条内容堆出来的。<b>单条内容的产出并不高，规模来自"达人数量 × 内容条数"。</b><br>
+      <b class="hl">盘子要铺到这个密度，靠品牌一家一家自己谈是不成立的 —— 需要机构化的达人组织能力，把海量 KOC 批量接入、持续供给并按周筛选复用。</b>
+    </div>
+
+    <p style="margin:22px 0 8px;font-size:14px;font-weight:700"><span class="pill p-a">达播带货</span> 撑起达人分销里 13%–16% 的 GMV</p>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi"><div class="num">37 场</div><div class="lbl">Q3 头部达播场次</div><div class="note">单月 8 → 14 → 15 场</div></div>
+      <div class="kpi"><div class="num">29 位</div><div class="lbl">Q3 头部达播达人</div><div class="note">7 位稳定合作者贡献 44.6%</div></div>
+      <div class="kpi"><div class="num">约 1,500 万</div><div class="lbl">Q3 达播 GMV</div><div class="note">7→9 月 +160.6%</div></div>
+    </div>
+
+    <p style="margin:16px 0 6px"><b>两套口径对账：腾讯侧头部切片 vs 友望全量</b></p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:160px">口径</th><th class="num">达人数</th><th class="num">场次</th><th class="num">达播 GMV</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>腾讯侧 · 头部切片</b><br><span class="dim">单场 &gt; 20 万</span></td><td class="num">29 位</td><td class="num">37 场</td><td class="num">约 1,500 万</td><td>品牌侧达播明细，<b>只统计单场高产出的头部场次</b></td></tr>
+        <tr><td><b>友望 · 全量口径</b><br><span class="dim">外部达人，剔官方</span></td><td class="num">566 位开播</td><td class="num">约 4,300 场</td><td class="num">约 3,400 万</td><td>Q3 去重，<b>含全部长尾达播</b></td></tr>
+        <tr style="background:#eef4ff"><td><b>头部占比</b></td><td class="num"><b>5%</b></td><td class="num"><b class="hl">不到 1%</b></td><td class="num"><b>约 44%</b></td><td>极少数高产场次，扛下近一半的达播 GMV</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">两套口径<b>可对账、不冲突</b>：腾讯侧 37 场是友望全量约 4,300 场的<b>子集</b>（单场 &gt; 20 万这一条筛出来的）。单月同样成立 —— 9 月腾讯侧 15 场、650–700 万；友望全量 306 位开播、1,300–1,400 万，头部场次占 1%、产出占约一半。<span class="dim">GMV 绝对值不可互推（品牌 GMV 口径 vs 友望销售额估算），此处只比结构。</span></p>
+
+    <div class="call c-g">
+      <span class="t">达播的盘子逻辑与短视频相反：不铺量，只筛头部</span>
+      达播侧<b class="hl">用不到 1% 的场次、5% 的达人，做出约 44% 的达播 GMV</b> —— 这条线扩规模靠的是<b>把少数能打大场的人反复复用</b>（7 位稳定合作者就贡献了 44.6%），而不是把达人数往上加。<br>
+      <b>对照看：短视频那边要的是"广"，达播这边要的是"精"</b> —— 前者需要机构化的大规模供给能力，后者需要的是头部达人的排期与关系资产。
+    </div>
+
+<h4>下钻一：达播带货 —— 306 位开播达人，谁在产出</h4>
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:14px 0 2px">按粉丝层级</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">粉丝层级</th><th class="num">达人数</th><th class="num">数量占比</th><th class="num">直播 GMV</th><th class="num">GMV 占比</th><th class="num">人均 GMV</th></tr></thead>
+      <tbody>
+        <tr><td><b>&lt; 1 万</b></td><td class="num">198</td><td class="num"><b>64.7%</b></td><td class="num">700–800 万</td><td class="num"><b class="hl">53.6%</b></td><td class="num">3–4 万</td></tr>
+        <tr><td>1 – 10 万</td><td class="num">46</td><td class="num">15.0%</td><td class="num">400–500 万</td><td class="num"><b>31.5%</b></td><td class="num"><b>9–10 万</b></td></tr>
+        <tr><td>10 – 50 万</td><td class="num">31</td><td class="num">10.1%</td><td class="num">100–200 万</td><td class="num">7.5%</td><td class="num">3–4 万</td></tr>
+        <tr><td>50 – 100 万</td><td class="num">13</td><td class="num">4.2%</td><td class="num">50–100 万</td><td class="num">4.5%</td><td class="num">4–5 万</td></tr>
+        <tr><td>≥ 100 万</td><td class="num">18</td><td class="num">5.9%</td><td class="num">30–50 万</td><td class="num">2.8%</td><td class="num">2–3 万</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:14px 0 2px">按账号类型</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">账号类型</th><th class="num">达人数</th><th class="num">数量占比</th><th class="num">GMV 占比</th><th class="num">人均 GMV</th><th>角色</th></tr></thead>
+      <tbody>
+        <tr><td><b>未标注 / 其他</b></td><td class="num">193</td><td class="num">63.1%</td><td class="num">52.6%</td><td class="num">3–4 万</td><td>长尾基本盘</td></tr>
+        <tr><td><b>生活 / 好物</b></td><td class="num">51</td><td class="num">16.7%</td><td class="num"><b>31.4%</b></td><td class="num"><b>8–9 万</b></td><td>达播出货主力</td></tr>
+        <tr><td>情感 / 娱乐</td><td class="num">30</td><td class="num">9.8%</td><td class="num">9.0%</td><td class="num">4–5 万</td><td>流量型，转化一般</td></tr>
+        <tr><td>健身运动</td><td class="num">9</td><td class="num">2.9%</td><td class="num">6.1%</td><td class="num">9–10 万</td><td>小而精，人均最高</td></tr>
+        <tr><td>美食</td><td class="num">13</td><td class="num">4.2%</td><td class="num">0.4%</td><td class="num">—</td><td>跨品类试水</td></tr>
+        <tr><td>母婴育儿</td><td class="num">7</td><td class="num">2.3%</td><td class="num">0.5%</td><td class="num">—</td><td>跨品类试水</td></tr>
+      </tbody>
+    </table></div>
+        <div class="call c-r">
+      <span class="t">达播的反直觉结论：不看粉丝量，看人群匹配</span>
+      <b>粉丝量与产出不成正比，头部甚至是负相关。</b>&lt; 1 万粉的达人占 64.7% 的人数、贡献 <b>53.6%</b> 的 GMV；而 ≥ 100 万粉的 18 位达人加起来只贡献 <b class="hl">2.8%</b>。人均产出最高的是 <b>1–10 万粉</b>那一层（9–10 万/人），不是百万粉。
+    </div>
+
+    <h4>下钻二：短视频带货 —— 964 位挂车达人，谁在供给</h4>
+    <p class="dim">短视频侧友望仅提供内容与条数口径，<b>无视频级成交金额</b>，故产出以<b>带货商品视频条数</b>衡量（已剔除官方矩阵号）。</p>
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:14px 0 2px">按粉丝层级</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">粉丝层级</th><th class="num">达人数</th><th class="num">数量占比</th><th class="num">带货视频占比</th><th class="num">人均条数</th></tr></thead>
+      <tbody>
+        <tr><td><b>&lt; 1 万</b></td><td class="num">701</td><td class="num"><b>72.7%</b></td><td class="num"><b class="hl">60.9%</b></td><td class="num">3.5</td></tr>
+        <tr><td>1 – 10 万</td><td class="num">146</td><td class="num">15.1%</td><td class="num"><b>22.1%</b></td><td class="num"><b>6.0</b></td></tr>
+        <tr><td>10 – 50 万</td><td class="num">67</td><td class="num">7.0%</td><td class="num">8.9%</td><td class="num">5.3</td></tr>
+        <tr><td>50 – 100 万</td><td class="num">30</td><td class="num">3.1%</td><td class="num">4.9%</td><td class="num">6.6</td></tr>
+        <tr><td>≥ 100 万</td><td class="num">20</td><td class="num">2.1%</td><td class="num">3.1%</td><td class="num">6.2</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:13px;color:var(--sub);font-weight:700;margin:14px 0 2px">按账号类型</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">账号类型</th><th class="num">达人数</th><th class="num">数量占比</th><th class="num">带货视频占比</th><th class="num">人均条数</th><th>角色</th></tr></thead>
+      <tbody>
+        <tr><td><b>未标注 / 其他</b></td><td class="num">682</td><td class="num">70.7%</td><td class="num"><b class="hl">76.7%</b></td><td class="num">4.5</td><td>供给基本盘</td></tr>
+        <tr><td>生活 / 好物</td><td class="num">165</td><td class="num">17.1%</td><td class="num">10.8%</td><td class="num">2.6</td><td>铺得多、单产低</td></tr>
+        <tr><td>情感 / 娱乐</td><td class="num">78</td><td class="num">8.1%</td><td class="num">8.9%</td><td class="num">4.5</td><td>流量型</td></tr>
+        <tr><td>健康 / 营养</td><td class="num">5</td><td class="num">0.5%</td><td class="num">1.5%</td><td class="num"><b>11.8</b></td><td>垂直专业，单产最高</td></tr>
+        <tr><td>健身运动</td><td class="num">11</td><td class="num">1.1%</td><td class="num">1.1%</td><td class="num">3.8</td><td>垂直精准</td></tr>
+        <tr><td>母婴育儿 / 美食 / 美妆</td><td class="num">23</td><td class="num">2.4%</td><td class="num">1.2%</td><td class="num">2.0</td><td>跨品类试水</td></tr>
+      </tbody>
+    </table></div>
+        <div class="call c-g">
+      <span class="t">短视频侧的两条读数</span>
+      <b>① 供给比达播更下沉。</b>&lt; 1 万粉达人占 72.7% 的人数、产出 60.9% 的带货视频 —— <b>短视频场的地基就是素人和小 KOC。</b><br>
+      <b>② 单产最高的是"1–10 万粉"和垂直专业号。</b>1–10 万粉人均 6.0 条；健康 / 营养类虽然只有 5 位达人，人均 <b>11.8 条</b>，是所有类型里最高的 —— <b>垂直号少而密，是效率最高的那一格。</b>
+    </div>
+    <p class="dim">稳定性校验：10 月 MTD（10/1–10/26）结构一致 —— 达播侧 &lt; 1 万粉贡献 48.4%、1–10 万粉 31.9%；短视频侧 &lt; 1 万粉产出占比 60.2%。</p>
+
+
+        <h4>KOC 团长机构合作：把达人供给铺起来的两种方式</h4>
+    <p>前面看到的达人盘子 —— 每月 <b>3,800 位以上合作达人</b>、<b>约 4,900 条带货短视频</b> —— 不是品牌自己一家一家谈出来的，背后是<b>机构化的 KOC 组织能力</b>：批量接入达人、持续供给内容、并按周筛出能跑的人再放大。我们可以协助对接<b>具备膳食品类合作经验、且有优质达人储备的 KOC 团长机构</b>，帮品牌把这块供给快速搭起来。合作有两种收费方式：</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">对比维度</th><th><span class="pill p-b">模式一</span> 低佣金 + 投流费</th><th><span class="pill p-a">模式二</span> 高佣金全包</th></tr></thead>
+      <tbody>
+        <tr><td><b>收费结构</b></td><td><b>5% + 5% 合作佣金</b>（合计 10%）</td><td>按产出 GMV 结算 <b>40% 佣金</b></td></tr>
+        <tr><td><b>投放预算</b></td><td>品牌<b>单独出投放预算</b>，预算与内容成本分账</td><td>团长<b>承接品类投放预算</b>，品牌不再单独出投放费用</td></tr>
+        <tr><td><b>团长角色</b></td><td>对接品牌与 KOC 达人的<b>中间方</b>，负责 <b>KOC 批量撮合</b>，收取固定佣金费用</td><td>类似品牌方货品的<b>承包商</b>，承包品类在视频号渠道的<b>达人分销</b>，分销成本<b>盈亏自负</b>，按 GMV 固定比例与品牌方结算佣金</td></tr>
+      </tbody>
+    </table></div>
+
+
+<!-- 1.4 -->
+    <h3>1.4 货盘结构：引流品 / 利润品</h3>
+    <p class="dim">产品族全景（自营 16 店，日均 GMV 万元，Q2 → Q3 → 10 月 MTD）</p>
+    <div class="tw"><table>
+      <thead><tr><th>产品族</th><th>日均 GMV 走势</th><th>GMV 占比<br><span class="dim">Q2 → Q3 → 10 月</span></th><th>客单价</th><th class="num">退款率</th><th>定位与判断</th></tr></thead>
+      <tbody>
+        <tr><td><b>骨胶原蛋白钙</b></td><td>45–50 → 55–60 → <b>85–90</b></td><td><b>31.8% → 39% → 51.8%</b></td><td>105–110 → 125–130 元</td><td class="num">16.0%</td><td><span class="pill p-b">第一利润品 / 现金牛</span> 占比三期从三成拉到过半，一枝独秀，也是单品依赖风险源头</td></tr>
+        <tr><td><b>益生菌</b></td><td>10–15 → 15–20 → <b>20–25</b></td><td>8% → 12% → <b>13%</b></td><td>190–195 → 160–170 元</td><td class="num">19.6%</td><td><span class="pill p-g">唯一稳定增长的第二曲线</span> 直播 ROI 三期都在 2.0 以上</td></tr>
+        <tr><td><b>B 族维生素</b></td><td>20–25 → 25–30 → 20–25</td><td>15% → 19% → 13%</td><td>50–60 元</td><td class="num">18.0%</td><td><span class="pill p-a">引流 + 走量</span> 9.9–99.5 元宽价格带，分销榜绝对主力</td></tr>
+        <tr><td><b>VC+VE 烟酰胺</b></td><td>31.3 → 24.5 → 19.8</td><td>21% → 17% → 12%</td><td>91 → 87 元</td><td class="num">24.8%</td><td><span class="pill p-r">持续下滑 + 结构性高退款</span></td></tr>
+        <tr><td><b>叶黄素</b></td><td>12.7 → 10.4 → 8.0</td><td>9% → 7% → 5%</td><td>113 → 69 元</td><td class="num">17.4%</td><td>持续下滑，客单价被腰斩</td></tr>
+        <tr><td><b>液体钙 / 钙铁锌</b></td><td>21.7 → 6.2 → 6.0</td><td>15% → 4% → 4%</td><td>228 → 289 元</td><td class="num">24.5%</td><td>节点型品类（Q2 靠消博会/母婴展推动），断崖后低位</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim" style="margin-top:8px">GMV 占比由各产品族日均 GMV 折算，含未单列的长尾产品族（合计 1% 左右）；骨胶原占比与已披露口径一致（31.8% → 51.8%）。</p>
+
+    <h4>价格带三层结构（视频号商品榜实证）</h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:90px">层级</th><th>代表商品</th><th style="width:110px">价格</th><th>作用</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill p-a">引流层</span></td><td>维 C 咀嚼片（21 条链接）、血橙复合 B 族（9.9 元，60 片）</td><td>9.9 – 19.9 元</td><td>拉新、达人铺量、制造尝鲜门槛</td></tr>
+        <tr><td><span class="pill p-b">承接层</span></td><td>每日定制营养包（4 粒×30 包）、四维益生菌（12000 亿活性）</td><td>50 – 200 元</td><td>组合装提客单，承接引流转化</td></tr>
+        <tr><td><span class="pill p-t">利润层</span></td><td>骨胶原钙 99 元 3 瓶 / 199 元 7 瓶 / 200 元两瓶装；液体钙铁锌直饮包</td><td>99 – 289 元</td><td>锁定 LTV，多瓶装降低单次决策成本</td></tr>
+      </tbody>
+    </table></div>
+
+
+    <h4>自营 vs 达人分销：同一盘货，两套打法</h4>
+    <p>诺特兰德不是把同一批货同时塞给自营和分销 —— 两条链路<b>挑的品、定的价、拆的链接都不一样</b>。从 9 月商品榜的在榜链接结构可以直接看出这个分工：</p>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">对比维度</th><th><span class="pill p-b">自营</span> 直播 + 直购</th><th><span class="pill p-a">达人分销</span> KOC 短视频为主</th></tr></thead>
+      <tbody>
+        <tr><td><b>主推什么货</b></td><td><b>高客单、需要讲解的利润品</b>：骨胶原钙（99 / 199 / 200 元多瓶装）、四维益生菌（客单 160–195 元）、液体钙铁锌（228–289 元）</td><td><b>低客单、能快速决策的走量品</b>：B 族（9.9–99.5 元宽价格带）、维 C 咀嚼片（9.9–19.9 元引流层）</td></tr>
+        <tr><td><b>链接怎么铺</b></td><td>单品拆多规格并行赛马：骨胶原自营 45 条、液体钙铁锌 44 条、烟酰胺 38 条、四维益生菌 28 条 —— 自营在榜 <b>357 条</b>、占全榜 <b>26.7%</b></td><td>同款多链接并行：骨胶原分销 43 条、新一代 B 族咀嚼片 25 条 —— 分销在榜 <b>317 条</b>、占全榜 <b>31.3%</b></td></tr>
+        <tr><td><b>成交靠什么</b></td><td>直播间话术 + 大包装组合，把客单做上去、锁定 LTV（骨胶原 200 元两瓶装退款率仅 12.6%）</td><td>短视频几秒讲清一个卖点，低门槛下单，靠<b>达人数量 × 内容条数</b>堆规模</td></tr>
+        <tr><td><b>承担什么角色</b></td><td>承接达人种草溢出的人群，做<b>收口与利润</b> —— 自营占全网成交 40%–50%</td><td>做<b>覆盖与拉新</b> —— 达人分销占 50%–60%，其中短视频带货约 85%</td></tr>
+        <tr><td><b>各自的风险点</b></td><td>客单能否站住、高退款是否侵蚀利润（烟酰胺 24.8%、液体钙 24.5%）</td><td>达人盘子的密度与素材供给能否持续（约 3,800 位/月、约 4,900 条/月）</td></tr>
+      </tbody>
+    </table></div>
+
+
+    <div class="call c-g">
+      <span class="t">货盘结论：三个维度</span>
+      <b>① 价格带：三层各司其职，缺一层就断链。</b>引流层 <b>9.9–19.9 元</b>压低尝鲜门槛、负责拉新铺量；承接层 <b>50–200 元</b>用组合装提客单、接住被种草的人群；利润层 <b>99–289 元</b>用多瓶装降低单次决策成本、锁定 LTV（骨胶原 200 元两瓶装退款率仅 <b>12.6%</b>，全店最低之一）。客单价 79 元/单是三层加权的结果，不是越便宜越好卖。<br>
+      <b>② 渠道：自营做深度，分销做广度。</b>分销端（占 50%–60%，短视频约 85%）只放低客单、几秒能讲清卖点的走量品；自营端（占 40%–50%）只接高客单、需要讲解的利润品。<b class="hl">风险在错配</b>：高客单塞进分销讲不清，低客单只放自营浪费规模能力 —— 两条链路的货盘要分开设计。<br>
+      <b>③ 对汤臣倍健的拓品启示：先补价格带，再铺达人；利润品靠规格，不靠单品。</b>
+      <br>· 每月约 3,800 位达人、约 4,900 条短视频能跑起来，前提是 9.9–19.9 元这档让 KOC 随手可挂 —— <b>拓品先补引流品，不是先找达人</b>。
+      <br>· 骨胶原靠 99 / 199 / 200 元三档并跑，把 10 月客单价从 Q3 的 85–90 元拉回 100–105 元，且大包装退款率最低 —— <b>利润品做多规格并行，不赌单一规格</b>。
+      <br>· <b>分销与自营各出一份货盘表</b>，分别排期定目标，避免同一款货在两条链路上互相抢价。
+    </div>
+  </div>
+
+  <!-- ================= 2 起盘路径 ================= -->
+  <div class="sec">
+    <h2><span class="n">2</span>自营起盘路径：四个阶段</h2>
+    <div class="anchor">
+      <span class="n">2025.04</span> 微信小店开放保健食品 / 膳食营养补充食品类目定向准入
+      <i>→</i>
+      <span class="n">2025.09</span> 诺特兰德逐步布局视频号（类目开放前团队已招完）
+      <i>→</i>
+      <span class="n">2026.10</span> 日均 GMV 567 万（全网）登顶
+    </div>
+
+
+    <h3>2.1 阶段总表</h3>
+    <p class="dim">各阶段只填各自时间窗内可确认的数据；自营侧早期基建（直播间数、账户数、日耗）仍存在缺口。</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:150px">阶段</th><th>里程碑</th><th>经营资产投入</th><th>广告基建指标</th><th>GMV &amp; 日耗量级</th></tr></thead>
+            <tbody>
+<tr>
+          <td><b>S1 单品破局</b></td>
+          <td>一个爆品跑通模型：骨胶原蛋白 + 钙 + 维 D 片</td>
+          <td>单品 <b>2–3 个</b>自营直播间；单品多规格链接赛马</td>
+          <td>单直播间 <b>3–5 个账户</b>投放；单账户下 <b>5–10 条广告 + 5–10 个智投项目</b></td>
+          <td>单直播间稳定在 <b>5–10 万</b>日耗量级，日广告 GMV 达到 <b>10–20 万</b></td>
+        </tr>
+<tr>
+          <td><b>S2 大场放量 + 节点爆发</b></td>
+          <td>直播大场跃迁：展会直播单场破 <b>100 万</b>并复制到多个单品直播间</td>
+          <td>主力直播间拉长至 <b>18–19 小时</b>开播；实践展播 / 仓播 / 溯源 / 空降等大场玩法升级</td>
+          <td>在投账户每日保持 <b>5–10 条广告 + 5–10 个智投项目</b>在线投放；每日完成账户下 <b>10%–30%</b> 的创意素材汰换上新</td>
+          <td>大场当天完成日耗量级与 GMV <b>三倍以上跳起</b>；年货节展会当天单直播间日耗突破 <b>40 万</b>、GMV 突破 <b>100 万</b></td>
+        </tr>
+<tr>
+          <td><b>S3 品类横向复制</b></td>
+          <td>拓展钙铁锌、益生菌、维 B、维生素 C/E 等多品类<b>矩阵化直播间</b>，覆盖不同人群 × 功效需求</td>
+          <td><b>16 家</b>自营店铺、<b>10+ 主力直播间</b>矩阵搭建完成</td>
+          <td>智投产品能力覆盖度提升至 <b>60%</b></td>
+          <td>培育多个日耗 <b>5–10 万</b>的主力直播间，自营广告日耗量级稳定 <b>60–80 万</b>；Q2 全店日均约 <b>145 万</b>；618 期生态 GMV 破亿（1 亿量级）、达人贡献 6 成；沉淀千万级高潜人群、复购稳定 30%</td>
+        </tr>
+<tr>
+          <td><b>S4 全域经营</b></td>
+          <td>品牌人群资产破圈</td>
+          <td>互选种草投入，跑通达人「种草预热 → 进播收割」种收闭环</td>
+          <td>种草内容发布，二次推广放大</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <h3>2.2 每个阶段的关键动作拆解</h3>
+
+    <div class="stage">
+      <div class="top"><span class="sid">S1</span><span class="nm">单品破局：做对了3件事情</span></div>
+      <div class="kv">
+        <div class="i"><div class="k">① 抢窗口</div><div class="v">"在微信小店开放膳食营养品类目之前，我们整个（小店运营）团队就已经招完了"（品牌市场及战略 VP 艾旭）。类目开放到布局只有 <b>5 个月</b>准备期。</div></div>
+        <div class="i"><div class="k">② 不复制抖音</div><div class="v">初期做过"双平台开播 vs 单独开播"对照测试，发现<b>单开时产品表现更稳定</b>，确立"视频号需要独立运营模型"的判断。</div></div>
+        <div class="i"><div class="k">③ 单独开品</div><div class="v">识别到视频号人群是 <b>41–60 岁、男女 35:65、二三四线超 75%、价格敏感认品牌</b>，推出"骨胶原蛋白+钙+维D片"。</div></div>
+      </div>
+    </div>
+
+    <div class="stage s2">
+      <div class="top"><span class="sid">S2</span><span class="nm">大场放量 + 节点爆发：展播效果验证快速复制放大</span></div>
+      <p>10/13 深圳展 8.5 小时成交 30 万这类展会场验证了「<b>大场 + 中场</b>」优于「全天挂播」。2026 年 6 月发现展会直播转化更好后，很快被复制到 @诺特兰德工厂店、@诺特兰德北京官方店（封面和背景换成展会现场，价格统一打「展会特供实惠装」）。</p>
+    </div>
+
+    <div class="stage s3">
+      <div class="top"><span class="sid">S3</span><span class="nm">品类横向复制：把直播间拆开</span></div>
+      <p>自营直播间从 2–3 个扩到十几个，按<b>品类 × 人群</b>一一对应：青少年营养（钙铁锌直饮包、蓝莓叶黄素酯软糖）/ 上班族（维生素 B 族咀嚼片）/ 女性（烟酰胺硒片）/ 中老年（骨胶原钙）。<b>每个直播间对应一类人群、一套话术、一组货盘。</b></p>
+      <p>每个直播间都是一次测试：不断优化货盘、赠品、价格钩子，统一卖点，逐场复盘。同时试水达播，先找带货能力最强的达人验证视频号达播可行性。</p>
+    </div>
+
+    <div class="stage s4">
+      <div class="top"><span class="sid">S4</span><span class="nm">全域经营：下一程的抓手</span></div>
+      <div class="kv">
+        <div class="i"><div class="k">把已验证的达人内容装进互选</div><div class="v">不是新增投入，是让<b>已经验证的内容</b>去接<b>已经蓄好的人</b>。互选投后 R3+ 66.23%（效果竞价 29.47%），但曝光占比仅 2.16%、观看量已降到 10 万次以内。</div></div>
+      </div>
+      <h4 style="margin-top:16px">双十一跑通达人「种草预热 → 进播收割」种收闭环</h4>
+      <div class="tw"><table>
+        <thead><tr><th style="width:120px">阶段</th><th style="width:110px">时间</th><th>动作</th></tr></thead>
+        <tbody>
+          <tr><td><b>定人定单</b></td><td>10/22 – 10/28</td><td>共创达人 3–5 位定名单｜合作方式与素材授权确认｜如翼投前基线截图</td></tr>
+          <tr><td><b>种草发布</b></td><td>10/29 – 11/05</td><td>种草内容先发、进账本｜二次 / 动态推广加热｜素材授权确认</td></tr>
+          <tr><td><b>预约 + 官宣</b></td><td>11/06 – 11/09</td><td>预约视频 D-3 起｜代言人官宣｜品专收口配套</td></tr>
+          <tr><td><b>进播 + 复盘</b></td><td>11/10 – 11/20</td><td>明星进播双开｜高光切片复投｜D+7 资产对账</td></tr>
+        </tbody>
+      </table></div>
+      <p class="dim">品牌侧 Q4 商家直播大场日历：13 场合计预估 GMV 290 万、投放预算 147 万，全部走 ADQ 且双开全域通；11/6–11/12 是最密集的大场带。<b>共创内容只要在 11/5 前发布进账本，就能给这一整排大场做前置蓄水。</b></p>
+
+      
+    </div>
+
+  </div>
+
+  <!-- ================= 3 汤臣下一阶段规划 ================= -->
+  <div class="sec">
+    <h2><span class="n">3</span>汤臣倍健下一阶段规划（需双方确认）</h2>
+    <p>对标的意义不是照抄动作，是知道<b>自己现在该做哪一步</b>。按第 2 章的四阶段刻度，汤臣倍健当前处在 <b>S1（单品破局）阶段初期</b>：短视频铺广度、直购做收口是诺特兰德 2026 Q3 之后才成立的结构，现在照搬会抄错阶段。本章只排下一阶段（S1 → S2）要做的事，并且有三件事必须先和汤臣对齐后才能启动 —— <b class="hl">拓哪个品、投多少钱、按什么标准算过关。</b></p>
+
+    <div class="call c-b">
+      <span class="t">先说三条前提（避免后面三项谈偏）</span>
+      <b>① 阶段不能跳。</b>S1 只做「一个品 + 2–3 个直播间 + 链接赛马」，不铺达人矩阵、不谈全域；S2 才放大场与节点。<br>
+      <b>② 广告依赖度是结果，不是目标。</b>诺特兰德广告 GMV 占比 20.4%、同行 24%–77%，那是长期跑出来的结构；起盘期占比高是正常的，不能拿它当 KPI。<br>
+      <b>③ 顺序不能反。</b>先定品 → 再定预算 → 最后定考核线。品没定就谈预算，预算会被摊薄；预算没定就谈 ROI，考核会变成互相甩锅。
+    </div>
+
+    <h3>3.1 拓品方向：先定 2–3 个品，不是全盘搬</h3>
+    <p>第 1 章的货盘结论已经给出筛品依据，落到汤臣现有货盘上，建议用四把尺子筛：</p>
+    <div class="kv">
+      <div class="i"><div class="k">① 人群对得上</div><div class="v">视频号主力成交人群是 <b>41–60 岁、男女 35:65、二三四线超 75%、价格敏感但认品牌</b>。骨关节、心脑血管、中老年综合营养天然对位；女性与儿童线人群结构不同，建议放到 S3 再开。</div></div>
+      <div class="i"><div class="k">② 价格带就位</div><div class="v">三层缺一层就断链 —— 引流 <b>9.9–19.9 元</b>、承接 <b>50–200 元</b>、利润 <b>99–289 元</b>。<b class="hl">汤臣现有货盘最可能缺的是引流档</b>：没有 19.9 元以下的尝鲜规格，每月约 3,800 位达人、约 4,900 条短视频的分销盘子就挂不起来。</div></div>
+      <div class="i"><div class="k">③ 内容讲得清</div><div class="v">分销端短视频占达人分销 GMV 的 <b>84%–87%</b>，只放「几秒能讲清卖点」的单成分走量品；复方、需要讲解的高客单品留给自营直播间。</div></div>
+      <div class="i"><div class="k">④ 供给撑得住</div><div class="v">库存深度、能否开<b>视频号专供规格 / 包装</b>、供货价能否留出佣金空间（KOC 团长两种模式：5%+5% 另加投流预算，或 40% 佣金全包）—— 这三件事不解决，跑出来的品也接不住量。</div></div>
+    </div>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:120px">候选品线</th><th style="width:96px">建议角色</th><th style="width:118px">建议价格带</th><th>适配依据</th><th style="width:180px">需汤臣确认</th></tr></thead>
+      <tbody>
+        <tr><td><b>骨关节（氨糖类）</b></td><td><span class="pill p-b">主力款</span></td><td>承接 99–199 元（多瓶装）</td><td>对标诺特兰德骨胶原（占比一路拉到过半）；41–60 岁人群直接对位；该品线诺特兰德直播 ROI 1.50–1.75 / 直购 1.75–2.00</td><td>是否可开专供规格｜库存深度｜供货价</td></tr>
+        <tr><td><b>血脂 / 心脑血管线</b></td><td><span class="pill p-b">主力款</span></td><td>承接 100–200 元</td><td>已准入视频号；45–60 岁高关注品类，成分钩子明确，短视频好讲</td><td>准入范围与可讲成分边界｜主推 SKU</td></tr>
+        <tr><td><b>基础维生素 / 钙铁锌</b></td><td><span class="pill p-a">引流款</span></td><td>引流 9.9–19.9 元</td><td>补分销盘子缺的「随手可挂」档位；该品线诺特兰德直购 ROI 2.00–2.25，效率不差</td><td>是否备低客单尝鲜规格｜是否冲击现有价盘</td></tr>
+        <tr><td><b>蛋白粉 / 综合营养</b></td><td><span class="pill p-g">利润款</span></td><td>利润 199–289 元</td><td>高客单需讲解，只放自营直播；大包装能拉客单、降退款（200 元两瓶装退款率 12.6%，全店最低之一）</td><td>多规格并行是否可行｜礼盒装供给</td></tr>
+        <tr><td>女性 / 儿童线</td><td><span class="pill p-n">后置</span></td><td>—</td><td>人群结构与视频号当前主力盘不一致</td><td>本阶段不投入，S3 再评估</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">上表是<b>我方建议的候选池，不是最终名单</b>。首批建议只取 <b>2–3 个 SKU</b>：1 个主力款 + 1 个引流款，最多再加 1 个利润款。品越少，赛马越快出结论。</p>
+
+    <h3>3.2 品类投入预算：分阶段排，不要一次铺满</h3>
+    <p>档位锚定两条线：一是诺特兰德 S1 的实测刻度（单直播间日耗 5–10 万、日广告 GMV 10–20 万；S2 大场单场破 100 万），二是汤臣京东站外投放既定的冷启动目标（日耗 10 万/天）。</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:120px">阶段</th><th style="width:96px">周期</th><th style="width:110px">日耗档位</th><th style="width:110px">阶段预算</th><th>用途拆分</th><th style="width:150px">阶段出口（过关条件）</th></tr></thead>
+      <tbody>
+        <tr><td><b>S1-a 测试</b></td><td>2–3 周</td><td>3–5 万</td><td>50–100 万</td><td>广告投放 80%｜素材制作 15%｜达人佣金 5%</td><td>跑出 1–2 条可复制素材 + 1 个可复用人群包</td></tr>
+        <tr><td><b>S1-b 爬坡</b></td><td>4–6 周</td><td>5–10 万 → 10–20 万</td><td>200–400 万</td><td>广告投放 70%｜达人佣金 20%｜素材 10%</td><td>单品日耗稳定到 10 万，ROI 达到当期考核线</td></tr>
+        <tr><td><b>S2 首个大场</b></td><td>2–3 周</td><td>峰值 30–40 万</td><td>大场专项 80–150 万</td><td>大场投放 + 达人种草预热 + 高光切片复投</td><td>单场 GMV 破 100 万，且大场后 48h 成本回落</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">上表只计<b>广告与内容侧投入</b>；直播间搭建、团队编制、货品与物流成本由汤臣侧另列。另建议同步约定一条<b>止损线</b>：单品连续 7 天日耗跑不到 3 万、或下单 ROI 低于 1.0，即换素材 / 换规格 / 换品，不停投硬扛。</p>
+
+    <h3>3.3 分阶段 ROI 考核：先对齐口径，再定考核线</h3>
+    <p>同一场投放，口径不同能差出一倍 —— 诺特兰德实测<b>下单 ROI 2.22、成交 ROI 1.10</b>。所以考核线之前，先定用哪把尺子。</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:110px">口径</th><th>定义</th><th style="width:210px">关键提醒</th></tr></thead>
+      <tbody>
+        <tr><td><b>下单 ROI</b></td><td>广告归因下单金额 ÷ 消耗</td><td>看得出即时效率，但含未成交与退款订单</td></tr>
+        <tr><td><b>成交 ROI</b></td><td>实际成交金额（扣退款）÷ 消耗</td><td>真实回报，但要等退款窗口结算，没法当日决策</td></tr>
+        <tr><td><b>退款率</b></td><td>按品线分别扣减</td><td>大包装最低（诺特兰德 200 元两瓶装 12.6%），低客单尝鲜装最高</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tw"><table>
+      <thead><tr><th style="width:130px">阶段</th><th style="width:130px">考核方式</th><th style="width:150px">建议考核线</th><th>同步观察</th><th style="width:110px">复盘节奏</th></tr></thead>
+      <tbody>
+        <tr><td><b>S1-a 测试期</b>（前 2 周）</td><td><b>不考核 ROI</b>，考「跑通」</td><td>单品日耗跑到 5 万<br>在跑素材 ≥ 10 条<br>跑出 1 个可复制人群包</td><td>CTR / CVR / 千次曝光成交额；此时 ROI 波动大，考核只会逼出「砍预算」的错误动作</td><td>每日看数<br>每周复盘</td></tr>
+        <tr><td><b>S1-b 爬坡期</b></td><td>下单 ROI</td><td><b>≥ 1.4</b>（行业 CID 考核线水位，最终值待双方确认）</td><td>成交 ROI、退款率、计划达成率</td><td>每周</td></tr>
+        <tr><td><b>S2 放量期</b></td><td>下单 ROI + 成交 ROI 双看</td><td>下单 <b>1.5–2.0</b><br>成交 <b>≥ 1.0</b><br><span style="opacity:.75">（参照诺特兰德各品线直购 1.75–2.50，取下限）</span></td><td>达成率 —— 诺特兰德已从 5 月 195%–200% 回落到 10 月 105%–110%，<b>放量必须配货盘结构，不能只加预算</b></td><td>双周<br>+ 大场后 48h</td></tr>
+        <tr><td><b>S3 起</b></td><td>复购 + 人群资产</td><td>复购率 <b>30%</b>｜R3 净增</td><td>5R 流转率、跨店攻防比</td><td>月度</td></tr>
+      </tbody>
+    </table></div>
+    <p class="dim">建议线是<b>过关线不是冲刺线</b>：低于它说明结构有问题要停下来查，高于它也不代表可以无上限加预算。</p>
+
+    <h3>3.4 下一步：需要汤臣侧拍板的清单</h3>
+    <div class="tw"><table>
+      <thead><tr><th style="width:36px">#</th><th style="width:150px">待确认事项</th><th>我方建议值</th><th style="width:130px">希望确认时间</th><th style="width:80px">汤臣确认</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>首批测试品线</b>（2–3 个 SKU）</td><td>1 个主力款（骨关节或血脂线）+ 1 个引流款（基础维生素 / 钙铁锌），可选再加 1 个利润款</td><td>11 月第 1 周</td><td>☐</td></tr>
+        <tr><td>2</td><td><b>视频号专供规格与价格带</b></td><td>1 个引流规格 ≤ 19.9 元 + 1 个多瓶装 99–199 元；与京东 / 天猫价盘区隔开</td><td>11 月第 1 周</td><td>☐</td></tr>
+        <tr><td>3</td><td><b>供给与库存</b></td><td>主推 SKU 备货深度、补货周期、能否定制包装</td><td>11 月第 1 周</td><td>☐</td></tr>
+        <tr><td>4</td><td><b>Q4–Q1 品类投入预算盘子</b></td><td>S1-a 50–100 万 → S1-b 200–400 万 → 大场专项 80–150 万</td><td>11/10 前</td><td>☐</td></tr>
+        <tr><td>5</td><td><b>广告 vs 达人佣金比例</b></td><td>测试期 8:2，爬坡期 7:3 起步，按品线效率再调</td><td>11/10 前</td><td>☐</td></tr>
+        <tr><td>6</td><td><b>考核口径</b></td><td>下单 ROI 为主、成交 ROI 结算复核；退款按品线扣减</td><td>11/10 前</td><td>☐</td></tr>
+        <tr><td>7</td><td><b>分阶段考核线</b></td><td>冷启动 2 周不考核 → 下单 ≥ 1.4 → 放量期 1.5–2.0 / 成交 ≥ 1.0</td><td>11/15 前</td><td>☐</td></tr>
+        <tr><td>8</td><td><b>单品止损线</b></td><td>连续 7 天日耗 &lt; 3 万或下单 ROI &lt; 1.0，换素材 / 换规格 / 换品</td><td>11/15 前</td><td>☐</td></tr>
+        <tr><td>9</td><td><b>复盘机制与对接人</b></td><td>每周一次数据复盘、双周一次策略会；双方各出 1 名对接人</td><td>下次会议</td><td>☐</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="call c-a">
+      <span class="t">⚠️ 这份规划成立的前提</span>
+      上表的建议值都来自诺特兰德的实测刻度与行业水位，<b>不等于汤臣的目标承诺</b>。真正的变量在三件事上：货盘能不能按视频号的价格带重组、供给能不能跟上跑量节奏、以及双方能不能接受「冷启动期用跑通指标代替 ROI」。<b class="hl">这三点谈成，S1 的四个动作（抢窗口、独立模型、单品破局、大包装提客单）才落得下去。</b>
+    </div>
+  </div>
+
+  <div class="disc">
+    本文件基于腾讯营销侧历史数据与公开信息整理，仅供参考，不构成对未来表现的预测或承诺；<br>
+    实际效果受内容、达人、竞品动作及平台政策等多重因素影响。
+  </div>
+
+</div>
+</body>
+</html>
