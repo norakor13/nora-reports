@@ -1,0 +1,418 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>诺特兰德 · 分品线成交人群画像</title><style>
+:root{--pri:#296BEF;--ink:#1B2333;--sub:#6B7488;--line:#E8ECF4;--bg:#F5F7FB;--card:#fff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;
+ background:var(--bg);color:var(--ink);font-size:13px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px;}
+.hero{background:linear-gradient(120deg,#123A8F 0%,#296BEF 55%,#4E8CFF 100%);border-radius:16px;
+ padding:30px 34px;color:#fff;box-shadow:0 10px 30px rgba(41,107,239,.22);}
+.hero h1{font-size:25px;font-weight:700;letter-spacing:.5px;}
+.hero .sub{margin-top:8px;font-size:13px;opacity:.92;}
+.hero .meta{margin-top:16px;display:flex;gap:26px;flex-wrap:wrap;font-size:12px;opacity:.9;}
+.hero .meta b{font-weight:600;}
+.note{background:#fff;border:1px solid var(--line);border-left:3px solid #FFAE19;border-radius:8px;
+ padding:12px 16px;margin-top:16px;font-size:12px;color:var(--sub);}
+section{background:var(--card);border-radius:14px;padding:24px 26px;margin-top:20px;
+ box-shadow:0 2px 12px rgba(24,39,75,.05);}
+h2{font-size:17px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+h2 .idx{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;
+ background:var(--pri);color:#fff;font-size:12px;font-weight:700;}
+h2 small{font-size:12px;font-weight:400;color:var(--sub);}
+h3{font-size:14px;font-weight:700;margin:18px 0 10px;color:#2A3550;}
+.insight{background:#F7F9FE;border-radius:10px;padding:14px 18px;margin:14px 0 18px;}
+.insight li{list-style:none;position:relative;padding-left:16px;margin:7px 0;font-size:12.5px;color:#39435A;}
+.insight li:before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--pri);}
+.insight b{color:#123A8F;font-weight:700;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 6px;}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:linear-gradient(180deg,#FBFCFE,#fff);}
+.kpi .k{font-size:12px;color:var(--sub);}
+.kpi .v{font-size:25px;font-weight:700;color:#123A8F;margin-top:4px;letter-spacing:.5px;}
+.kpi .v span{font-size:12px;font-weight:500;color:var(--sub);margin-left:3px;}
+.kpi .d{font-size:11.5px;color:var(--sub);margin-top:3px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;}
+th{background:#F2F5FB;color:#42506B;font-weight:600;padding:9px 10px;text-align:center;white-space:nowrap;
+ border-bottom:1px solid var(--line);}
+td{padding:9px 10px;text-align:center;border-bottom:1px solid #F1F4F9;color:#2C3547;}
+th:first-child,td:first-child{text-align:left;}
+tr:hover td{background:#FAFBFF;}
+td.name{font-weight:600;}
+.mini{display:inline-block;height:7px;border-radius:4px;background:#3E79F0;vertical-align:middle;}
+.donut-wrap{display:flex;align-items:center;gap:14px;}
+.legend{display:flex;flex-direction:column;gap:5px;font-size:11.5px;}
+.legend-h{flex-direction:row;flex-wrap:wrap;gap:14px;margin-top:8px;}
+.lg-row{display:flex;align-items:center;gap:6px;color:#4A5468;}
+.dot{width:9px;height:9px;border-radius:3px;flex:none;}
+.lg-lab{min-width:52px;}
+.lg-val{font-weight:600;color:#2C3547;}
+.stack{display:flex;width:100%;border-radius:6px;overflow:hidden;background:#F0F3F9;}
+.seg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;overflow:hidden;}
+.hbar{margin:6px 0 18px;position:relative;}
+.hb-row{display:flex;align-items:center;gap:10px;margin:7px 0;}
+.hb-lab{width:110px;text-align:right;color:#39435A;font-size:12.5px;flex:none;}
+.hb-track{flex:1;height:16px;background:#F2F5FB;border-radius:4px;overflow:hidden;}
+.hb-bar{height:100%;border-radius:4px;transition:width .3s;}
+.hb-val{width:56px;font-size:12px;font-weight:600;color:#2C3547;flex:none;}
+.hb-ref{position:absolute;top:-2px;bottom:-2px;border-left:1.5px dashed #F76852;pointer-events:none;}
+.hb-ref span{position:absolute;top:-16px;left:4px;font-size:10.5px;color:#F76852;white-space:nowrap;}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px;}
+.lcard{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff;}
+.lcard .hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+ border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:12px;}
+.lcard .hd .t{font-size:14px;font-weight:700;}
+.lcard .hd .t i{font-style:normal;font-size:11px;color:var(--sub);margin-left:6px;}
+.lcard .hd .c{font-size:11.5px;color:var(--sub);}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.t-blue{background:#EAF1FE;color:#296BEF;} .t-orange{background:#FFF4E2;color:#C77A00;}
+.t-green{background:#EAF8EC;color:#2E8B3D;} .t-purple{background:#F1EEFE;color:#6B54D6;}
+.t-gray{background:#F0F2F6;color:#6B7488;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.hm{width:100%;border-collapse:separate;border-spacing:3px;font-size:12px;}
+.hm th{background:transparent;border:none;color:#5A6579;font-weight:600;padding:4px;font-size:11.5px;}
+.hm td{border:none;border-radius:6px;padding:7px 4px;font-weight:600;color:#1B2333;}
+.hm td.rowh{background:#F5F7FB;font-weight:600;text-align:left;padding-left:10px;color:#39435A;}
+.foot{margin-top:22px;font-size:11.5px;color:#8A93A6;line-height:1.9;}
+.adv{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:12px;}
+.adv .item{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#FCFDFF;}
+.adv .item h4{font-size:13px;font-weight:700;color:#123A8F;margin-bottom:6px;}
+.adv .item p{font-size:12.3px;color:#4A5468;}
+.adv .item .why{margin-top:7px;font-size:11.5px;color:#8A93A6;}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr);}.cards,.grid2,.adv{grid-template-columns:1fr;}}
+
+.lcard-kpi{display:flex;gap:16px;margin:6px 0 12px;}
+.lcard-kpi>div{display:flex;flex-direction:column;}
+.lcard-kpi .kv{font-size:17px;font-weight:700;color:#123A8F;line-height:1.2;}
+.lcard-kpi .ku{font-size:11px;color:#8A93A6;}
+.mini-title{font-size:11.5px;color:#6B7488;margin:10px 0 5px;font-weight:600;}
+.lins{margin-top:12px;padding-top:10px;border-top:1px dashed #E8ECF4;font-size:12px;color:#4A5468;line-height:1.7;}
+.cmp-row{display:flex;align-items:center;gap:10px;margin:8px 0;}
+.cmp-lab{width:96px;flex:none;font-size:11.5px;color:#4A5468;text-align:right;}
+.hb-val{width:96px;}
+</style></head><body><div class="wrap">
+<div class="hero">
+  <h1>诺特兰德 · 分品线成交人群画像</h1>
+  <div class="sub">近30天（2026-09-29 ~ 2026-10-28）· 客户简称含"诺特兰德"的全部投放商品 · 同一商品不同链接已归拢</div>
+  <div class="meta"><span>总消耗 <b>2,000~2,400万元</b></span><span>下单次数 <b>40~48万次</b></span>
+  <span>综合客单价 <b>100~110元</b></span><span>品线 <b>8 条 + 未标注</b></span>
+  <span>对标大盘 <b>膳食营养</b></span><span>数值口径 <b>绝对量区间化</b></span></div>
+</div>
+<div class="note"><b>一句话结论：</b>诺特兰德的成交人群与膳食营养大盘几乎同质（60岁以上 44.4% vs 40.8%、女性 66.9% vs 67.9%、下沉 63.7% vs 61.2%），
+但综合客单价 100~110元、约为大盘 180~190元 的一半——<b>问题不在"打给谁"，而在"卖什么、卖多少钱"</b>。
+品线内部则存在两套完全割裂的人群：银发补钙/护眼阵营（60岁以上 42%~73%）与中年女性礼盒阵营（钙铁锌，30-49 岁 82.5%）。</div>
+<section id="s1"><h2><span class="idx">1</span>分品线全景
+      <small>近30天 2026-09-29 ~ 2026-10-28 · 客户简称含"诺特兰德"全部投放商品</small></h2>
+      
+    <div class="kpis">
+      <div class="kpi"><div class="k">近30天总消耗</div><div class="v">2,000~2,400<span>万元</span></div>
+        <div class="d">8 条品线 + 未标注商品名</div></div>
+      <div class="kpi"><div class="k">成交下单次数</div><div class="v">40~48万<span>次</span></div>
+        <div class="d">全量下单行为（含未支付）</div></div>
+      <div class="kpi"><div class="k">综合客单价</div><div class="v">100~110<span>元</span></div>
+        <div class="d">膳食营养大盘 180~190元，约为其一半</div></div>
+      <div class="kpi"><div class="k">第一大品线</div><div class="v">39.4<span>%</span></div>
+        <div class="d">骨胶原钙维D · 750~900万元</div></div>
+    </div>
+    <ul class="insight">
+      <li><b>一条品线撑起四成盘子：</b>骨胶原钙维D 消耗 750~900万元、占 39.4%，下单次数占 29.9%，
+      是诺特兰德在膳食营养赛道的绝对基本盘；益生菌(13.8%)、B族维生素(12.1%)、VC+VE抗氧化(10.3%) 构成第二梯队。</li>
+      <li><b>消耗与下单明显错配，品线分工清晰：</b>B族维生素用 12.1% 消耗换来 22.6% 下单次数（客单 55~60元）、
+      叶黄素 7.0% 消耗换 11.4% 下单（客单 70~75元），属低价高频的引流型品线；
+      钙铁锌相反，7.8% 消耗只换 9.6% 下单但客单 130~140元，是高价低频的利润型品线。</li>
+      <li><b>高客单集中在蛋白粉与益生菌：</b>蛋白粉客单 180~190元（与大盘 180~190元 同档），
+      益生菌 150~160元，但两者合计仅占 15.2% 消耗，客单价值尚未被规模放大。</li>
+      <li><b>7.5% 消耗（150~175万元）无法归入任何品线：</b>这部分投放的商品名为空，既无法做品线人群运营，
+      也无法评估商品效率，建议优先推动商品名规范上报。</li>
+    </ul><table>
+      <thead><tr><th>品线</th><th>消耗(万元)</th><th>消耗占比</th><th>下单次数</th><th>下单占比</th>
+      <th>客单价(元)</th><th>客单/大盘</th><th>消耗 Top1 商品</th></tr></thead>
+      <tbody><tr>
+          <td class="name">骨胶原钙维D</td>
+          <td>750~900</td>
+          <td><span class="mini" style="width:67.0px"></span> 39.4%</td>
+          <td>12~14万</td>
+          <td><span class="mini" style="width:50.8px;background:#76C84D"></span> 29.9%</td>
+          <td><b>120~130</b></td>
+          <td><span class="tag t-blue">63%~72%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">骨胶原蛋白+钙+维D片中老年成人运动组合[全年价保 买贵退差…</td>
+        </tr><tr>
+          <td class="name">益生菌</td>
+          <td>250~300</td>
+          <td><span class="mini" style="width:23.4px"></span> 13.8%</td>
+          <td>4.0~4.8万</td>
+          <td><span class="mini" style="width:16.9px;background:#76C84D"></span> 9.9%</td>
+          <td><b>150~160</b></td>
+          <td><span class="tag t-blue">79%~89%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">四维益生菌固体饮料12000亿活性益生菌益生元 10条/盒y…</td>
+        </tr><tr>
+          <td class="name">B族维生素</td>
+          <td>240~280</td>
+          <td><span class="mini" style="width:20.5px"></span> 12.1%</td>
+          <td>9.0~10万</td>
+          <td><span class="mini" style="width:38.4px;background:#76C84D"></span> 22.6%</td>
+          <td><b>55~60</b></td>
+          <td><span class="tag t-blue">29%~33%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">新款维生素B族咀嚼片复配好营养8大B族含量升级72粒/瓶 Q…</td>
+        </tr><tr>
+          <td class="name">VC+VE+烟酰胺抗氧化</td>
+          <td>200~240</td>
+          <td><span class="mini" style="width:17.5px"></span> 10.3%</td>
+          <td>4.0~4.8万</td>
+          <td><span class="mini" style="width:17.6px;background:#76C84D"></span> 10.3%</td>
+          <td><b>90~95</b></td>
+          <td><span class="tag t-blue">47%~53%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">维生素C+E+烟酰胺咀嚼片  60粒/瓶 fjq自营</td>
+        </tr><tr>
+          <td class="name">钙铁锌</td>
+          <td>150~180</td>
+          <td><span class="mini" style="width:13.3px"></span> 7.8%</td>
+          <td>4.0~4.8万</td>
+          <td><span class="mini" style="width:16.3px;background:#76C84D"></span> 9.6%</td>
+          <td><b>130~140</b></td>
+          <td><span class="tag t-blue">68%~78%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">【刘涛推荐-双11福利】-5G钙铁锌-复合肽特膳直饮包-4桶…</td>
+        </tr><tr>
+          <td class="name">叶黄素</td>
+          <td>150~175</td>
+          <td><span class="mini" style="width:12.0px"></span> 7.0%</td>
+          <td>4.8~5.6万</td>
+          <td><span class="mini" style="width:19.4px;background:#76C84D"></span> 11.4%</td>
+          <td><b>70~75</b></td>
+          <td><span class="tag t-blue">37%~42%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">蓝莓叶黄素酯咀嚼片营养正品 60片/瓶 wp</td>
+        </tr><tr>
+          <td class="name">钙+维D咀嚼片</td>
+          <td>12~14</td>
+          <td><span class="mini" style="width:1.1px"></span> 0.6%</td>
+          <td>4,800~5,600</td>
+          <td><span class="mini" style="width:1.9px;background:#76C84D"></span> 1.1%</td>
+          <td><b>55~60</b></td>
+          <td><span class="tag t-blue">29%~33%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">钙+维生素D咀嚼片维生素D3钙片VD3碳酸钙 wp</td>
+        </tr><tr>
+          <td class="name">蛋白粉</td>
+          <td>30~35</td>
+          <td><span class="mini" style="width:2.4px"></span> 1.4%</td>
+          <td>3,000~3,500</td>
+          <td><span class="mini" style="width:1.3px;background:#76C84D"></span> 0.8%</td>
+          <td><b>180~190</b></td>
+          <td><span class="tag t-orange">95%~106%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">动植物三重蛋白粉90%高含量蛋白质 fjq-WCW</td>
+        </tr><tr>
+          <td class="name">商品名缺失(未归品线)</td>
+          <td>150~175</td>
+          <td><span class="mini" style="width:12.8px"></span> 7.5%</td>
+          <td>1.8~2.1万</td>
+          <td><span class="mini" style="width:7.4px;background:#76C84D"></span> 4.3%</td>
+          <td><b>130~140</b></td>
+          <td><span class="tag t-gray">68%~78%</span></td>
+          <td style="text-align:left;font-size:11.5px;color:#6B7488">(商品名缺失)</td>
+        </tr></tbody></table>
+      <div class="foot">注：同一商品的不同链接/渠道后缀（如 fjq自营、wp、jc 等）已按商品主体归拢至所属品线；
+      下单次数为全量下单行为口径（含未支付），客单价 = 下单金额 / 下单次数。<br/>
+      钙铁锌品线全量下单 4.0~4.8万次 中大量为未支付订单（净成交仅 7,500~9,000 单），
+      其 130~140元 客单被稀释，有效成交客单约 370~380元，使用该数字时需注意。</div>
+    </section><section id="s2"><h2><span class="idx">2</span>整体成交人群 vs 膳食营养大盘
+      <small>成交下单次数结构 · 大盘 = KPI三级行业"膳食营养"</small></h2>
+      
+    <ul class="insight">
+      <li><b>人群结构几乎与大盘重合，诺特兰德抢的是同一批人：</b>60岁以上占 44.4%（大盘 40.8%，指数 1.09）、
+      女性 66.9%（大盘 67.9%）、下沉市场（三线及以下）63.7%（大盘 61.2%）。</li>
+      <li><b>真正的差距在价值端而不在人群端：</b>综合客单价 100~110元，约为大盘 180~190元 的一半——
+      同样一批中老年女性，诺特兰德卖的是 55~140 元的单瓶/单片，大盘卖的是 180~190 元的组合装。</li>
+      <li><b>20-39 岁是结构性短板：</b>合计仅占 6.0%，大盘 9.1%，指数 0.67，
+      年轻化只能靠特定品线（钙铁锌）打开，不是整体投放自然结果。</li>
+      <li><b>城市结构上诺特兰德更下沉一点：</b>其他城市 43.1% vs 大盘 40.9%，
+      核心城市 9.1% vs 10.1%，高线城市仍有补量空间。</li>
+    </ul>
+      <div class="grid2">
+        <div><h3>年龄结构对比（诺特兰德 / 大盘）</h3><div class="cmp">
+          <div class="cmp-row"><span class="cmp-lab">诺特兰德</span><div class="stack" style="height:26px"><div class="seg" style="width:0.242%;background:#0B4FD9" title="0-19岁 0.2%"><span></span></div><div class="seg" style="width:0.483%;background:#296BEF" title="20-29岁 0.5%"><span></span></div><div class="seg" style="width:5.546%;background:#4080FF" title="30-39岁 5.5%"><span></span></div><div class="seg" style="width:18.869%;background:#80AAFF" title="40-49岁 18.9%"><span>18.9%</span></div><div class="seg" style="width:30.420%;background:#A6C3FF" title="50-59岁 30.4%"><span>30.4%</span></div><div class="seg" style="width:44.440%;background:#CBDCFE" title="60岁以上 44.4%"><span>44.4%</span></div></div></div>
+          <div class="cmp-row"><span class="cmp-lab">膳食营养大盘</span><div class="stack" style="height:26px"><div class="seg" style="width:0.248%;background:#0B4FD9" title="0-19岁 0.2%"><span></span></div><div class="seg" style="width:1.063%;background:#296BEF" title="20-29岁 1.1%"><span></span></div><div class="seg" style="width:7.987%;background:#4080FF" title="30-39岁 8.0%"><span></span></div><div class="seg" style="width:21.918%;background:#80AAFF" title="40-49岁 21.9%"><span>21.9%</span></div><div class="seg" style="width:28.030%;background:#A6C3FF" title="50-59岁 28.0%"><span>28.0%</span></div><div class="seg" style="width:40.754%;background:#CBDCFE" title="60岁以上 40.8%"><span>40.8%</span></div></div></div>
+          <div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2% / 0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.5% / 1.1%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">5.5% / 8.0%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">18.9% / 21.9%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">30.4% / 28.0%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">44.4% / 40.8%</span></div></div></div></div>
+        <div><h3>性别结构对比</h3><div class="cmp">
+          <div class="cmp-row"><span class="cmp-lab">诺特兰德</span><div class="stack" style="height:26px"><div class="seg" style="width:66.904%;background:#3E79F0" title="女性 66.9%"><span>66.9%</span></div><div class="seg" style="width:17.500%;background:#11CFCF" title="男性 17.5%"><span>17.5%</span></div><div class="seg" style="width:15.597%;background:#CBDCFE" title="未知 15.6%"><span>15.6%</span></div></div></div>
+          <div class="cmp-row"><span class="cmp-lab">膳食营养大盘</span><div class="stack" style="height:26px"><div class="seg" style="width:67.922%;background:#3E79F0" title="女性 67.9%"><span>67.9%</span></div><div class="seg" style="width:16.557%;background:#11CFCF" title="男性 16.6%"><span>16.6%</span></div><div class="seg" style="width:15.521%;background:#CBDCFE" title="未知 15.5%"><span>15.5%</span></div></div></div>
+          <div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">66.9% / 67.9%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">17.5% / 16.6%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">15.6% / 15.5%</span></div></div></div>
+             <h3 style="margin-top:20px">城市等级结构对比</h3><div class="cmp">
+          <div class="cmp-row"><span class="cmp-lab">诺特兰德</span><div class="stack" style="height:26px"><div class="seg" style="width:9.140%;background:#0B4FD9" title="核心城市 9.1%"><span>9.1%</span></div><div class="seg" style="width:13.949%;background:#296BEF" title="一线城市 13.9%"><span>13.9%</span></div><div class="seg" style="width:13.229%;background:#4080FF" title="二线城市 13.2%"><span>13.2%</span></div><div class="seg" style="width:20.619%;background:#80AAFF" title="三线城市 20.6%"><span>20.6%</span></div><div class="seg" style="width:43.063%;background:#CBDCFE" title="其他城市 43.1%"><span>43.1%</span></div></div></div>
+          <div class="cmp-row"><span class="cmp-lab">膳食营养大盘</span><div class="stack" style="height:26px"><div class="seg" style="width:10.121%;background:#0B4FD9" title="核心城市 10.1%"><span>10.1%</span></div><div class="seg" style="width:15.174%;background:#296BEF" title="一线城市 15.2%"><span>15.2%</span></div><div class="seg" style="width:13.490%;background:#4080FF" title="二线城市 13.5%"><span>13.5%</span></div><div class="seg" style="width:20.360%;background:#80AAFF" title="三线城市 20.4%"><span>20.4%</span></div><div class="seg" style="width:40.855%;background:#CBDCFE" title="其他城市 40.9%"><span>40.9%</span></div></div></div>
+          <div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">9.1% / 10.1%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">13.9% / 15.2%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.2% / 13.5%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">20.6% / 20.4%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">43.1% / 40.9%</span></div></div></div></div>
+      </div>
+      <h3>年龄结构相对大盘的偏离指数（&gt;1 为该年龄段占比高于大盘）</h3>
+      <div class="hbar"><div class="hb-row"><div class="hb-lab">0-19岁</div><div class="hb-track"><div class="hb-bar" style="width:48.88%;background:#A6C3FF"></div></div><div class="hb-val">0.98</div></div><div class="hb-row"><div class="hb-lab">20-29岁</div><div class="hb-track"><div class="hb-bar" style="width:22.73%;background:#A6C3FF"></div></div><div class="hb-val">0.45</div></div><div class="hb-row"><div class="hb-lab">30-39岁</div><div class="hb-track"><div class="hb-bar" style="width:34.72%;background:#A6C3FF"></div></div><div class="hb-val">0.69</div></div><div class="hb-row"><div class="hb-lab">40-49岁</div><div class="hb-track"><div class="hb-bar" style="width:43.04%;background:#A6C3FF"></div></div><div class="hb-val">0.86</div></div><div class="hb-row"><div class="hb-lab">50-59岁</div><div class="hb-track"><div class="hb-bar" style="width:54.26%;background:#3E79F0"></div></div><div class="hb-val">1.09</div></div><div class="hb-row"><div class="hb-lab">60岁以上</div><div class="hb-track"><div class="hb-bar" style="width:54.52%;background:#3E79F0"></div></div><div class="hb-val">1.09</div></div><div class="hb-ref" style="left:calc(120px + (100% - 120px - 56px) * 0.5000)"><span>大盘=1.0</span></div></div>
+      <div class="foot">图例中数值为"诺特兰德 / 膳食营养大盘"；指数 = 诺特兰德该年龄段下单占比 / 膳食营养大盘同年龄段占比；
+      样本为带人群画像的成交下单，大盘为 KPI三级行业"膳食营养"全量客户合计。结构占比与指数为精确值（不涉及绝对量）。</div>
+    </section><section id="s3"><h2><span class="idx">3</span>分品线成交人群画像
+      <small>每条品线的年龄 / 性别 / 城市等级结构与客单价区间</small></h2>
+      <ul class="insight">
+        <li><b>品线之间不是"程度差异"，而是"人群差异"：</b>钙铁锌的 60岁以上占比 4.2% 与钙+维D 的 72.6% 相差 17 倍，
+        说明诺特兰德在膳食营养赛道里同时运营着两套完全不同的人群（30-50 岁中年女性礼盒 vs 55+ 银发补钙护眼）。</li>
+        <li><b>银发阵营内部也有梯度：</b>钙+维D(72.6%) &gt; 叶黄素(49.3%) &gt; 骨胶原钙维D(46.9%) &gt; B族(45.2%) &gt; VC+VE(41.8%) &gt; 益生菌(40.9%)，
+        越靠近"补钙/护眼"刚需，年龄越老；越靠近"综合维生素/益生菌"，40-49 岁占比越高。</li>
+        <li><b>城市维度几乎没有区分度：</b>各品线下沉（三线及以下）占比集中在 61%~67%，城市等级不是区分品线人群的有效变量，
+        分品线定向应优先用年龄 × 性别而非地域。</li>
+        <li><b>钙铁锌的人群画像覆盖仅 22%：</b>该品线大量下单未带人群画像（直饮包/礼盒类链路），结构结论方向可信但精度弱于其他品线，使用时应结合链路侧数据复核。</li>
+      </ul>
+      <div class="cards"><div class="lcard">
+          <div class="hd"><div class="t">骨胶原钙维D<i>39.4% 消耗</i></div>
+            <div class="c"><span class="tag t-blue">银发主力</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">120~130</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">12~14万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">750~900</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 69.78,0.00 L69.45,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M69.78,0.00 A69.0,69.0 0 0 1 71.36,0.04 L70.37,29.00 A40.019999999999996,40.019999999999996 0 0 0 69.45,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M71.36,0.04 A69.0,69.0 0 0 1 84.84,1.84 L78.18,30.05 A40.019999999999996,40.019999999999996 0 0 0 70.37,29.00 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M84.84,1.84 A69.0,69.0 0 0 1 132.87,42.89 L106.04,53.86 A40.019999999999996,40.019999999999996 0 0 0 78.18,30.05 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M132.87,42.89 A69.0,69.0 0 0 1 55.85,136.73 L61.37,108.29 A40.019999999999996,40.019999999999996 0 0 0 106.04,53.86 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M55.85,136.73 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 61.37,108.29 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.4%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">3.1%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">15.1%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">34.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">46.9%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:66.685%;background:#3E79F0" title="女性 66.7%"><span>66.7%</span></div><div class="seg" style="width:17.759%;background:#11CFCF" title="男性 17.8%"><span>17.8%</span></div><div class="seg" style="width:15.556%;background:#CBDCFE" title="未知 15.6%"><span>15.6%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">66.7%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">17.8%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">15.6%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:8.571%;background:#0B4FD9" title="核心城市 8.6%"><span>8.6%</span></div><div class="seg" style="width:12.734%;background:#296BEF" title="一线城市 12.7%"><span>12.7%</span></div><div class="seg" style="width:13.093%;background:#4080FF" title="二线城市 13.1%"><span>13.1%</span></div><div class="seg" style="width:20.378%;background:#80AAFF" title="三线城市 20.4%"><span>20.4%</span></div><div class="seg" style="width:45.224%;background:#CBDCFE" title="其他城市 45.2%"><span>45.2%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">8.6%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">12.7%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.1%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">20.4%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">45.2%</span></div></div>
+          <div class="lins">银发女性补钙主力盘：60岁以上 46.9%（指数 1.15）、女性 66.7%、下沉 65.6%。人群基本到顶，增长要靠组合装把客单价往上抬一个档。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">益生菌<i>13.8% 消耗</i></div>
+            <div class="c"><span class="tag t-green">相对年轻·高客单</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">150~160</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">4.0~4.8万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">250~300</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 69.93,0.01 L69.54,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M69.93,0.01 A69.0,69.0 0 0 1 72.07,0.07 L70.78,29.02 A40.019999999999996,40.019999999999996 0 0 0 69.54,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M72.07,0.07 A69.0,69.0 0 0 1 96.88,5.88 L85.17,32.39 A40.019999999999996,40.019999999999996 0 0 0 70.78,29.02 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M96.88,5.88 A69.0,69.0 0 0 1 137.11,80.03 L108.51,75.40 A40.019999999999996,40.019999999999996 0 0 0 85.17,32.39 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M137.11,80.03 A69.0,69.0 0 0 1 31.67,127.03 L47.35,102.66 A40.019999999999996,40.019999999999996 0 0 0 108.51,75.40 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M31.67,127.03 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 47.35,102.66 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">5.9%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">20.9%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">31.5%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">40.9%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:72.102%;background:#3E79F0" title="女性 72.1%"><span>72.1%</span></div><div class="seg" style="width:13.074%;background:#11CFCF" title="男性 13.1%"><span>13.1%</span></div><div class="seg" style="width:14.824%;background:#CBDCFE" title="未知 14.8%"><span>14.8%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">72.1%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">13.1%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">14.8%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:9.901%;background:#0B4FD9" title="核心城市 9.9%"><span>9.9%</span></div><div class="seg" style="width:16.478%;background:#296BEF" title="一线城市 16.5%"><span>16.5%</span></div><div class="seg" style="width:12.589%;background:#4080FF" title="二线城市 12.6%"><span>12.6%</span></div><div class="seg" style="width:21.318%;background:#80AAFF" title="三线城市 21.3%"><span>21.3%</span></div><div class="seg" style="width:39.714%;background:#CBDCFE" title="其他城市 39.7%"><span>39.7%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">9.9%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">16.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">12.6%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">21.3%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">39.7%</span></div></div>
+          <div class="lins">银发品线里最"年轻"的一条：30-49 岁占 26.8%（其他银发品线仅 18%~26%），客单价居第二，是最适合承接低客单流量做二次转化的品线。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">B族维生素<i>12.1% 消耗</i></div>
+            <div class="c"><span class="tag t-orange">低价拉新</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">55~60</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">9.0~10万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">240~280</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 69.98,0.01 L69.57,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M69.98,0.01 A69.0,69.0 0 0 1 72.24,0.08 L70.88,29.02 A40.019999999999996,40.019999999999996 0 0 0 69.57,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M72.24,0.08 A69.0,69.0 0 0 1 98.02,6.40 L85.83,32.69 A40.019999999999996,40.019999999999996 0 0 0 70.88,29.02 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M98.02,6.40 A69.0,69.0 0 0 1 137.91,72.56 L108.97,71.06 A40.019999999999996,40.019999999999996 0 0 0 85.83,32.69 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M137.91,72.56 A69.0,69.0 0 0 1 48.42,134.86 L57.06,107.20 A40.019999999999996,40.019999999999996 0 0 0 108.97,71.06 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M48.42,134.86 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 57.06,107.20 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">6.2%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">18.9%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">29.0%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">45.2%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:56.710%;background:#3E79F0" title="女性 56.7%"><span>56.7%</span></div><div class="seg" style="width:27.312%;background:#11CFCF" title="男性 27.3%"><span>27.3%</span></div><div class="seg" style="width:15.977%;background:#CBDCFE" title="未知 16.0%"><span>16.0%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">56.7%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">27.3%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">16.0%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:9.033%;background:#0B4FD9" title="核心城市 9.0%"><span>9.0%</span></div><div class="seg" style="width:14.214%;background:#296BEF" title="一线城市 14.2%"><span>14.2%</span></div><div class="seg" style="width:13.441%;background:#4080FF" title="二线城市 13.4%"><span>13.4%</span></div><div class="seg" style="width:20.709%;background:#80AAFF" title="三线城市 20.7%"><span>20.7%</span></div><div class="seg" style="width:42.603%;background:#CBDCFE" title="其他城市 42.6%"><span>42.6%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">9.0%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">14.2%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.4%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">20.7%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">42.6%</span></div></div>
+          <div class="lins">低价高频 + 男性渗透最好：客单价为全品线最低，男性占比 27.3% 为全品线最高，适合当拉新入口而非利润品线。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">VC+VE+烟酰胺抗氧化<i>10.3% 消耗</i></div>
+            <div class="c"><span class="tag t-gray">标准人群</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">90~95</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">4.0~4.8万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">200~240</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 70.38,0.01 L69.80,28.99 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M70.38,0.01 A69.0,69.0 0 0 1 73.42,0.14 L71.57,29.06 A40.019999999999996,40.019999999999996 0 0 0 69.80,28.99 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M73.42,0.14 A69.0,69.0 0 0 1 98.82,6.78 L86.30,32.91 A40.019999999999996,40.019999999999996 0 0 0 71.57,29.06 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M98.82,6.78 A69.0,69.0 0 0 1 137.37,78.31 L108.65,74.40 A40.019999999999996,40.019999999999996 0 0 0 86.30,32.91 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M137.37,78.31 A69.0,69.0 0 0 1 35.02,129.05 L49.29,103.83 A40.019999999999996,40.019999999999996 0 0 0 108.65,74.40 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M35.02,129.05 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 49.29,103.83 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.3%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.7%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">6.1%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">20.0%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">31.0%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">41.8%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:73.420%;background:#3E79F0" title="女性 73.4%"><span>73.4%</span></div><div class="seg" style="width:8.670%;background:#11CFCF" title="男性 8.7%"><span>8.7%</span></div><div class="seg" style="width:17.911%;background:#CBDCFE" title="未知 17.9%"><span>17.9%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">73.4%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">8.7%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">17.9%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:9.512%;background:#0B4FD9" title="核心城市 9.5%"><span>9.5%</span></div><div class="seg" style="width:13.522%;background:#296BEF" title="一线城市 13.5%"><span>13.5%</span></div><div class="seg" style="width:13.615%;background:#4080FF" title="二线城市 13.6%"><span>13.6%</span></div><div class="seg" style="width:19.305%;background:#80AAFF" title="三线城市 19.3%"><span>19.3%</span></div><div class="seg" style="width:44.045%;background:#CBDCFE" title="其他城市 44.0%"><span>44.0%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">9.5%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">13.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.6%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">19.3%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">44.0%</span></div></div>
+          <div class="lins">与大盘最接近的"标准品线"：60岁以上 41.8%、女性 73.4%，各维度偏离大盘都在 6pp 以内，是人群基本盘的中性样本。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">钙铁锌<i>7.8% 消耗</i><span class="tag t-orange" style="margin-left:6px">画像覆盖 22%，结构仅供参考</span></div>
+            <div class="c"><span class="tag t-purple">中年女性·高客单</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">130~140</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">4.0~4.8万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">150~180</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 73.85,0.17 L71.81,29.08 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M73.85,0.17 A69.0,69.0 0 0 1 77.94,0.58 L74.18,29.32 A40.019999999999996,40.019999999999996 0 0 0 71.81,29.08 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M77.94,0.58 A69.0,69.0 0 0 1 134.97,89.22 L107.26,80.73 A40.019999999999996,40.019999999999996 0 0 0 74.18,29.32 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M134.97,89.22 A69.0,69.0 0 1 1 12.15,29.90 L36.03,46.32 A40.019999999999996,40.019999999999996 0 1 0 107.26,80.73 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M12.15,29.90 A69.0,69.0 0 0 1 51.14,2.35 L58.64,30.34 A40.019999999999996,40.019999999999996 0 0 0 36.03,46.32 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M51.14,2.35 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 58.64,30.34 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">1.1%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.9%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">27.7%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">54.9%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">11.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">4.2%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:80.282%;background:#3E79F0" title="女性 80.3%"><span>80.3%</span></div><div class="seg" style="width:4.674%;background:#11CFCF" title="男性 4.7%"><span></span></div><div class="seg" style="width:15.044%;background:#CBDCFE" title="未知 15.0%"><span>15.0%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">80.3%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">4.7%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">15.0%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:5.578%;background:#0B4FD9" title="核心城市 5.6%"><span></span></div><div class="seg" style="width:14.247%;background:#296BEF" title="一线城市 14.2%"><span>14.2%</span></div><div class="seg" style="width:13.289%;background:#4080FF" title="二线城市 13.3%"><span>13.3%</span></div><div class="seg" style="width:24.176%;background:#80AAFF" title="三线城市 24.2%"><span>24.2%</span></div><div class="seg" style="width:42.709%;background:#CBDCFE" title="其他城市 42.7%"><span>42.7%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">5.6%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">14.2%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.3%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">24.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">42.7%</span></div></div>
+          <div class="lins">唯一非银发品线：30-49 岁占 82.5%、60岁以上仅 4.2%（指数 0.10）、女性 80.3%。面向 30-50 岁女性的直饮包/礼盒人群，与其余品线几乎零重叠。表面客单为全量下单口径，其中大量为未支付订单，有效成交客单明显更高。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">叶黄素<i>7.0% 消耗</i></div>
+            <div class="c"><span class="tag t-blue">银发护眼</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">70~75</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">4.8~5.6万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">150~175</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 70.01,0.01 L69.59,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M70.01,0.01 A69.0,69.0 0 0 1 71.67,0.05 L70.55,29.01 A40.019999999999996,40.019999999999996 0 0 0 69.59,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M71.67,0.05 A69.0,69.0 0 0 1 94.42,4.85 L83.74,31.79 A40.019999999999996,40.019999999999996 0 0 0 70.55,29.01 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M94.42,4.85 A69.0,69.0 0 0 1 137.97,67.02 L109.00,67.85 A40.019999999999996,40.019999999999996 0 0 0 83.74,31.79 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M137.97,67.02 A69.0,69.0 0 0 1 65.92,137.93 L67.21,108.98 A40.019999999999996,40.019999999999996 0 0 0 109.00,67.85 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M65.92,137.93 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 67.21,108.98 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.4%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">5.4%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">18.5%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">26.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">49.3%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:75.564%;background:#3E79F0" title="女性 75.6%"><span>75.6%</span></div><div class="seg" style="width:10.645%;background:#11CFCF" title="男性 10.6%"><span>10.6%</span></div><div class="seg" style="width:13.791%;background:#CBDCFE" title="未知 13.8%"><span>13.8%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">75.6%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">10.6%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">13.8%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:10.507%;background:#0B4FD9" title="核心城市 10.5%"><span>10.5%</span></div><div class="seg" style="width:14.514%;background:#296BEF" title="一线城市 14.5%"><span>14.5%</span></div><div class="seg" style="width:13.534%;background:#4080FF" title="二线城市 13.5%"><span>13.5%</span></div><div class="seg" style="width:20.914%;background:#80AAFF" title="三线城市 20.9%"><span>20.9%</span></div><div class="seg" style="width:40.531%;background:#CBDCFE" title="其他城市 40.5%"><span>40.5%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">10.5%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">14.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.5%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">20.9%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">40.5%</span></div></div>
+          <div class="lins">最"老"的品线之一：60岁以上 49.3%（指数 1.21）、女性 75.6%。银发护眼刚需，人群质量高但客单价偏低。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">钙+维D咀嚼片<i>0.6% 消耗</i></div>
+            <div class="c"><span class="tag t-orange">深度银发·低价</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">55~60</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">4,800~5,600</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">12~14</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 70.56,0.02 L69.90,28.99 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M70.56,0.02 A69.0,69.0 0 0 1 72.50,0.09 L71.03,29.03 A40.019999999999996,40.019999999999996 0 0 0 69.90,28.99 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M72.50,0.09 A69.0,69.0 0 0 1 79.76,0.84 L75.24,29.47 A40.019999999999996,40.019999999999996 0 0 0 71.03,29.03 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M79.76,0.84 A69.0,69.0 0 0 1 99.87,7.29 L86.91,33.21 A40.019999999999996,40.019999999999996 0 0 0 75.24,29.47 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M99.87,7.29 A69.0,69.0 0 0 1 137.23,79.27 L108.57,74.96 A40.019999999999996,40.019999999999996 0 0 0 86.91,33.21 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M137.23,79.27 A69.0,69.0 0 1 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 1 0 108.57,74.96 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.4%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.4%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">1.7%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">4.9%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">20.0%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">72.6%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:54.219%;background:#3E79F0" title="女性 54.2%"><span>54.2%</span></div><div class="seg" style="width:31.037%;background:#11CFCF" title="男性 31.0%"><span>31.0%</span></div><div class="seg" style="width:14.744%;background:#CBDCFE" title="未知 14.7%"><span>14.7%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">54.2%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">31.0%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">14.7%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:8.909%;background:#0B4FD9" title="核心城市 8.9%"><span>8.9%</span></div><div class="seg" style="width:12.926%;background:#296BEF" title="一线城市 12.9%"><span>12.9%</span></div><div class="seg" style="width:12.994%;background:#4080FF" title="二线城市 13.0%"><span>13.0%</span></div><div class="seg" style="width:18.784%;background:#80AAFF" title="三线城市 18.8%"><span>18.8%</span></div><div class="seg" style="width:46.387%;background:#CBDCFE" title="其他城市 46.4%"><span>46.4%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">8.9%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">12.9%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">13.0%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">18.8%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">46.4%</span></div></div>
+          <div class="lins">极致老年化 + 极致低价：60岁以上 72.6%（指数 1.78，全品线最高），规模小（0.6% 消耗），适合做低价试吃/引流品。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">蛋白粉<i>1.4% 消耗</i></div>
+            <div class="c"><span class="tag t-green">全龄均衡·最高客单</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">180~190</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">3,000~3,500</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">30~35</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 69.57,0.00 L69.33,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M69.57,0.00 A69.0,69.0 0 0 1 72.81,0.11 L71.21,29.04 A40.019999999999996,40.019999999999996 0 0 0 69.33,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M72.81,0.11 A69.0,69.0 0 0 1 112.50,15.44 L94.23,37.94 A40.019999999999996,40.019999999999996 0 0 0 71.21,29.04 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M112.50,15.44 A69.0,69.0 0 0 1 109.99,124.50 L92.77,101.19 A40.019999999999996,40.019999999999996 0 0 0 94.23,37.94 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M109.99,124.50 A69.0,69.0 0 0 1 4.30,92.98 L31.47,82.91 A40.019999999999996,40.019999999999996 0 0 0 92.77,101.19 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M4.30,92.98 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 31.47,82.91 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.1%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.7%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">10.0%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">29.0%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">29.5%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">30.6%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:75.742%;background:#3E79F0" title="女性 75.7%"><span>75.7%</span></div><div class="seg" style="width:7.238%;background:#11CFCF" title="男性 7.2%"><span></span></div><div class="seg" style="width:17.020%;background:#CBDCFE" title="未知 17.0%"><span>17.0%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">75.7%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">7.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">17.0%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:8.380%;background:#0B4FD9" title="核心城市 8.4%"><span>8.4%</span></div><div class="seg" style="width:13.662%;background:#296BEF" title="一线城市 13.7%"><span>13.7%</span></div><div class="seg" style="width:13.988%;background:#4080FF" title="二线城市 14.0%"><span>14.0%</span></div><div class="seg" style="width:22.172%;background:#80AAFF" title="三线城市 22.2%"><span>22.2%</span></div><div class="seg" style="width:41.800%;background:#CBDCFE" title="其他城市 41.8%"><span>41.8%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">8.4%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">13.7%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">14.0%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">22.2%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">41.8%</span></div></div>
+          <div class="lins">年龄最均衡、客单最高：30-49 岁 39.0%、60岁以上 30.6%，客单价与大盘同档，但规模仅 1.4% 消耗。</div>
+        </div><div class="lcard">
+          <div class="hd"><div class="t">商品名缺失(未归品线)<i>7.5% 消耗</i></div>
+            <div class="c"><span class="tag t-gray">待规范上报</span></div></div>
+          <div class="lcard-kpi">
+            <div><span class="kv">130~140</span><span class="ku">元 客单价</span></div>
+            <div><span class="kv">1.8~2.1万</span><span class="ku">次 下单</span></div>
+            <div><span class="kv">150~175</span><span class="ku">万元 消耗</span></div>
+          </div>
+          <div class="mini-title">年龄结构</div>
+          <div class="donut-wrap"><svg viewBox="0 0 138 138" width="138" height="138" class="donut"><path d="M69.00,0.00 A69.0,69.0 0 0 1 69.93,0.01 L69.54,28.98 A40.019999999999996,40.019999999999996 0 0 0 69.00,28.98 Z" fill="#0B4FD9" stroke="#fff" stroke-width="1.2"/><path d="M69.93,0.01 A69.0,69.0 0 0 1 72.24,0.08 L70.88,29.02 A40.019999999999996,40.019999999999996 0 0 0 69.54,28.98 Z" fill="#296BEF" stroke="#fff" stroke-width="1.2"/><path d="M72.24,0.08 A69.0,69.0 0 0 1 94.91,5.05 L84.02,31.91 A40.019999999999996,40.019999999999996 0 0 0 70.88,29.02 Z" fill="#4080FF" stroke="#fff" stroke-width="1.2"/><path d="M94.91,5.05 A69.0,69.0 0 0 1 137.69,75.55 L108.84,72.80 A40.019999999999996,40.019999999999996 0 0 0 84.02,31.91 Z" fill="#80AAFF" stroke="#fff" stroke-width="1.2"/><path d="M137.69,75.55 A69.0,69.0 0 0 1 28.66,124.98 L45.60,101.47 A40.019999999999996,40.019999999999996 0 0 0 108.84,72.80 Z" fill="#A6C3FF" stroke="#fff" stroke-width="1.2"/><path d="M28.66,124.98 A69.0,69.0 0 0 1 69.00,0.00 L69.00,28.98 A40.019999999999996,40.019999999999996 0 0 0 45.60,101.47 Z" fill="#CBDCFE" stroke="#fff" stroke-width="1.2"/></svg><div class="legend"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">0-19岁</span><span class="lg-val">0.2%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">20-29岁</span><span class="lg-val">0.5%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">30-39岁</span><span class="lg-val">5.4%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">40-49岁</span><span class="lg-val">20.4%</span></div><div class="lg-row"><span class="dot" style="background:#A6C3FF"></span><span class="lg-lab">50-59岁</span><span class="lg-val">33.4%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">60岁以上</span><span class="lg-val">40.1%</span></div></div></div>
+          <div class="mini-title">性别结构</div><div class="stack" style="height:20px"><div class="seg" style="width:70.371%;background:#3E79F0" title="女性 70.4%"><span>70.4%</span></div><div class="seg" style="width:14.274%;background:#11CFCF" title="男性 14.3%"><span>14.3%</span></div><div class="seg" style="width:15.356%;background:#CBDCFE" title="未知 15.4%"><span>15.4%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#3E79F0"></span><span class="lg-lab">女性</span><span class="lg-val">70.4%</span></div><div class="lg-row"><span class="dot" style="background:#11CFCF"></span><span class="lg-lab">男性</span><span class="lg-val">14.3%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">未知</span><span class="lg-val">15.4%</span></div></div>
+          <div class="mini-title">城市等级结构</div><div class="stack" style="height:20px"><div class="seg" style="width:9.055%;background:#0B4FD9" title="核心城市 9.1%"><span>9.1%</span></div><div class="seg" style="width:14.126%;background:#296BEF" title="一线城市 14.1%"><span>14.1%</span></div><div class="seg" style="width:12.540%;background:#4080FF" title="二线城市 12.5%"><span>12.5%</span></div><div class="seg" style="width:20.705%;background:#80AAFF" title="三线城市 20.7%"><span>20.7%</span></div><div class="seg" style="width:43.574%;background:#CBDCFE" title="其他城市 43.6%"><span>43.6%</span></div></div><div class="legend legend-h"><div class="lg-row"><span class="dot" style="background:#0B4FD9"></span><span class="lg-lab">核心城市</span><span class="lg-val">9.1%</span></div><div class="lg-row"><span class="dot" style="background:#296BEF"></span><span class="lg-lab">一线城市</span><span class="lg-val">14.1%</span></div><div class="lg-row"><span class="dot" style="background:#4080FF"></span><span class="lg-lab">二线城市</span><span class="lg-val">12.5%</span></div><div class="lg-row"><span class="dot" style="background:#80AAFF"></span><span class="lg-lab">三线城市</span><span class="lg-val">20.7%</span></div><div class="lg-row"><span class="dot" style="background:#CBDCFE"></span><span class="lg-lab">其他城市</span><span class="lg-val">43.6%</span></div></div>
+          <div class="lins">结构与骨胶原钙维D 高度相似（60岁以上 40.1%），推测为同类商品未规范上报商品名，需推动补录后才能纳入品线运营。</div>
+        </div></div>
+    </section><section id="s4"><h2><span class="idx">4</span>人群结构矩阵
+      <small>品线 × 年龄 / 城市 / 性别（成交下单次数占比，颜色越深占比越高）</small></h2>
+      
+    <ul class="insight">
+      <li><b>矩阵把 9 条品线切成三个阵营：</b>①银发刚需（钙+维D / 叶黄素 / 骨胶原钙维D / B族 / VC+VE，60岁以上 41.8%~72.6%）；
+      ②中年女性礼盒（钙铁锌，30-49 岁 82.5%）；③全龄均衡（蛋白粉 / 益生菌，30-49 岁 26.8%~39.0%）。</li>
+      <li><b>30-49 岁人群是唯一可迁移的增量池：</b>在银发阵营里这部分人只占 18%~26%，而钙铁锌做到 82.5%——
+      说明该年龄段并非不接受营养品，而是现有银发品线的商品形态（单瓶钙片/叶黄素）与话术不匹配他们。</li>
+      <li><b>性别维度：钙铁锌(80.3%)、蛋白粉(75.7%)、叶黄素(75.6%) 女性集中度最高；B族(27.3%)、钙+维D(31.0%) 男性渗透相对好，</b>
+      可作为男性向素材的试点品线。</li>
+      <li><b>城市结构在各品线高度雷同（下沉 61%~67%、核心城市 5.6%~10.5%），</b>
+      意味着按城市等级做品线差异化投放的收益有限，预算应集中在年龄 × 性别 × 商品形态的匹配上。</li>
+    </ul>
+      <h3>品线 × 年龄结构</h3><table class="hm"><thead><tr><th></th><th>0-19岁</th><th>20-29岁</th><th>30-39岁</th><th>40-49岁</th><th>50-59岁</th><th>60岁以上</th></tr></thead><tbody><tr><td class="rowh">骨胶原钙维D</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.2%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.4%</td><td style="background:rgba(41,107,239,0.15);color:#1B2333">3.1%</td><td style="background:rgba(41,107,239,0.35);color:#1B2333">15.1%</td><td style="background:rgba(41,107,239,0.59);color:#fff">34.2%</td><td style="background:rgba(41,107,239,0.74);color:#fff">46.9%</td></tr><tr><td class="rowh">益生菌</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.2%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.5%</td><td style="background:rgba(41,107,239,0.20);color:#1B2333">5.9%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">20.9%</td><td style="background:rgba(41,107,239,0.56);color:#fff">31.5%</td><td style="background:rgba(41,107,239,0.67);color:#fff">40.9%</td></tr><tr><td class="rowh">B族维生素</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.2%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.5%</td><td style="background:rgba(41,107,239,0.21);color:#1B2333">6.2%</td><td style="background:rgba(41,107,239,0.40);color:#1B2333">18.9%</td><td style="background:rgba(41,107,239,0.53);color:#1B2333">29.0%</td><td style="background:rgba(41,107,239,0.72);color:#fff">45.2%</td></tr><tr><td class="rowh">VC+VE+烟酰胺抗氧化</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.3%</td><td style="background:rgba(41,107,239,0.09);color:#1B2333">0.7%</td><td style="background:rgba(41,107,239,0.21);color:#1B2333">6.1%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">20.0%</td><td style="background:rgba(41,107,239,0.56);color:#fff">31.0%</td><td style="background:rgba(41,107,239,0.68);color:#fff">41.8%</td></tr><tr><td class="rowh">钙铁锌</td><td style="background:rgba(41,107,239,0.10);color:#1B2333">1.1%</td><td style="background:rgba(41,107,239,0.10);color:#1B2333">0.9%</td><td style="background:rgba(41,107,239,0.52);color:#1B2333">27.7%</td><td style="background:rgba(41,107,239,0.82);color:#fff">54.9%</td><td style="background:rgba(41,107,239,0.29);color:#1B2333">11.2%</td><td style="background:rgba(41,107,239,0.17);color:#1B2333">4.2%</td></tr><tr><td class="rowh">叶黄素</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.2%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.4%</td><td style="background:rgba(41,107,239,0.19);color:#1B2333">5.4%</td><td style="background:rgba(41,107,239,0.40);color:#1B2333">18.5%</td><td style="background:rgba(41,107,239,0.50);color:#1B2333">26.2%</td><td style="background:rgba(41,107,239,0.76);color:#fff">49.3%</td></tr><tr><td class="rowh">钙+维D咀嚼片</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.4%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.4%</td><td style="background:rgba(41,107,239,0.12);color:#1B2333">1.7%</td><td style="background:rgba(41,107,239,0.18);color:#1B2333">4.9%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">20.0%</td><td style="background:rgba(41,107,239,1.00);color:#fff">72.6%</td></tr><tr><td class="rowh">蛋白粉</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.1%</td><td style="background:rgba(41,107,239,0.09);color:#1B2333">0.7%</td><td style="background:rgba(41,107,239,0.27);color:#1B2333">10.0%</td><td style="background:rgba(41,107,239,0.53);color:#1B2333">29.0%</td><td style="background:rgba(41,107,239,0.54);color:#1B2333">29.5%</td><td style="background:rgba(41,107,239,0.55);color:#fff">30.6%</td></tr><tr><td class="rowh">商品名缺失(未归品线)</td><td style="background:rgba(41,107,239,0.07);color:#1B2333">0.2%</td><td style="background:rgba(41,107,239,0.08);color:#1B2333">0.5%</td><td style="background:rgba(41,107,239,0.19);color:#1B2333">5.4%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">20.4%</td><td style="background:rgba(41,107,239,0.59);color:#fff">33.4%</td><td style="background:rgba(41,107,239,0.66);color:#fff">40.1%</td></tr></tbody></table>
+      <div class="grid2" style="margin-top:22px">
+        <div><h3>品线 × 城市等级</h3><table class="hm"><thead><tr><th></th><th>核心城市</th><th>一线城市</th><th>二线城市</th><th>三线城市</th><th>其他城市</th></tr></thead><tbody><tr><td class="rowh">骨胶原钙维D</td><td style="background:rgba(41,107,239,0.32);color:#1B2333">8.6%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">12.7%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">13.1%</td><td style="background:rgba(41,107,239,0.57);color:#fff">20.4%</td><td style="background:rgba(41,107,239,0.98);color:#fff">45.2%</td></tr><tr><td class="rowh">益生菌</td><td style="background:rgba(41,107,239,0.36);color:#1B2333">9.9%</td><td style="background:rgba(41,107,239,0.49);color:#1B2333">16.5%</td><td style="background:rgba(41,107,239,0.41);color:#1B2333">12.6%</td><td style="background:rgba(41,107,239,0.58);color:#fff">21.3%</td><td style="background:rgba(41,107,239,0.90);color:#fff">39.7%</td></tr><tr><td class="rowh">B族维生素</td><td style="background:rgba(41,107,239,0.34);color:#1B2333">9.0%</td><td style="background:rgba(41,107,239,0.45);color:#1B2333">14.2%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">13.4%</td><td style="background:rgba(41,107,239,0.57);color:#fff">20.7%</td><td style="background:rgba(41,107,239,0.94);color:#fff">42.6%</td></tr><tr><td class="rowh">VC+VE+烟酰胺抗氧化</td><td style="background:rgba(41,107,239,0.35);color:#1B2333">9.5%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">13.5%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">13.6%</td><td style="background:rgba(41,107,239,0.55);color:#1B2333">19.3%</td><td style="background:rgba(41,107,239,0.96);color:#fff">44.0%</td></tr><tr><td class="rowh">钙铁锌</td><td style="background:rgba(41,107,239,0.25);color:#1B2333">5.6%</td><td style="background:rgba(41,107,239,0.45);color:#1B2333">14.2%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">13.3%</td><td style="background:rgba(41,107,239,0.64);color:#fff">24.2%</td><td style="background:rgba(41,107,239,0.94);color:#fff">42.7%</td></tr><tr><td class="rowh">叶黄素</td><td style="background:rgba(41,107,239,0.37);color:#1B2333">10.5%</td><td style="background:rgba(41,107,239,0.45);color:#1B2333">14.5%</td><td style="background:rgba(41,107,239,0.43);color:#1B2333">13.5%</td><td style="background:rgba(41,107,239,0.58);color:#fff">20.9%</td><td style="background:rgba(41,107,239,0.91);color:#fff">40.5%</td></tr><tr><td class="rowh">钙+维D咀嚼片</td><td style="background:rgba(41,107,239,0.33);color:#1B2333">8.9%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">12.9%</td><td style="background:rgba(41,107,239,0.42);color:#1B2333">13.0%</td><td style="background:rgba(41,107,239,0.54);color:#1B2333">18.8%</td><td style="background:rgba(41,107,239,1.00);color:#fff">46.4%</td></tr><tr><td class="rowh">蛋白粉</td><td style="background:rgba(41,107,239,0.32);color:#1B2333">8.4%</td><td style="background:rgba(41,107,239,0.44);color:#1B2333">13.7%</td><td style="background:rgba(41,107,239,0.44);color:#1B2333">14.0%</td><td style="background:rgba(41,107,239,0.60);color:#fff">22.2%</td><td style="background:rgba(41,107,239,0.93);color:#fff">41.8%</td></tr><tr><td class="rowh">商品名缺失(未归品线)</td><td style="background:rgba(41,107,239,0.34);color:#1B2333">9.1%</td><td style="background:rgba(41,107,239,0.45);color:#1B2333">14.1%</td><td style="background:rgba(41,107,239,0.41);color:#1B2333">12.5%</td><td style="background:rgba(41,107,239,0.57);color:#fff">20.7%</td><td style="background:rgba(41,107,239,0.96);color:#fff">43.6%</td></tr></tbody></table></div>
+        <div><h3>品线 × 性别</h3><table class="hm"><thead><tr><th></th><th>女性</th><th>男性</th><th>未知</th></tr></thead><tbody><tr><td class="rowh">骨胶原钙维D</td><td style="background:rgba(41,107,239,0.88);color:#fff">66.7%</td><td style="background:rgba(41,107,239,0.36);color:#1B2333">17.8%</td><td style="background:rgba(41,107,239,0.33);color:#1B2333">15.6%</td></tr><tr><td class="rowh">益生菌</td><td style="background:rgba(41,107,239,0.93);color:#fff">72.1%</td><td style="background:rgba(41,107,239,0.30);color:#1B2333">13.1%</td><td style="background:rgba(41,107,239,0.32);color:#1B2333">14.8%</td></tr><tr><td class="rowh">B族维生素</td><td style="background:rgba(41,107,239,0.78);color:#fff">56.7%</td><td style="background:rgba(41,107,239,0.48);color:#1B2333">27.3%</td><td style="background:rgba(41,107,239,0.34);color:#1B2333">16.0%</td></tr><tr><td class="rowh">VC+VE+烟酰胺抗氧化</td><td style="background:rgba(41,107,239,0.94);color:#fff">73.4%</td><td style="background:rgba(41,107,239,0.24);color:#1B2333">8.7%</td><td style="background:rgba(41,107,239,0.37);color:#1B2333">17.9%</td></tr><tr><td class="rowh">钙铁锌</td><td style="background:rgba(41,107,239,1.00);color:#fff">80.3%</td><td style="background:rgba(41,107,239,0.17);color:#1B2333">4.7%</td><td style="background:rgba(41,107,239,0.33);color:#1B2333">15.0%</td></tr><tr><td class="rowh">叶黄素</td><td style="background:rgba(41,107,239,0.96);color:#fff">75.6%</td><td style="background:rgba(41,107,239,0.27);color:#1B2333">10.6%</td><td style="background:rgba(41,107,239,0.31);color:#1B2333">13.8%</td></tr><tr><td class="rowh">钙+维D咀嚼片</td><td style="background:rgba(41,107,239,0.76);color:#fff">54.2%</td><td style="background:rgba(41,107,239,0.52);color:#1B2333">31.0%</td><td style="background:rgba(41,107,239,0.32);color:#1B2333">14.7%</td></tr><tr><td class="rowh">蛋白粉</td><td style="background:rgba(41,107,239,0.96);color:#fff">75.7%</td><td style="background:rgba(41,107,239,0.21);color:#1B2333">7.2%</td><td style="background:rgba(41,107,239,0.35);color:#1B2333">17.0%</td></tr><tr><td class="rowh">商品名缺失(未归品线)</td><td style="background:rgba(41,107,239,0.91);color:#fff">70.4%</td><td style="background:rgba(41,107,239,0.32);color:#1B2333">14.3%</td><td style="background:rgba(41,107,239,0.33);color:#1B2333">15.4%</td></tr></tbody></table></div>
+      </div>
+    </section><section id="s5"><h2><span class="idx">5</span>客单价分层与价值结构
+      <small>客单价 = 下单金额 / 下单次数（全量口径，区间呈现）</small></h2>
+      
+    <ul class="insight">
+      <li><b>9 条品线中只有蛋白粉与大盘客单价同档，</b>益生菌、钙铁锌、商品名缺失、骨胶原钙维D 落在 120~160 元区间；
+      B族维生素、钙+维D、叶黄素、VC+VE 4 条在 100 元以下，其中 B族与钙+维D 最低。</li>
+      <li><b>客单与规模呈明显反向：</b>客单价最低的 B族维生素却是下单次数第二（22.6%），
+      客单价最高的蛋白粉下单次数仅 0.8%——当前结构是"低价冲量"而非"高客单创收"。</li>
+      <li><b>提客单最有杠杆的两处：</b>①骨胶原钙维D（39.4% 消耗、29.9% 下单占比）客单价每提升 10 元，全盘客单价约 +3 元；
+      ②益生菌（下单占比 9.9%）若通过组合装整体上一个价格档（+30 元左右），全盘客单价同样约 +3 元。</li>
+      <li><b>钙+维D 与 B族已无提价空间，</b>应定位为拉新/试吃入口，考核指标从 ROI 改为新客数与二次转化率。</li>
+    </ul>
+      <h3>各品线客单价区间 vs 膳食营养大盘</h3><div class="hbar"><div class="hb-row"><div class="hb-lab">骨胶原钙维D</div><div class="hb-track"><div class="hb-bar" style="width:59.52%;background:#A6C3FF"></div></div><div class="hb-val">120~130元</div></div><div class="hb-row"><div class="hb-lab">益生菌</div><div class="hb-track"><div class="hb-bar" style="width:73.81%;background:#A6C3FF"></div></div><div class="hb-val">150~160元</div></div><div class="hb-row"><div class="hb-lab">B族维生素</div><div class="hb-track"><div class="hb-bar" style="width:27.38%;background:#A6C3FF"></div></div><div class="hb-val">55~60元</div></div><div class="hb-row"><div class="hb-lab">VC+VE+烟酰胺抗氧化</div><div class="hb-track"><div class="hb-bar" style="width:44.05%;background:#A6C3FF"></div></div><div class="hb-val">90~95元</div></div><div class="hb-row"><div class="hb-lab">钙铁锌</div><div class="hb-track"><div class="hb-bar" style="width:64.29%;background:#A6C3FF"></div></div><div class="hb-val">130~140元</div></div><div class="hb-row"><div class="hb-lab">叶黄素</div><div class="hb-track"><div class="hb-bar" style="width:34.52%;background:#A6C3FF"></div></div><div class="hb-val">70~75元</div></div><div class="hb-row"><div class="hb-lab">钙+维D咀嚼片</div><div class="hb-track"><div class="hb-bar" style="width:27.38%;background:#A6C3FF"></div></div><div class="hb-val">55~60元</div></div><div class="hb-row"><div class="hb-lab">蛋白粉</div><div class="hb-track"><div class="hb-bar" style="width:88.10%;background:#76C84D"></div></div><div class="hb-val">180~190元</div></div><div class="hb-row"><div class="hb-lab">商品名缺失(未归品线)</div><div class="hb-track"><div class="hb-bar" style="width:64.29%;background:#A6C3FF"></div></div><div class="hb-val">130~140元</div></div><div class="hb-ref" style="left:calc(120px + (100% - 120px - 106px) * 0.8810)"><span>大盘 180~190元</span></div></div>
+      <div class="foot">条形长度为客单价区间中值，右侧标注区间；红色虚线为膳食营养大盘客单价区间中值；绿色为达到大盘 90% 以上的品线。</div>
+    </section><section id="s6"><h2><span class="idx">6</span>行动建议</h2>
+      <div class="adv"><div class="item"><h4>1. 骨胶原钙维D：从"单瓶补钙"转向"组合装提客单"</h4><p>该品线占 39.4% 消耗但客单价仅 120~130 元、60岁以上已 46.9%（指数 1.15），人群基本到顶。建议把 120 粒单瓶为主的结构升级为"钙+VD+胶原蛋白"3~6 瓶组合装，目标客单价提升一个档位（+20~30 元）。</p><div class="why">依据：人群结构已与大盘重合，增量只能来自客单价而非新增人群。</div></div><div class="item"><h4>2. 钙铁锌：独立人群、独立素材、独立账户结构</h4><p>30-49 岁占 82.5%、女性占 80.3%、60岁以上仅 4.2%，与银发品线几乎零重叠。建议单独建人群包与素材（中年女性/礼盒场景），避免与骨胶原共用银发素材造成人群互斥。</p><div class="why">依据：该品线是唯一能触达 30-50 岁人群的入口，且该人群在膳食营养大盘中占 29.9%。</div></div><div class="item"><h4>3. B族维生素 / 叶黄素 / 钙+维D：定位拉新入口，考核改为新客</h4><p>客单价均在 55~75 元区间、下单次数合计占 35.1%，是低价高频流量池。建议考核从 ROI 转向新客数、7 日内二次下单率，并配置向骨胶原钙维D、益生菌的承接链路。</p><div class="why">依据：这三条品线贡献了 35.1% 的下单次数，但只贡献 19.8% 消耗。</div></div><div class="item"><h4>4. 益生菌 / 蛋白粉：承接提客单任务</h4><p>益生菌 30-49 岁占 26.8%（银发品线中最高）、客单价居中；蛋白粉客单价最高、年龄最均衡。建议把 B族/叶黄素的成交人群作为种子人群包，做益生菌/蛋白粉的二次触达与组合装推荐。</p><div class="why">依据：两条品线合计仅 15.2% 消耗，客单价值尚未规模化。</div></div><div class="item"><h4>5. 补齐商品名上报，回收 7.5% 的"黑盒"消耗</h4><p>这部分消耗无法归品线、无法做人群运营，其人群结构（60岁以上 40.1%）与骨胶原高度相似，规模已接近叶黄素整条品线。建议与客户对齐 DPA 商品名上报规范，或在素材层补齐商品信息。</p><div class="why">依据：黑盒部分占全部消耗的 7.5%，是当前最大的口径缺口。</div></div><div class="item"><h4>6. 补量高线城市，打开 20-39 岁缺口</h4><p>核心城市占比 9.1%（大盘 10.1%）、20-39 岁仅 6.0%（大盘 9.1%）。建议用益生菌/蛋白粉在一线/新一线做定向测试，验证年轻高线人群的单位经济模型后再放量。</p><div class="why">依据：年轻人群是当前唯一未被打透的结构性缺口。</div></div></div>
+      <div class="foot">
+        数据口径：时间 2026-09-29 ~ 2026-10-28；客户简称 contains "诺特兰德"（含诺特兰德W）；
+        品线按 DPA 商品名称关键词归拢，同一商品不同链接/渠道后缀已合并；成交人群结构基于带人群画像的成交下单次数（下单行为，含未支付），
+        客单价为全量下单口径；大盘为 KPI三级行业"膳食营养"全量客户。<br/>
+        人群属性维度受数仓限制（≤35 天、不可与消耗/GMV/ROI 同查），故人群结构使用下单次数占比而非消耗占比。<br/>
+        <b>脱敏说明：</b>本报告对外版中，消耗、下单次数、客单价等绝对量均以区间呈现（区间宽度 10%~25%，真值必落区间内），
+        内部结构占比、人群占比、偏离指数、覆盖率等比率类指标保留精确值。
+      </div>
+    </section>
+</div></body></html>
